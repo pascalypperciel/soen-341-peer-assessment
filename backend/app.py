@@ -3,6 +3,8 @@ from flask_cors import CORS
 import pyodbc
 import os
 from dotenv import load_dotenv
+#blueprints
+from login_signup_routes import login_signup_routes
 
 app = Flask(__name__)
 CORS(app)
