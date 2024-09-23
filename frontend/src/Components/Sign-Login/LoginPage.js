@@ -65,7 +65,7 @@ const LoginPage = () => {
         <div>
           <label>{isTeacher ? 'Username' : 'Student ID'}</label>
           <input
-            type={isTeacher ? 'text' : 'number'}
+            type={isTeacher ? 'text' : 'text'}
             name="idOrUsername"
             value={credentials.idOrUsername}
             onChange={handleChange}

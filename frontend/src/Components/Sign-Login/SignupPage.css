@@ -5,44 +5,45 @@
     justify-content: center;     /* Center items horizontally */
     width: fit-content;          /* Adjust to content size */
     margin: auto;                /* Center the container */
-    height: 50vh;                /* Fixed height */
+    height: 60vh;                /* Fixed height */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds shadow */
     border-radius: 20px;
   }
   
-
-
 .container h1{
-    color: #014284;
+    color: #1860c3;
+    border: solid;
 
 }
 
-.button-container {
+.button-role {
     position: absolute;          /* Position buttons over the image */
     top: 50%;                   /* Adjust this value to move up or down */
-    left: 50%;                  /* Adjust this value to move left or right */
-    transform: translate(-179%, -50%); /* Center the buttons horizontally and vertically */
+    left: 45%;                  /* Adjust this value to move left or right */
+    transform: translate(-210%, -50%); /* Center the buttons horizontally and vertically */
     display: flex;              /* Align buttons in a column */
     flex-direction: column;     /* Stack buttons vertically */
     align-items: center;        /* Center buttons horizontally */
+    border:solid;
   }
   
 .button {
     display: block;             /* Stack buttons vertically */
     margin: 32px 0;            /* Space between buttons (10px top and bottom) */
-    padding: 35px 14px;        /* Button padding */
+    padding: 35px 25px;        /* Button padding */
     border: none;               /* Remove default border */
     border-radius: 20px;        /* Rounded corners */
     background-color: #007bff; /* Button color */
-    color: black;               /* Text color */
+    color: white;               /* Text color */
     cursor: pointer;            /* Pointer cursor on hover */
     background-color: transparent;
-    font-size: 15px;
+    font-size: 17px;
     font-weight: bold; /* Makes the font bold */
 }
 
 .button.active {
     background-color: #F2F5F8; /* Change this color for the active state */
+    color:black;
   }
   
 .image {
@@ -63,3 +64,20 @@
     padding: 10px 20px;          /* Adjust as needed */
     background-color: #f8f9fa;   /* Example background color */
 }
+
+.textfield { 
+    width: 300px;
+    margin: 20px 0; /* Vertical margin for spacing above and below */
+    padding: 20px; /* Padding inside the input */
+    box-sizing: border-box; /* Include padding in the width */
+}
+
+/* Optional: To specifically target the margin for the last field */
+.textfield:last-of-type {
+    margin-bottom: 30px; /* Change this as per your design */
+}
+
+.button-signup{
+    color:black;
+}
+

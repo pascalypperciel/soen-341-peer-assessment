@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './SignupPage.css';
-import backgroundImage from '../Assets/background.jpg';
+import backgroundImage from '../Assets/background2.jpg';
+import TextField from '@mui/material/TextField';
 
 const SignupPage = () => {
     const [isTeacher, setIsTeacher] = useState(true);
@@ -39,51 +40,59 @@ const SignupPage = () => {
   
     const handleSwitch = (type) => {
       setIsTeacher(type === 'teacher');
-      setSignupData({ idOrUsername: '', password: '' }); // Reset the form fields
+      setSignupData({ idOrUsername: '', password: '' }); 
     };
   
     return (
       <div className="container">
         <img src={backgroundImage} alt="Description" className="image" />
-        <div className="button-container">
+        <div className="button-role">
           <button
             className={`button ${isTeacher ? 'active' : ''}`}
             onClick={() => handleSwitch('teacher')}
           >
-            Teacher Sign Up
+            Teacher 
           </button>
           <button
             className={`button ${!isTeacher ? 'active' : ''}`}
             onClick={() => handleSwitch('student')}
           >
-            Student Sign Up
+            Student 
           </button>
         </div>
         
         <div className="info">
           <h1>Sign Up</h1>
           <form onSubmit={handleSignup}>
-            <div>
-              <label>{isTeacher ? 'Username' : 'Student ID'}</label>
-              <input
-                type={isTeacher ? 'text' : 'number'}
-                name="idOrUsername"
-                value={signupData.idOrUsername}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label>Password</label>
-              <input
-                type="password"
-                name="password"
-                value={signupData.password}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <button type="submit">Sign Up</button>
+          <div>
+          <TextField
+    className='textfield'
+    id="filled-basic"
+    label={isTeacher ? 'Username' : 'Student ID'}
+    variant="filled"
+    type={isTeacher ? 'text' : 'text'}
+    name="idOrUsername"
+    value={signupData.idOrUsername}
+    onChange={handleChange}
+    required
+/>
+</div>
+<div>
+    <TextField
+        className='textfield'
+        id="filled-password"
+        label="Password"
+        variant="filled"
+        type="password"
+        name="password"
+        value={signupData.password}
+        onChange={handleChange}
+        required
+    />
+</div>
+        <button className='button-signup' type="submit">
+            Sign Up
+        </button>
           </form>
         </div>
       </div>
