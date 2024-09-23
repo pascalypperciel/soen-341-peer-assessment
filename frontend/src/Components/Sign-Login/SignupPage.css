@@ -8,29 +8,32 @@
     height: 60vh;                /* Fixed height */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds shadow */
     border-radius: 20px;
+    background-color: white;     /* Optional: Add background color to make it stand out */
+    margin-top: 20vh;
   }
   
-.container h1{
-    color: #1860c3;
-    border: solid;
-
+  .container h1 {
+    color: #1860c3;                  /* Text color */
+    /*border: solid;                   /* Optional border */
+    margin: 20px 0 100px;                 /* Space above and below the title */
+    text-align: center;              /* Center the text */
 }
 
 .button-role {
     position: absolute;          /* Position buttons over the image */
     top: 50%;                   /* Adjust this value to move up or down */
-    left: 45%;                  /* Adjust this value to move left or right */
+    left: 53%;                  /* Adjust this value to move left or right */
     transform: translate(-210%, -50%); /* Center the buttons horizontally and vertically */
     display: flex;              /* Align buttons in a column */
     flex-direction: column;     /* Stack buttons vertically */
     align-items: center;        /* Center buttons horizontally */
-    border:solid;
+    /*border:solid;*/
   }
   
 .button {
     display: block;             /* Stack buttons vertically */
     margin: 32px 0;            /* Space between buttons (10px top and bottom) */
-    padding: 35px 25px;        /* Button padding */
+    padding: 35px 30px;        /* Button padding */
     border: none;               /* Remove default border */
     border-radius: 20px;        /* Rounded corners */
     background-color: #007bff; /* Button color */
@@ -39,10 +42,11 @@
     background-color: transparent;
     font-size: 17px;
     font-weight: bold; /* Makes the font bold */
+    transition: background-color 0.2s ease, color 0.3s ease; /* Add transition */
 }
 
 .button.active {
-    background-color: #F2F5F8; /* Change this color for the active state */
+    background-color: white; /* Change this color for the active state */
     color:black;
   }
   
@@ -54,10 +58,16 @@
 }
 
 .info {
-    width: 60%;               /* Set a maximum width for the info div */
-    padding: 20px;
-    margin-left: 60px;                  /* Adds some padding around the content */
+    width: 60%;                      /* Set a maximum width for the info div */
+    padding: 20px;                   /* Adds padding around the content */
+    /*: solid;                   /* Adds a border around the div */
+    height: 90%;                     /* Set height as desired */
+    display: flex;                   /* Enable Flexbox layout */
+    flex-direction: column;          /* Arrange items in a column */
+    align-items: center;             /* Center items horizontally */
+    justify-content: flex-start;     /* Align items at the start (top) */
 }
+
 
 .footer {
     flex: 0 0 auto;              /* Footer takes its content height */
@@ -77,7 +87,33 @@
     margin-bottom: 30px; /* Change this as per your design */
 }
 
-.button-signup{
-    color:black;
+.button-signup {
+    width: 300px; /* Set width */
+    padding: 10px 20px; /* Add padding */
+    background-color: #1860C3; /* Set background color */
+    color: turquoise; /* Text color */
+    border: 2px solid transparent; /* Set border */
+    border-radius: 20px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Font size */
+    font-weight: bold; /* Bold text */
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Add transition */
+}
+
+/* Hover effect */
+.button-signup:hover {
+    background-color: #0056b3; /* Change background color on hover */
+    border-color: #0056b3; /* Change border color on hover if needed */
+}
+
+.peer-title{
+    position: absolute;          /* Position buttons over the image */
+    top:20%;                   /* Adjust this value to move up or down */
+    left: 48%;                  /* Adjust this value to move left or right */
+    transform: translate(-210%, -50%); /* Center the buttons horizontally and vertically */
+    display: flex;              /* Align buttons in a column */
+    flex-direction: column;     /* Stack buttons vertically */
+    align-items: center; 
+    color:white;
 }
 
