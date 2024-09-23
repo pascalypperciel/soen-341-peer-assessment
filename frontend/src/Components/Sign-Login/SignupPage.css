@@ -1,0 +1,65 @@
+.container {
+    position: relative;           /* Allows absolute positioning of child elements */
+    display: flex;               /* Flexbox layout */
+    align-items: center;         /* Center items vertically */
+    justify-content: center;     /* Center items horizontally */
+    width: fit-content;          /* Adjust to content size */
+    margin: auto;                /* Center the container */
+    height: 50vh;                /* Fixed height */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds shadow */
+    border-radius: 20px;
+  }
+  
+
+
+.container h1{
+    color: #014284;
+
+}
+
+.button-container {
+    position: absolute;          /* Position buttons over the image */
+    top: 50%;                   /* Adjust this value to move up or down */
+    left: 50%;                  /* Adjust this value to move left or right */
+    transform: translate(-179%, -50%); /* Center the buttons horizontally and vertically */
+    display: flex;              /* Align buttons in a column */
+    flex-direction: column;     /* Stack buttons vertically */
+    align-items: center;        /* Center buttons horizontally */
+  }
+  
+.button {
+    display: block;             /* Stack buttons vertically */
+    margin: 32px 0;            /* Space between buttons (10px top and bottom) */
+    padding: 35px 14px;        /* Button padding */
+    border: none;               /* Remove default border */
+    border-radius: 20px;        /* Rounded corners */
+    background-color: #007bff; /* Button color */
+    color: black;               /* Text color */
+    cursor: pointer;            /* Pointer cursor on hover */
+    background-color: transparent;
+    font-size: 15px;
+    font-weight: bold; /* Makes the font bold */
+}
+
+.button.active {
+    background-color: #F2F5F8; /* Change this color for the active state */
+  }
+  
+.image {
+    width: 40%;                   /* Set width for the image */
+    height: 100%;                 /* Cover the full height of the container */
+    object-fit: cover;            /* Scale to cover the area */
+    border-radius: 20px 0 0 20px; /* Optional: rounded corners on the left */
+}
+
+.info {
+    width: 60%;               /* Set a maximum width for the info div */
+    padding: 20px;
+    margin-left: 60px;                  /* Adds some padding around the content */
+}
+
+.footer {
+    flex: 0 0 auto;              /* Footer takes its content height */
+    padding: 10px 20px;          /* Adjust as needed */
+    background-color: #f8f9fa;   /* Example background color */
+}
