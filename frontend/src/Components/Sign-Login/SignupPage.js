@@ -102,6 +102,22 @@ const SignupPage = () => {
         <div className="info">
           <h1>{isLogin ? (isTeacher ? 'Login' : 'Login') : (isTeacher ? 'Sign Up' : 'Sign Up')}</h1>
           <form onSubmit={isLogin ? handleLogin : handleSignup}>
+          {!isLogin && (
+      <div>
+        <TextField
+          className="textfield"
+          id="filled-basic"
+          label="Full Name"
+          variant="filled"
+          type="text"
+          name="fullName" // Use a different name if needed
+          value={signupData.fullName} // Ensure fullName is in your signupData state if needed
+          onChange={handleChange}
+          required
+        />
+      </div>
+    )}
+
             <div>
               <TextField
                 className='textfield'
