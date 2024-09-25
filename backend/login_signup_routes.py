@@ -12,10 +12,10 @@ login_signup_routes = Blueprint('login_signup_routes', __name__)
 def studentSignup():
     #obtaining infromation from the signup form
     data= request.get_json()
-    studentID=data[studentID]
-    name=data[name]
+    studentID=data['studentID']
+    name=data['name']
     #no password hashing yet 
-    password=data[password]
+    password=data['password']
 
     try: 
         #connect to db
@@ -32,8 +32,8 @@ def studentSignup():
         cursor.close()
         
 
-    except :
-        return 'Error connecting to db'
+    except Exception as e :
+        return 'Error connecting to db', 500
     
     #temporary name for ratings page
     return redirect(url_for('ratingspage'))
@@ -42,10 +42,10 @@ def studentSignup():
 def teacherSignup():
     #obtaining infromation from the signup form
     data= request.get_json()
-    teacherID=data[teacherID]
-    name=data[name]
+    teacherID=data['teacherID']
+    name=data['name']
     #no password hashing yet 
-    password=data[password]
+    password=data['password']
 
     try: 
         #connect to db
@@ -61,8 +61,8 @@ def teacherSignup():
         
         cursor.close()
 
-    except :
-        return 'Error connecting to db'
+    except Exception as e :
+        return 'Error connecting to db', 500
     
     #temporary name for ratings page
     return redirect(url_for('ratingspage'))
@@ -70,8 +70,8 @@ def teacherSignup():
 @login_signup_routes.route('studentLogin', methods=['POST'])
 def studentLogin():
     data=request.get_json()
-    StudentID=data[StudentID]
-    password=data[password]
+    StudentID=data['studentID']
+    password=data['password']
 
     try: 
         #connect to db
@@ -93,15 +93,15 @@ def studentLogin():
             return redirect(url_for('ratingspage'))
         else:
         # placeholder page for now 
-            return 'invalid StudentID or Password'
-    except :
-        return 'Error connecting to db'
+            return 'invalid StudentID or Password', 401
+    except Exception as e :
+        return 'Error connecting to db', 500
     
 @login_signup_routes.route('teacherLogin', methods=['POST'])
-def studentLogin():
+def teacherLogin():
     data=request.get_json()
-    TeacherID=data[TeacherID]
-    password=data[password]
+    TeacherID=data['teacherID']
+    password=data['password']
 
     try: 
         #connect to db
@@ -121,6 +121,6 @@ def studentLogin():
         if storedPassword==password:
             return redirect(url_for('groupspage'))
         else:
-            return 'invalid TeacherID or Password'
-    except :
-        return 'Error connecting to db'
+            return 'invalid TeacherID or Password', 401
+    except Exception as e :
+        return 'Error connecting to db', 500
