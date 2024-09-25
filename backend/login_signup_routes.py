@@ -12,10 +12,10 @@ login_signup_routes = Blueprint('login_signup_routes', __name__)
 def studentSignup():
     #obtaining infromation from the signup form
     data= request.get_json()
-    studentID=request.form[studentID]
-    name=request.form[name]
+    studentID=data[studentID]
+    name=data[name]
     #no password hashing yet 
-    password=request.form[password]
+    password=data[password]
 
     try: 
         #connect to db
@@ -42,10 +42,10 @@ def studentSignup():
 def teacherSignup():
     #obtaining infromation from the signup form
     data= request.get_json()
-    teacherID=request.form[teacherID]
-    name=request.form[name]
+    teacherID=data[teacherID]
+    name=data[name]
     #no password hashing yet 
-    password=request.form[password]
+    password=data[password]
 
     try: 
         #connect to db
@@ -70,8 +70,8 @@ def teacherSignup():
 @login_signup_routes.route('studentLogin', methods=['POST'])
 def studentLogin():
     data=request.get_json()
-    StudentID=request.form[StudentID]
-    password=request.form[password]
+    StudentID=data[StudentID]
+    password=data[password]
 
     try: 
         #connect to db
@@ -92,7 +92,7 @@ def studentLogin():
         if storedPassword==password:
             return redirect(url_for('ratingspage'))
         else:
-# placeholder page for now 
+        # placeholder page for now 
             return 'invalid StudentID or Password'
     except :
         return 'Error connecting to db'
@@ -100,8 +100,8 @@ def studentLogin():
 @login_signup_routes.route('teacherLogin', methods=['POST'])
 def studentLogin():
     data=request.get_json()
-    TeacherID=request.form[TeacherID]
-    password=request.form[password]
+    TeacherID=data[TeacherID]
+    password=data[password]
 
     try: 
         #connect to db
@@ -117,7 +117,7 @@ def studentLogin():
 
         if result:
             storedPassword=result
-#placeholder page for now 
+        #placeholder page for now 
         if storedPassword==password:
             return redirect(url_for('groupspage'))
         else:
