@@ -4,6 +4,7 @@ import backgroundImage from '../Assets/background2.jpg';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button'; 
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';  // Importing Axios here
 
 const SignupPage = () => {
     const [isTeacher, setIsTeacher] = useState(true);
@@ -33,9 +34,10 @@ const SignupPage = () => {
         }
 
         // Validate password
-        if ("^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$".test(password)) {
-            errors.password = 'Password must be minimum 8 characters, at least one letter and one number';
+        if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password)) {
+            errors.password = 'Password must be at least 8 characters, include at least one letter and one number';
         }
+        
 
         return errors;
     };
@@ -51,15 +53,13 @@ const SignupPage = () => {
 
         const url = isTeacher ? '/api/teachers' : '/api/students';
         try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    [isTeacher ? 'username' : 'studentId']: signupData.idOrUsername,
-                    password: signupData.password,
-                }),
+            // Using Axios to send the request
+            const response = await axios.post(url, {
+                [isTeacher ? 'username' : 'studentId']: signupData.idOrUsername,
+                password: signupData.password,
             });
-            if (response.ok) {
+            
+            if (response.status === 200) {
                 console.log('Signup successful');
                 navigate('/login');
             } else {
@@ -101,7 +101,7 @@ const SignupPage = () => {
                     className={`button ${isTeacher ? 'active' : ''}`}
                     onClick={() => handleRoleSwitch('teacher')}
                 >
-                    Teacher
+                    Professor
                 </button>
                 <button
                     className={`button ${!isTeacher ? 'active' : ''}`}

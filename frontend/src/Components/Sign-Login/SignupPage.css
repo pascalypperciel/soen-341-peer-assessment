@@ -77,15 +77,18 @@
 }
 
 .textfield { 
-    width: 300px;
-    margin: 20px 0; /* Vertical margin for spacing above and below */
-    padding: 20px; /* Padding inside the input */
-    box-sizing: border-box; /* Include padding in the width */
+    width: 300px; /* Adjust as needed */
+    margin: 10px 0;
+    padding: 5px;
+    box-sizing: border-box;
+    line-height: normal; /* Ensure default line height */
+
+   
 }
 
 /* Optional: To specifically target the margin for the last field */
 .textfield:last-of-type {
-    margin-bottom: 30px; /* Change this as per your design */
+    margin-bottom: 20px;
 }
 
 .button-signup {
