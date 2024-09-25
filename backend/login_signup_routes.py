@@ -67,7 +67,7 @@ def teacherSignup():
     #temporary name for ratings page
     return redirect(url_for('ratingspage'))
 
-@login_signup_routes.route('studentLogin', methods=['POST'])
+@login_signup_routes.route('studentLogin', methods=['GET'])
 def studentLogin():
     data=request.get_json()
     StudentID=data['studentID']
@@ -97,7 +97,7 @@ def studentLogin():
     except Exception as e :
         return 'Error connecting to db', 500
     
-@login_signup_routes.route('teacherLogin', methods=['POST'])
+@login_signup_routes.route('teacherLogin', methods=['GET'])
 def teacherLogin():
     data=request.get_json()
     TeacherID=data['teacherID']
