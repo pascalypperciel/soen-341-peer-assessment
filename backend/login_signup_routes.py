@@ -1,6 +1,10 @@
 from flask import Blueprint,request,jsonify,redirect,url_for
-from mysql.connector import Error 
 from app import load_dotenv, conn
+from flask_cors import CORS
+import pyodbc
+import os
+from dotenv import load_dotenv
+
 
 login_signup_routes = Blueprint('login_signup_routes', __name__)
 
@@ -28,7 +32,7 @@ def studentSignup():
         cursor.close()
         
 
-    except Error as e:
+    except :
         return 'Error connecting to db'
     
     #temporary name for ratings page
@@ -57,7 +61,7 @@ def teacherSignup():
         
         cursor.close()
 
-    except Error as e:
+    except :
         return 'Error connecting to db'
     
     #temporary name for ratings page
@@ -90,7 +94,7 @@ def studentLogin():
         else:
 # placeholder page for now 
             return 'invalid StudentID or Password'
-    except Error as e:
+    except :
         return 'Error connecting to db'
     
 @login_signup_routes.route('teacherLogin', methods=['POST'])
@@ -118,5 +122,5 @@ def studentLogin():
             return redirect(url_for('groupspage'))
         else:
             return 'invalid TeacherID or Password'
-    except Error as e:
+    except :
         return 'Error connecting to db'
