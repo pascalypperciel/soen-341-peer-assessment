@@ -16,7 +16,7 @@
   .container h1 {
     color: #1860c3;                  /* Text color */
     /*border: solid;                   /* Optional border */
-    margin: 20px 0 100px;                 /* Space above and below the title */
+    margin: 20px 0 45px;                 /* Space above and below the title */
     text-align: center;              /* Center the text */
 }
 
@@ -117,4 +117,11 @@
     align-items: center; 
     color:white;
 }
+
+.error {
+    color: red; /* Change to your preferred error color */
+    font-size: 0.9em; /* Adjust size as needed */
+    margin-top: 5px; /* Space above the error message */
+    width:300px;
+  }
 
