@@ -1,6 +1,6 @@
 from flask import Blueprint,request,jsonify,redirect,url_for
-from app import get_db_connection 
 from mysql.connector import Error 
+from app import load_dotenv, conn
 
 login_signup_routes = Blueprint('login_signup_routes', __name__)
 
@@ -15,8 +15,7 @@ def studentSignup():
 
     try: 
         #connect to db
-        connection= get_db_connection()
-        cursor= connection.cursor()
+        cursor = conn.cursor()
 
         #query to add student to Student table using cursor
         StudentSignup_query="""
@@ -26,9 +25,8 @@ def studentSignup():
 
         cursor.execute(StudentSignup_query, StudentSignup_values)
         
-        connection.commit()
         cursor.close()
-        connection.close()
+        
 
     except Error as e:
         return 'Error connecting to db'
@@ -47,8 +45,7 @@ def teacherSignup():
 
     try: 
         #connect to db
-        connection= get_db_connection()
-        cursor= connection.cursor()
+        cursor = conn.cursor()
 
         #query to add teacher to Teacher table using cursor
         TeacherSignup_query="""
@@ -58,9 +55,7 @@ def teacherSignup():
 
         cursor.execute(TeacherSignup_query,  TeachertSignup_values)
         
-        connection.commit()
         cursor.close()
-        connection.close()
 
     except Error as e:
         return 'Error connecting to db'
@@ -76,8 +71,7 @@ def studentLogin():
 
     try: 
         #connect to db
-        connection= get_db_connection()
-        cursor= connection.cursor()
+        cursor = conn.cursor()
 
         #query to verify if student with entered StudentID and Password exists
         StudentLogin_query="""
@@ -87,7 +81,6 @@ def studentLogin():
         cursor.execute(StudentLogin_query, (StudentID,))
         result = cursor.fetchone()
         cursor.close()
-        connection.close()
 
         if result:
             storedPassword=result
@@ -108,8 +101,7 @@ def studentLogin():
 
     try: 
         #connect to db
-        connection= get_db_connection()
-        cursor= connection.cursor()
+        cursor = conn.cursor()
 
         #query to verify if teacher twith entered TeacherID and Password exists
         TeacherLogin_query="""
@@ -118,7 +110,6 @@ def studentLogin():
         cursor.execute(TeacherLogin_query, (TeacherID,))
         result = cursor.fetchone()
         cursor.close()
-        connection.close()
 
         if result:
             storedPassword=result
