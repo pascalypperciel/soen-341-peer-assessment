@@ -78,30 +78,28 @@ const SignupPage = () => {
         }
 
         const url = isTeacher 
-            ? `/teacherLogin` // Updated URL
-            : `/studentLogin`; // Updated URL
+            ? `/teacherLogin?teacherID=${signupData.idOrUsername}&password=${signupData.password}` // Pass parameters in the URL
+            : `/studentLogin?studentID=${signupData.idOrUsername}&password=${signupData.password}`;
 
         try {
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    [isTeacher ? 'teacherID' : 'studentID']: signupData.idOrUsername, // Use 'teacherID' or 'studentID'
-                    password: signupData.password,
-                })
+                }
             });
+
             if (response.ok) {
                 const user = await response.json();
                 console.log('Login successful:', user);
-                navigate('/homeStudent');
+                navigate(isTeacher ? '/homeTeacher' : '/homeStudent'); // Navigate to appropriate home
             } else {
                 console.error('Login failed');
             }
         } catch (error) {
             console.error('Error:', error);
         }
+
     };
 
     const handleChange = (e) => {

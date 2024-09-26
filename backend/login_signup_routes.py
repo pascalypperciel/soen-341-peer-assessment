@@ -70,9 +70,8 @@ def teacherSignup():
 
 @login_signup_routes.route('/studentLogin', methods=['GET'])
 def studentLogin():
-    data=request.get_json()
-    StudentID=data['studentID']
-    password=data['password']
+    StudentID = request.args.get('studentID')
+    password = request.args.get('password')
 
     try: 
         #connect to db
@@ -104,9 +103,8 @@ def studentLogin():
     
 @login_signup_routes.route('/teacherLogin', methods=['GET'])
 def teacherLogin():
-    data=request.get_json()
-    TeacherID=data['teacherID']
-    password=data['password']
+    TeacherID = request.args.get('teacherID')
+    password = request.args.get('password')
 
     try: 
         #connect to db
