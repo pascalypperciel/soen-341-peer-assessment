@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import SignupPage from './Components/Sign-Login/SignupPage'; 
-import LoginPage from './Components/Sign-Login/LoginPage';
+import HomeStudent from './Components/Sign-Login/homeStudent'; 
 
 const App = () => {
   return (
@@ -9,6 +9,7 @@ const App = () => {
         {/* Redirect from "/" to "/signup" */}
         <Route path="/" element={<Navigate to="/signup" />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/home" element={<HomeStudent />} />
       </Routes>
     </Router>
   );
