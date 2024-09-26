@@ -9,7 +9,7 @@ const App = () => {
         {/* Redirect from "/" to "/signup" */}
         <Route path="/" element={<Navigate to="/signup" />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/home" element={<HomeStudent />} />
+        <Route path="/homeStudent" element={<HomeStudent />} />
       </Routes>
     </Router>
   );

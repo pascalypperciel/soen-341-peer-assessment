@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import homeStudent from './homeStudent'; 
+import homeStudent from './homeStudent';
 
 const SignupPage = () => {
     const [isTeacher, setIsTeacher] = useState(true);
@@ -42,7 +42,7 @@ const SignupPage = () => {
         return errors;
     };
 
-    const handleSignup = async (e) => {  //This is where the backend I think should go 
+    const handleSignup = async (e) => {
         e.preventDefault();
         const validationErrors = validateForm();
         if (Object.keys(validationErrors).length > 0) {
@@ -50,10 +50,11 @@ const SignupPage = () => {
             return;
         }
 
-        const url = isTeacher ? '/api/teachers' : '/api/students';
+        const url = isTeacher ? '/teacherSignup' : '/studentSignup'; // Updated URL
         try {
             const response = await axios.post(url, {
-                [isTeacher ? 'username' : 'studentId']: signupData.idOrUsername,
+                [isTeacher ? 'teacherID' : 'studentID']: signupData.idOrUsername, // Use 'teacherID' or 'studentID'
+                name: signupData.fullName, // Use 'name' for fullName
                 password: signupData.password,
             });
 
@@ -68,8 +69,7 @@ const SignupPage = () => {
         }
     };
 
-        //THIS IS WHERE THE BACKEND SHOULD DO THE JOB
-    const handleLogin = async (e) => {   
+    const handleLogin = async (e) => {
         e.preventDefault();
         const validationErrors = validateForm();
         if (Object.keys(validationErrors).length > 0) {
@@ -78,11 +78,20 @@ const SignupPage = () => {
         }
 
         const url = isTeacher 
-            ? `/api/teachers?username=${signupData.idOrUsername}&password=${signupData.password}`
-            : `/api/students?studentId=${signupData.idOrUsername}&password=${signupData.password}`;
+            ? `/teacherLogin` // Updated URL
+            : `/studentLogin`; // Updated URL
 
         try {
-            const response = await fetch(url, { method: 'GET' });
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    [isTeacher ? 'teacherID' : 'studentID']: signupData.idOrUsername, // Use 'teacherID' or 'studentID'
+                    password: signupData.password,
+                })
+            });
             if (response.ok) {
                 const user = await response.json();
                 console.log('Login successful:', user);
@@ -103,14 +112,10 @@ const SignupPage = () => {
         setValidationErrors({});
     };
 
-    //BACKEND STOP
-
-    //Be able to switch betweent the professor and the student
     const handleRoleSwitch = (type) => {
         setIsTeacher(type === 'teacher');
         setSignupData({ fullName: '', idOrUsername: '', password: '' });
     };
-
 
     const handleFormSwitch = () => {
         setIsLogin(!isLogin);
