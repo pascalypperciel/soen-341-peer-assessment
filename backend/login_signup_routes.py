@@ -1,8 +1,7 @@
 from flask import Blueprint,request,jsonify,redirect,url_for
-from app import load_dotenv, conn
+from db import conn
 from flask_cors import CORS
 import pyodbc
-import os
 from dotenv import load_dotenv
 
 
@@ -23,26 +22,26 @@ def studentSignup():
 
         #query to add student to Student table using cursor
         StudentSignup_query="""
-        INSERT INTO Students (StudentID, Name, Password) VALUES (%s,%s,%s)
+        INSERT INTO Students (StudentID, Name, Password) VALUES (?,?,?)
         """
         StudentSignup_values=(studentID,name,password)
 
         cursor.execute(StudentSignup_query, StudentSignup_values)
-        
-        cursor.close()
-        
-
+        conn.commit()
+                
     except Exception as e :
-        return 'Error connecting to db', 500
+        return {'error': str(e)}, 500
+    
+    finally:
+        cursor.close()
     
     #temporary name for ratings page
-    return redirect(url_for('ratingspage'))
+    return {'message': 'Signup successful'}, 200
 
 @login_signup_routes.route('/teacherSignup', methods=['POST'])
 def teacherSignup():
     #obtaining infromation from the signup form
     data= request.get_json()
-    teacherID=data['teacherID']
     name=data['name']
     #no password hashing yet 
     password=data['password']
@@ -53,21 +52,23 @@ def teacherSignup():
 
         #query to add teacher to Teacher table using cursor
         TeacherSignup_query="""
-        INSERT INTO Teachers (TeacherID, Name, Password) VALUES (%s,%s,%s)
+        INSERT INTO Teachers (Name, Password) VALUES (?, ?)
         """
-        TeachertSignup_values=(teacherID,name,password)
+        TeacherSignup_values=(name, password)
 
-        cursor.execute(TeacherSignup_query,  TeachertSignup_values)
+        cursor.execute(TeacherSignup_query, TeacherSignup_values)
+        conn.commit()
         
-        cursor.close()
-
     except Exception as e :
-        return 'Error connecting to db', 500
+        return {'error': str(e)}, 500
+    
+    finally:
+        cursor.close()
     
     #temporary name for ratings page
-    return redirect(url_for('ratingspage'))
+    return {'message': 'Signup successful'}, 200
 
-@login_signup_routes.route('studentLogin', methods=['GET'])
+@login_signup_routes.route('/studentLogin', methods=['GET'])
 def studentLogin():
     data=request.get_json()
     StudentID=data['studentID']
@@ -79,25 +80,29 @@ def studentLogin():
 
         #query to verify if student with entered StudentID and Password exists
         StudentLogin_query="""
-        SELECT Password FROM Students WHERE StudentID = %s
+        SELECT Password FROM Students WHERE StudentID = ?
         """
 
         cursor.execute(StudentLogin_query, (StudentID,))
         result = cursor.fetchone()
-        cursor.close()
 
         if result:
-            storedPassword=result
-
-        if storedPassword==password:
-            return redirect(url_for('ratingspage'))
+            storedPassword=result[0]
+            if storedPassword==password:
+                return {'message': 'Login successful'}, 200
+            else:
+                return {'message': 'Incorrect password'}, 401
         else:
         # placeholder page for now 
-            return 'invalid StudentID or Password', 401
+            return {'message': 'Student not found'}, 401
+        
     except Exception as e :
-        return 'Error connecting to db', 500
+        return {'error': str(e)}, 500
     
-@login_signup_routes.route('teacherLogin', methods=['GET'])
+    finally:
+        cursor.close()
+    
+@login_signup_routes.route('/teacherLogin', methods=['GET'])
 def teacherLogin():
     data=request.get_json()
     TeacherID=data['teacherID']
@@ -109,18 +114,23 @@ def teacherLogin():
 
         #query to verify if teacher twith entered TeacherID and Password exists
         TeacherLogin_query="""
-        SELECT Password FROM Teachers WHERE TeacherID = %s
+        SELECT Password FROM Teachers WHERE TeacherID = ?
         """
         cursor.execute(TeacherLogin_query, (TeacherID,))
         result = cursor.fetchone()
-        cursor.close()
 
         if result:
-            storedPassword=result
-        #placeholder page for now 
-        if storedPassword==password:
-            return redirect(url_for('groupspage'))
+            storedPassword=result[0]
+            if storedPassword==password:
+                return {'message': 'Login successful'}, 200
+            else:
+                return {'message': 'Incorrect password'}, 401
         else:
-            return 'invalid TeacherID or Password', 401
+        # placeholder page for now 
+            return {'message': 'Teacher not found'}, 401
+        
     except Exception as e :
-        return 'Error connecting to db', 500
+        return {'error': str(e)}, 500
+    
+    finally:
+        cursor.close()
