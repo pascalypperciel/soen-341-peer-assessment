@@ -21,7 +21,45 @@ def make_team_manually():
     if not student_ids:
         return jsonify({"error": "No student IDs provided"}), 400
 
+    #validate student ID entries to ensure they are INTs by parsing
+    try:
+        student_ids = [int(sid.strip()) for sid in student_ids if sid.strip()]
+    except ValueError:
+        return jsonify({"error": "Invalid student ID format"}), 400
+
+    #db connection -> must be updated for live server implementation
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    try:
+        #Find the largest groupID such that you can increment and assign to new group
+        cursor.execute("SELECT MAX(groupID) FROM StudentGroup")
+        result = cursor.fetchone()
+
+        # If there are no entries, we start from GroupID = 1, otherwise increment
+        current_group_id = result[0] if result[0] is not None else 0
+        new_group_id = current_group_id + 1
     
+        #insert the group into the proper table 
+        query = """"
+        INSERT INTO StudentGroup (StudentID, GroupID)
+        VALUES (%d, %d)
+        """
+        for student_id in student_ids:
+            cursor.execute(query, (student_id, new_group_id))
+
+        #commit the hroups to db
+        connection.commit()
+
+    except pyodbc.Error as err:
+        connection.rollback()
+        return jsonify({"error": f"Database error: {str(err)}"}), 500
+ 
+
+    finally:
+        cursor.close()
+        
+    return jsonify({"message": f"New team created with GroupID {new_group_id}!"}), 200
 
 
 
