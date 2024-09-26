@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Responsive Sidebar</title>
+    <style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+}
+
+.sidebar {
+    height: 100vh;
+    width: 250px;
+    background-color: #111;
+    color: #818181;
+    overflow-x: hidden;
+    padding-top: 20px;
+    transition: 0.5s;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar ul {
+    padding: 0;
+    list-style-type: none;
+}
+
+.sidebar a {
+    padding: 8px 16px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    color: #f1f1f1;
+}
+
+.content {
+    flex: 1;
+    padding: 16px;
+}
+
+/* Toggle button style */
+.toggle-btn {
+    font-size: 18px;
+    background-color: #111;
+    color: #818181;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+}
+
+/* Style when button is hovered */
+.toggle-btn:hover {
+    color: #f1f1f1;
+}
+
+/* Media query for responsiveness */
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        text-align: center;
+    }
+
+    .sidebar.collapsed {
+        width: 100%;
+    }
+}
+
+.sidebar.collapsed {
+    width: 60px;
+    overflow: hidden;
+}
+
+.sidebar.collapsed ul {
+    display: none;
+}
+
+.sidebar.collapsed .toggle-btn {
+    text-align: center;
+}
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="sidebar">
+        <button class="toggle-btn" onclick="toggleSidebar()">☰ Menu</button>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h1>Heading if needed</h1>
+        <p>This is where the main stuff goes guys</p>
+    </div>
+</div>
+
+<script>
+
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    sidebar.classList.toggle('collapsed');
+}
+</script>
+</body>
+</html>
+
+
