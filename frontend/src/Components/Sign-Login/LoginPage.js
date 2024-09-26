@@ -11,23 +11,19 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const url = isTeacher 
-      ? `/api/teachers?username=${credentials.idOrUsername}&password=${credentials.password}`
-      : `/api/students?studentId=${credentials.idOrUsername}&password=${credentials.password}`;
 
-    try {
-      const response = await fetch(url, { method: 'GET' });
-      if (response.ok) {
-        const user = await response.json();
-        console.log('Login successful:', user);
-        // Redirect to the dashboard or another page
-        navigate('/dashboard'); // Change this to your desired route after login
-      } else {
-        console.error('Login failed');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    const url = isTeacher ? '/teacherLogin' : '/studentLogin';
+
+try {
+    const response = await axios.post(url, {
+        idOrUsername: signupData.idOrUsername,
+        password: signupData.password,
+    });
+    // Handle the response
+} catch (error) {
+    // Handle the error
+}
+
   };
 
   const handleChange = (e) => {
