@@ -1,4 +1,4 @@
-from flask import Blueprint,request,jsonify,redirect,url_for
+from flask import Blueprint,request,jsonify,redirect,url_for,session
 from db import conn
 from flask_cors import CORS
 import pyodbc
@@ -43,6 +43,7 @@ def teacherSignup():
     #obtaining infromation from the signup form
     data= request.get_json()
     name=data['name']
+    username=data['username']
     #no password hashing yet 
     password=data['password']
 
@@ -52,9 +53,9 @@ def teacherSignup():
 
         #query to add teacher to Teacher table using cursor
         TeacherSignup_query="""
-        INSERT INTO Teachers (Name, Password) VALUES (?, ?)
+        INSERT INTO Teachers (Name, Password, Username) VALUES (?, ?, ?)
         """
-        TeacherSignup_values=(name, password)
+        TeacherSignup_values=(name, password, username)
 
         cursor.execute(TeacherSignup_query, TeacherSignup_values)
         conn.commit()
@@ -70,9 +71,8 @@ def teacherSignup():
 
 @login_signup_routes.route('/studentLogin', methods=['GET'])
 def studentLogin():
-    data=request.get_json()
-    StudentID=data['studentID']
-    password=data['password']
+    StudentID = request.args.get('studentID')
+    password = request.args.get('password')
 
     try: 
         #connect to db
@@ -89,6 +89,10 @@ def studentLogin():
         if result:
             storedPassword=result[0]
             if storedPassword==password:
+
+                #store the stud ID in a session once logged in
+                session['student_id']= StudentID
+
                 return {'message': 'Login successful'}, 200
             else:
                 return {'message': 'Incorrect password'}, 401
@@ -104,33 +108,40 @@ def studentLogin():
     
 @login_signup_routes.route('/teacherLogin', methods=['GET'])
 def teacherLogin():
-    data=request.get_json()
-    TeacherID=data['teacherID']
-    password=data['password']
+    username = request.args.get('username')
+    password = request.args.get('password')
 
     try: 
-        #connect to db
+        # connect to db
         cursor = conn.cursor()
 
-        #query to verify if teacher twith entered TeacherID and Password exists
-        TeacherLogin_query="""
-        SELECT Password FROM Teachers WHERE TeacherID = ?
+        # query to verify if teacher with entered Username and Password exists
+        TeacherLogin_query = """
+        SELECT Password, TeacherID FROM Teachers WHERE Username = ?
         """
-        cursor.execute(TeacherLogin_query, (TeacherID,))
+        cursor.execute(TeacherLogin_query, (username,))
         result = cursor.fetchone()
 
         if result:
-            storedPassword=result[0]
-            if storedPassword==password:
-                return {'message': 'Login successful'}, 200
+            storedPassword = result[0]
+            teacherID = result[1]
+            session['teacher_id']= teacherID
+            
+            if storedPassword == password:
+                return {'message': 'Login successful', 'teacher_id': teacherID}, 200
             else:
                 return {'message': 'Incorrect password'}, 401
         else:
-        # placeholder page for now 
             return {'message': 'Teacher not found'}, 401
-        
-    except Exception as e :
+
+    except Exception as e:
         return {'error': str(e)}, 500
-    
+
     finally:
         cursor.close()
+
+@login_signup_routes.route('/logout', methods=['GET'])
+def logout():
+    session.pop('student_id', None)
+    session.pop('teacher_id', None)
+    return {'message': 'Logged out!'}, 200

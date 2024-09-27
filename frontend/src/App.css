@@ -36,3 +36,23 @@
     transform: rotate(360deg);
   }
 }
+
+.layout {
+  display: flex;
+  flex-direction: column;       /* Stack header, main, and footer */
+  height: 100vh;               /* Full viewport height */
+}
+
+.main-content {
+  display: flex;                /* Use flexbox for the main content */
+  flex: 1;                     /* Allow it to grow and fill available space */
+  justify-content: center;      /* Center horizontally */
+  align-items: center;          /* Center vertically */
+}
+
+.footer {
+  /* Add your footer styles */
+  /* Example: */
+  padding: 20px;
+  background-color: #f8f9fa;
+}
