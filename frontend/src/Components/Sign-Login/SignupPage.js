@@ -53,7 +53,7 @@ const SignupPage = () => {
         const url = isTeacher ? '/teacherSignup' : '/studentSignup'; // Updated URL
         try {
             const response = await axios.post(url, {
-                [isTeacher ? 'teacherID' : 'studentID']: signupData.idOrUsername, // Use 'teacherID' or 'studentID'
+                [isTeacher ? 'username' : 'studentID']: signupData.idOrUsername, // Use 'teacherID' or 'studentID'
                 name: signupData.fullName, // Use 'name' for fullName
                 password: signupData.password,
             });
@@ -78,7 +78,7 @@ const SignupPage = () => {
         }
 
         const url = isTeacher 
-            ? `/teacherLogin?teacherID=${signupData.idOrUsername}&password=${signupData.password}` // Pass parameters in the URL
+            ? `/teacherLogin?username=${signupData.idOrUsername}&password=${signupData.password}` // Pass parameters in the URL
             : `/studentLogin?studentID=${signupData.idOrUsername}&password=${signupData.password}`;
 
         try {

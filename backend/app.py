@@ -5,6 +5,7 @@ from db import conn
 from login_signup_routes import login_signup_routes
 
 app = Flask(__name__)
+app.secret_key = 'SuperStrongKey'
 app.register_blueprint(login_signup_routes)
 CORS(app)
 

@@ -43,6 +43,7 @@ def teacherSignup():
     #obtaining infromation from the signup form
     data= request.get_json()
     name=data['name']
+    username=data['username']
     #no password hashing yet 
     password=data['password']
 
@@ -52,9 +53,9 @@ def teacherSignup():
 
         #query to add teacher to Teacher table using cursor
         TeacherSignup_query="""
-        INSERT INTO Teachers (Name, Password) VALUES (?, ?)
+        INSERT INTO Teachers (Name, Password, Username) VALUES (?, ?, ?)
         """
-        TeacherSignup_values=(name, password)
+        TeacherSignup_values=(name, password, username)
 
         cursor.execute(TeacherSignup_query, TeacherSignup_values)
         conn.commit()
@@ -107,38 +108,35 @@ def studentLogin():
     
 @login_signup_routes.route('/teacherLogin', methods=['GET'])
 def teacherLogin():
-    TeacherID = request.args.get('teacherID')
+    username = request.args.get('username')
     password = request.args.get('password')
 
     try: 
-        #connect to db
+        # connect to db
         cursor = conn.cursor()
 
-        #query to verify if teacher twith entered TeacherID and Password exists
-        TeacherLogin_query="""
-        SELECT Password FROM Teachers WHERE TeacherID = ?
+        # query to verify if teacher with entered Username and Password exists
+        TeacherLogin_query = """
+        SELECT Password, TeacherID FROM Teachers WHERE Username = ?
         """
-        cursor.execute(TeacherLogin_query, (TeacherID,))
+        cursor.execute(TeacherLogin_query, (username,))
         result = cursor.fetchone()
 
         if result:
-            storedPassword=result[0]
-            if storedPassword==password:
-
-                #store the stud ID in a session once logged in
-                session['teacher_id']= TeacherID
-                
-       
-                return {'message': 'Login successful'}, 200
+            storedPassword = result[0]
+            teacherID = result[1]
+            session['teacher_id']= teacherID
+            
+            if storedPassword == password:
+                return {'message': 'Login successful', 'teacher_id': teacherID}, 200
             else:
                 return {'message': 'Incorrect password'}, 401
         else:
-        # placeholder page for now 
             return {'message': 'Teacher not found'}, 401
-        
-    except Exception as e :
+
+    except Exception as e:
         return {'error': str(e)}, 500
-    
+
     finally:
         cursor.close()
 
