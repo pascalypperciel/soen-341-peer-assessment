@@ -1,8 +1,10 @@
-from flask import Blueprint,request,jsonify,redirect,url_for
+from flask import Blueprint,request,jsonify,redirect,url_for,session
 from db import conn
 from flask_cors import CORS
 import pyodbc
 from dotenv import load_dotenv
+
+#imports for the csv reading
 from io import StringIO
 import csv
 
@@ -10,7 +12,6 @@ teams_page_routes = Blueprint('teams_page_routes', __name__)
 
 #Method for instructor to manually create a team given specific fields 
 # -> student ID manual input , group id assessed based on current inputs in db
-
 
 @teams_page_routes.route('maketeamsManually', methods= ['POST'])
 def make_team_manually():
@@ -27,10 +28,8 @@ def make_team_manually():
     except ValueError:
         return jsonify({"error": "Invalid student ID format"}), 400
 
-    #db connection -> must be updated for live server implementation
-    connection = get_db_connection()
-    cursor = connection.cursor()
-
+    #db connection -> live server implementation
+    cursor = conn.curso
     try:
         #Find the largest groupID such that you can increment and assign to new group
         cursor.execute("SELECT MAX(groupID) FROM StudentGroup")
@@ -49,10 +48,10 @@ def make_team_manually():
             cursor.execute(query, (student_id, new_group_id))
 
         #commit the hroups to db
-        connection.commit()
+        conn.commit()
 
     except pyodbc.Error as err:
-        connection.rollback()
+        conn.rollback()
         return jsonify({"error": f"Database error: {str(err)}"}), 500
  
 
@@ -112,11 +111,67 @@ def make_team_CSV():
                 VALUES (%s, %s)
                 """
                 cursor.execute(query, (student_id, group_id))
-
-        cursor.commit()
+        #commit changes to DB
+        conn.commit()
 
     except Exception as e: 
         return {'error':str(e)},500 
     finally:
         cursor.close()  
     return jsonify({"message": "Teams successfully uploaded!"}), 200
+
+#Method for instructor to create a team with a csv upload 
+# csv format is assumed to be studentID in each row, when there is an empty row, signaling of end of that specific team 
+@teams_page_routes.route('/displayStudentTeam',methods=['GET'])
+def display_student_team ():
+    #assume sessions implemented in login route
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+
+    #assign student_id based on sessions
+    student_id = session['student_id']
+
+    try:
+
+        cursor = conn.cursor()
+
+        #query for groups the student is apart of
+        query = """
+            SELECT GroupID
+            FROM StudentGroup
+            WHERE StudentID = ?
+        """
+
+        cursor.excecute(query, (student_id))
+
+        #fetch all groups student is in
+        group_ids = [row[0] for row in cursor.fetchall()]
+
+        #if no groups return message 
+        if not group_ids:
+            return jsonify({"message": f"No groups for this student!"}), 404
+        
+    #In each group find the other team members
+
+        groups_with_students = {}
+        for group_id in group_ids:
+            # Query to get all students in this group
+            student_query = """
+                SELECT StudentID
+                FROM StudentGroup
+                WHERE GroupID = ?
+            """
+            cursor.execute(student_query, (group_id,))
+            student_ids_in_group = [row[0] for row in cursor.fetchall()]
+
+            # Add the group and its list of students
+            groups_with_students[group_id] = student_ids_in_group
+
+    except pyodbc.Error as e:
+        return jsonify({"error": f"Database error: {str(e)}"}), 500
+
+    finally:
+        cursor.close()
+
+    # Return a JSON response with the student's groups and all students in those groups
+    return jsonify({"student_id": student_id, "groups_with_students": groups_with_students}), 200
