@@ -1,4 +1,4 @@
-from flask import Blueprint,request,jsonify,redirect,url_for
+from flask import Blueprint,request,jsonify,redirect,url_for,session
 from db import conn
 from flask_cors import CORS
 import pyodbc
@@ -88,6 +88,10 @@ def studentLogin():
         if result:
             storedPassword=result[0]
             if storedPassword==password:
+
+                #store the stud ID in a session once logged in
+                session['student_id']= StudentID
+
                 return {'message': 'Login successful'}, 200
             else:
                 return {'message': 'Incorrect password'}, 401
@@ -120,6 +124,11 @@ def teacherLogin():
         if result:
             storedPassword=result[0]
             if storedPassword==password:
+
+                #store the stud ID in a session once logged in
+                session['teacher_id']= TeacherID
+                
+       
                 return {'message': 'Login successful'}, 200
             else:
                 return {'message': 'Incorrect password'}, 401
@@ -132,3 +141,9 @@ def teacherLogin():
     
     finally:
         cursor.close()
+
+@login_signup_routes.route('/logout', methods=['GET'])
+def logout():
+    session.pop('student_id', None)
+    session.pop('teacher_id', None)
+    return {'message': 'Logged out!'}, 200
