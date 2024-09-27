@@ -120,3 +120,63 @@ def make_team_CSV():
     finally:
         cursor.close()  
     return jsonify({"message": "Teams successfully uploaded!"}), 200
+
+
+@teams_page_routes.route('/displayTeams',methods=['GET'])
+def display_teams():
+    #prompt the teacher to enter which class they would like to view using the course id
+    data=request.get_json()
+    course_id=data['courseID']
+
+    if not course_id:
+        return jsonify({"error": "courseID is required"}), 400
+    
+    try:
+         cursor = conn.cursor()
+         # find groups with matching Courseids
+         grous_query="""
+            SELECT GroupID FROM Groups WHERE CourseID= ?
+            """
+         cursor.execute(grous_query,course_id)
+
+         #fetch all rows from the response to exctracrt the groupids with the respective courseid
+         groups_result=cursor.fetchall()
+
+         if not groups_result:
+            return jsonify({"message": "No groups found for this course"}), 404
+         #list of all group ids
+         group_ids=[group[0] for group in groups_result]
+
+
+        # Preparing list to return 
+         groups_in_course = []
+        #find the students with a certain group matching the course id
+         for group in groups_result:
+            group_id = group[0]  # Extract the GroupID
+            # Query to get all students in the current group
+            students_query = """
+                SELECT Students.StudentID, Students.Name
+                FROM Students
+                JOIN StudentGroup ON Students.StudentID = StudentGroup.StudentID
+                WHERE StudentGroup.GroupID = ?
+            """
+            cursor.execute(students_query, (group_id,))
+            #fetch all rows from query result
+            students_result = cursor.fetchall()
+
+            #make a list of the students within the group
+            students_in_group = [{"studentId": student[0], "name": student[1]} for student in students_result]
+
+            #append the group to the list of groups in the class
+            groups_in_course.append(students_in_group)
+
+            #return nested list of the groups within a course
+         return jsonify(groups_in_course), 200
+         
+    except Exception as e :
+        return {'error': str(e)}, 500
+    
+    finally: 
+        cursor.close()
+        
+
