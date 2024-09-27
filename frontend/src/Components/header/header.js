@@ -4,6 +4,7 @@ import './header.css';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   const navigate = useNavigate(); 
@@ -26,11 +27,13 @@ const Header = () => {
         </div>
 
         <nav className="nav-bar">
-          <div className="center-links">
-            <a href="#home">Home</a>
-            <a href="#news">News</a>
-            <a href="#contact">Contact</a>
-          </div>
+        
+        <ul className="center-links">
+          <li><Link to="/ratingPage">Home</Link></li>
+          <li><Link to="/test">Rate a Student</Link></li>
+          <li><Link to="/">Something</Link></li>
+        </ul>
+
 
           <Box sx={{ '& button': { m: 1 } }}>
             <Button

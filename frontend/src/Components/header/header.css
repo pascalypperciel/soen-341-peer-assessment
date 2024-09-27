@@ -24,16 +24,20 @@
     display: flex;
     flex-grow: 1;
     justify-content: center; /* Center the Home, News, and Contact links */
+    list-style-type: none;
   }
   
-  .center-links a {
+  .center-links li {
     margin: 0 30px;
-    text-decoration: none;
-    color: #912338;
     font-weight: bold;
     padding: 10px;
     border-radius: 10px;
     transition: text-shadow 0.3s ease;
+  }
+  
+  .center-links li a {
+    text-decoration: none; /* Remove underline from links */
+    color: #912338; /* Set the text color */
   }
   
   .center-links a:hover {
