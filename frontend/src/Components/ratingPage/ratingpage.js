@@ -10,9 +10,13 @@ const RatingPage = () => {
     return (
         <div>
           <Header />
+          <div>
+            {/* You can add content here if needed */}
+          </div>
+          <Footer />
         </div>
       );
-    };
+    };      
     
 
 export default RatingPage;
