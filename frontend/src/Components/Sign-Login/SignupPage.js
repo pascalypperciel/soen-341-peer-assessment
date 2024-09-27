@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './SignupPage.css';
-import backgroundImage from '../Assets/background2.jpg';
+import backgroundImage from '../Assets/concordia1.jpg';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
@@ -126,7 +126,7 @@ const SignupPage = () => {
             <img src={backgroundImage} alt="Description" className="image" />
 
             <div className='peer-title'>
-                <h2> Peer Assessment </h2>
+                <h2> Concordia University </h2>
             </div>
 
             <div className="button-role">
