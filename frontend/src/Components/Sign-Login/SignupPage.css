@@ -1,6 +1,7 @@
 .container {
   position: relative;
   display: flex;
+  flex-direction: row; /* or column, depending on layout */
   align-items: center;
   justify-content: center;
   width: fit-content;
@@ -12,6 +13,7 @@
   margin-top: 20vh;
   width: 55%;
   max-width: 1200px;
+  min-height: 600px;
 }
 
 .container h1 {
@@ -67,10 +69,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  min-height: 0;
+  justify-content: space-between; /* Space out content */
+  min-height: 0; /* Prevent shrinking too much */
+  max-height: 90%; /* Ensure it doesn't overflow the container */
   flex-grow: 1;
-  justify-content: space-between;
 }
 
 .info .textfield {
@@ -86,7 +88,7 @@
   width: 100%;
   max-width: 600px;
   min-width: 300px;
-  padding: 5px 10px;
+  padding: 10px 20px;
   background-color: #912338;
   border-radius: 20px;
   cursor: pointer;
