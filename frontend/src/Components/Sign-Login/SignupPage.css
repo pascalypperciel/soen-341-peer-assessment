@@ -1,7 +1,7 @@
 .container {
   position: relative;
   display: flex;
-  flex-direction: row; /* or column, depending on layout */
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   width: fit-content;
@@ -69,9 +69,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between; /* Space out content */
-  min-height: 0; /* Prevent shrinking too much */
-  max-height: 90%; /* Ensure it doesn't overflow the container */
+  justify-content: space-between;
+  min-height: 0;
+  max-height: 90%;
   flex-grow: 1;
 }
 
@@ -146,9 +146,9 @@
     color: #912338;
     transition: background-color 0.3s ease, color 0.3s ease,
       border-color 0.3s ease;
-    width: auto; /* Cancel full width */
-    max-width: none; /* Cancel maximum width */
-    align-self: auto; /* Cancel right alignment */
+    width: auto;
+    max-width: none;
+    align-self: auto;
   }
 
   .button-role {
