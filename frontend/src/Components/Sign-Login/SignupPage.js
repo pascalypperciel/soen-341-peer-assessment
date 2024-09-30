@@ -27,7 +27,7 @@ const SignupPage = () => {
     }
 
     if (isTeacher) {
-      if (!/^[a-zA-Z]{3,20}$/.test(idOrUsername)) {
+      if (!/^[a-zA-Z_]{3,20}$/.test(idOrUsername)) {
         errors.idOrUsername = "Username is not valid";
       }
     } else {
@@ -94,7 +94,7 @@ const SignupPage = () => {
       if (response.ok) {
         const user = await response.json();
         console.log("Login successful:", user);
-        navigate(isTeacher ? "/homeTeacher" : "/homeStudent");
+        navigate("/homeStudent");
       } else {
         console.error("Login failed");
       }
