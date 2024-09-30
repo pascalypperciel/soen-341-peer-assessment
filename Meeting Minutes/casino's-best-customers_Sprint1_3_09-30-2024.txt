@@ -1,0 +1,52 @@
+Meeting #3
+
+Meeting Title: Closing up Sprint #1 and starting Sprint #2
+Date: September 30th, 2024
+Time: 4:00 pm
+
+Attendees:
+-Justin Lombardi
+-Antonino Guarraci
+-Massimo Caruso
+-Jessica Codreanu
+-Pascal Ypperciel
+-Parsa Darbani
+
+Absentees: None
+
+
+
+Agenda:
+	- List what is there to be done by midnight (due date for Sprint #1)
+	- Going over what needs to be done in Sprint #2 and assigning first batch of tasks
+
+Topics Discussed
+
+End of Sprint #1:
+
+	- Some members need to wrap-up, test, and push their code.
+	- Need to upload the meeting minutes on the repo.
+	- Need to write the detailed log of everyone.
+
+Beginning of Sprint #2:
+
+	- Went over the Sprint #2 overview PDF.
+	- Pascal explained the user stories/issues created from said PDF.
+	- Issues were assigned to everyone for Sprint #2.
+	
+		
+Descisions made: 
+
+	- none
+
+Next Steps:
+
+	- Wrap up Sprint #1 (push code, write detailed log)
+	- Prepare for Thursday's demo
+	- (If possible) Start Sprint #2 tasks
+
+Next meeting:
+ 
+	-2024-10-03
+	-4:00pm
+	-Lab class room
