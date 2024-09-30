@@ -1,0 +1,65 @@
+Meeting #1
+
+Meeting Title: Establishing a Plan of Action 
+Date: September 19th, 2024
+Time: 2:15 pm
+
+Attendees:
+-Justin Lombardi
+-Antonino Guarraci
+-Massimo Caruso
+-Jessica Codreanu
+-Pascal Ypperciel
+-Parsa Darbani
+
+Absentees: None
+
+
+
+Agenda:
+	-Discuss a stack 
+	-Assign members to front end/ back end development 
+	-Discuss user stories for sprint 1 
+
+Topics Discussed
+
+Stack:
+
+	-Decided to use react framework for front end 
+	-Flask server for back end 
+	-SQL server for database storage
+		Different tables for students, teachers, courses, groups, and ratings
+	-Several members had already used flask and other were interested in learning react.js
+	
+
+Front end and back end development:
+
+	-Three members were each assigned to front and back end development 
+		Backend: Justin, Pascal, Antonino
+		Frontend: Parsa,Jessica, Massimo
+
+User Stories:
+
+	-Brainstorm for all possible functionalities of the program
+		Teachers having several classes
+		Student id’s being unique
+		Different endpoints 
+		Password Hashing 
+		
+Descisions made: 
+
+	- Project will be completed using react.js frontend, flask backend and SQL server as form of storage 
+	- there will be dedicated front end and back end teams
+	- 
+
+Next Steps:
+
+	-Everyone work on their respective user stories
+	-Front end and back end teams work together to troubleshoot and test code
+
+Next meeting:
+ 
+	-2024-09-26  
+	-2:15pm
+	-Concordia University
+	-Hall Building 8th floor
