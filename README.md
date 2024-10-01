@@ -45,6 +45,8 @@ Code contribution, push code, create/delete branches, pull requests, open and ta
 #### Admin
 Same as Contributor but can also manage repository settings, manage collaborators, etc.
 
+## Repository's Rules
+Currently, we have a rule where PR requires at least one approuval from a reviewer to be accepeted and merged.
   
 
   
