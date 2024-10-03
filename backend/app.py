@@ -4,6 +4,8 @@ from db import conn
 #blueprints
 from login_signup_routes import login_signup_routes
 
+from teams_page_routes import teams_page_routes 
+
 app = Flask(__name__)
 app.secret_key = 'SuperStrongKey'
 app.register_blueprint(login_signup_routes)
