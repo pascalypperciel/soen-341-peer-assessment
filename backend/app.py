@@ -4,6 +4,8 @@ import pyodbc
 import os
 from dotenv import load_dotenv
 
+from teams_page_routes import teams_page_routes 
+
 app = Flask(__name__)
 CORS(app)
 
