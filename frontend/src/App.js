@@ -5,7 +5,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import SignupPage from "./Components/Sign-Login/SignupPage";
-import HomeStudent from "./Components/Sign-Login/homeStudent";
+import Teams from "./Components/TeamPage/Teams";
 
 const App = () => {
   return (
@@ -13,7 +13,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Navigate to="/signup" />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/homeStudent" element={<HomeStudent />} />
+        <Route path="/teams" element={<Teams />} />
       </Routes>
     </Router>
   );
