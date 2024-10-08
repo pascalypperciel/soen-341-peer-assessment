@@ -78,60 +78,86 @@ def make_team_manually():
 
 	return {'message': 'Inserts successful'}, 200
 
-#Method for instructor to create a team with a csv upload 
-# csv format is assumed to be studentID in each row, when there is an empty row, signaling of end of that specific team 
-@teams_page_routes.route('/makeTeamCSV',methods=['POST'])
+@teams_page_routes.route('/makeTeamCSV', methods=['POST'])
 def make_team_CSV():
-	#get the file from the front end 
-	file = request.files['file']
-	#error handle if the file is not there
-	if not file:
-		return jsonify({"error": "No file provided"}), 400
+    file = request.files['file']
+    teacher_id = request.form.get('teacher_id')
 
-	# Open file streams
-	file_stream = StringIO(file.read().decode("utf-8"))
-	csv_reader = csv.reader(file_stream)
-	#create empty list to hold all teams in tupples and current_team to save the team of the itteration
-	teams = []
-	current_team = []
-	group_id = 1  
+    if not file or not teacher_id:
+        return jsonify({"error": "Missing required data: file or teacher_id"}), 400
 
-	# read and parse the CSV file
-	for row in csv_reader:
-		if not row:  #if empty line, means end of team 
-			if current_team:
-				teams.append((current_team, group_id))
-				current_team = []
-				group_id += 1
-		else:
-			try:
-				student_id = int(row[0].strip())  
-				current_team.append(student_id)
-			except ValueError:
-				return jsonify({"error": "Invalid student ID format in file"}), 400
+    file_stream = StringIO(file.read().decode("utf-8"))
+    csv_reader = csv.reader(file_stream)
+    
+    teams = [] 
+    current_team = []
+    group_names = []
+    course_names = [] 
+    courses_cache = {}
 
-	if current_team:  # Add the last group if not already added
-		teams.append((current_team, group_id))
+    try:
+        cursor = conn.cursor()
 
-	#add correct cursor connection for the live server - > this set up assumes local hosting.
-	cursor = conn.cursor()
-	try:
-		for team, group_id in teams:
-			for student_id in team:
-				#query to put the teams into the db
-				query = """
-				INSERT INTO StudentGroup (StudentID, GroupID)
-				VALUES (%s, %s)
-				"""
-				cursor.execute(query, (student_id, group_id))
-		#commit changes to DB
-		conn.commit()
+        for row in csv_reader:
+            if not row:
+                continue
+            try:
+                student_id = int(row[0].strip())
+                team_name = row[1].strip() if len(row) > 1 else "Unnamed Team"
+                course_name = row[2].strip() if len(row) > 2 else "Unnamed Course"
+                
+                if team_name not in group_names:
+                    group_names.append(team_name)
+                    current_team = []
+                    teams.append((team_name, course_name, current_team))
+                
+                current_team.append(student_id)
+            except ValueError:
+                return jsonify({"error": "Invalid student ID format in file"}), 400
 
-	except Exception as e: 
-		return {'error':str(e)},500 
-	finally:
-		cursor.close()  
-	return jsonify({"message": "Teams successfully uploaded!"}), 200
+        for team_name, course_name, team_students in teams:
+            # check if the course exists, create if not
+            if course_name not in courses_cache:
+                check_course_query = "SELECT CourseID FROM Courses WHERE Name = ?"
+                cursor.execute(check_course_query, (course_name,))
+                result = cursor.fetchone()
+
+                if result:
+                    course_id = result[0]
+                else:
+                    insert_course_query = "INSERT INTO Courses (Name, TeacherID) VALUES (?, ?)"
+                    cursor.execute(insert_course_query, (course_name, teacher_id))
+                    conn.commit()
+
+                    cursor.execute(check_course_query, (course_name,))
+                    course_id = cursor.fetchone()[0]
+
+                courses_cache[course_name] = course_id
+            else:
+                course_id = courses_cache[course_name]
+
+            insert_group_query = "INSERT INTO Groups (Name, CourseID) VALUES (?, ?)"
+            cursor.execute(insert_group_query, (team_name, course_id))
+            conn.commit()
+
+            cursor.execute("SELECT GroupID FROM Groups WHERE Name = ?", (team_name,))
+            group_id = cursor.fetchone()[0]
+
+            insert_student_group_query = "INSERT INTO StudentGroup (GroupID, StudentID) VALUES (?, ?)"
+            for student_id in team_students:
+                cursor.execute(insert_student_group_query, (group_id, student_id))
+
+        conn.commit()
+
+    except Exception as e:
+        conn.rollback()
+        return {'error': str(e)}, 500
+
+    finally:
+        cursor.close()
+
+    return jsonify({"message": "Teams successfully uploaded!"}), 200
+
 
 @teams_page_routes.route('/displayTeamsTeacher',methods=['GET'])
 def display_teams_teacher():

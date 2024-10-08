@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Papa from 'papaparse';
-import { Modal, TextField, Button, Box, Typography, FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText, OutlinedInput } from '@mui/material';
+import { Modal, TextField, Button, Box, Typography, FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText, OutlinedInput, IconButton, Tooltip } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
 import axios from 'axios';
 import '../../App.css';
 
@@ -16,6 +17,7 @@ function AddTeamModal({ onAddTeam, onClose }) {
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [createNewCourse, setCreateNewCourse] = useState(false);
   const fileInputRef = useRef(null);
+  const [showTipModal, setShowTipModal] = useState(false);
 
   // Fetch available courses and students on modal load
   useEffect(() => {
@@ -76,22 +78,21 @@ function AddTeamModal({ onAddTeam, onClose }) {
 
   const handleCsvUpload = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      Papa.parse(file, {
-        header: true,
-        skipEmptyLines: true,
-        complete: (result) => {
-          const csvTeams = result.data.map((team) => ({
-            teamName: team.teamName || "Unnamed Team",  
-            course: team.course || "No Course", 
-            students: team.students
-              ? team.students.split(",").map((s) => s.trim()) 
-              : [], 
-          }));
+    const formData = new FormData();
   
-          csvTeams.forEach(onAddTeam);
-        },
-      });
+    formData.append('file', file);
+    formData.append('course_name', createNewCourse ? newTeam.course : availableCourses.find(c => c.courseId === selectedCourse)?.name);
+    formData.append('teacher_id', localStorage.getItem("teacher_id"));
+  
+    if (file) {
+      axios.post('/makeTeamCSV', formData)
+        .then(response => {
+          console.log("CSV Upload Success:", response.data);
+          onClose();
+        })
+        .catch(error => {
+          console.error("CSV Upload Error:", error.response ? error.response.data : error.message);
+        });
     }
   };
 
@@ -209,14 +210,24 @@ function AddTeamModal({ onAddTeam, onClose }) {
           Add Team
         </Button>
 
-        <Typography variant="h6" component="h3" sx={{ mt: 3 }}>Or Upload CSV</Typography>
+        <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
+          <Typography variant="h6" component="h3">Or Upload CSV</Typography>
+          <Tooltip title="Each row should include a team name, course name, and student IDs separated by commas. Leave a blank row between teams to separate them. If a course doesn't exist, it will be automatically created. The CSV should only existing students.">
+            <IconButton 
+              onClick={() => setShowTipModal(true)} 
+              sx={{ ml: 1, p: 0 }}
+            >
+              <InfoIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
         
         <Button
           variant="contained" 
           onClick={handleFileButtonClick}
           sx={buttonStyle} 
         >
-          Upload CSV
+          Choose a File
         </Button>
         <input
           ref={fileInputRef}
