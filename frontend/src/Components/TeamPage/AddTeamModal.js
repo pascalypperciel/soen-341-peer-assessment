@@ -212,7 +212,7 @@ function AddTeamModal({ onAddTeam, onClose }) {
 
         <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
           <Typography variant="h6" component="h3">Or Upload CSV</Typography>
-          <Tooltip title="Each row should include a team name, course name, and student IDs separated by commas. Leave a blank row between teams to separate them. If a course doesn't exist, it will be automatically created. The CSV should only existing students.">
+          <Tooltip title="Each row should contain the following columns. The first column is an existing student ID, the second column is the name of the team, and the last column is the name of the course.">
             <IconButton 
               onClick={() => setShowTipModal(true)} 
               sx={{ ml: 1, p: 0 }}
