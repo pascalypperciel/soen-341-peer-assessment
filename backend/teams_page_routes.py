@@ -194,9 +194,10 @@ def display_teams_student ():
 
         #query for groups the student is apart of
         query = """
-            SELECT Groups.GroupID, Groups.Name, Groups.CourseID
+            SELECT Groups.GroupID, Groups.Name, Groups.CourseID, Courses.Name
             FROM StudentGroup
             JOIN Groups ON Groups.GroupID = StudentGroup.GroupID
+            JOIN Courses on Courses.CourseID = Groups.CourseID
             WHERE StudentGroup.StudentID = ?
         """
         cursor.execute(query, (student_id,))
@@ -214,6 +215,7 @@ def display_teams_student ():
             group_id = group[0]  # GroupID
             group_name = group[1]  # GroupName
             course_id = group[2]  # CourseID
+            course_name = group[3]  # CourseName
 
             # Query to get all students in this group
             students_query = """
@@ -232,6 +234,7 @@ def display_teams_student ():
                 "groupId": group_id,
                 "groupName": group_name,
                 "courseId": course_id,
+                "courseName": course_name,
                 "students": students_in_group
             })
 

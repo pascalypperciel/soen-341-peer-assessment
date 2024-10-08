@@ -4,6 +4,7 @@ import { TextField, Button, Typography, Box, Stack } from '@mui/material';
 function TeamCard({ team, onDelete, onEdit }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTeam, setEditedTeam] = useState({ ...team });
+  const [studentsInput, setStudentsInput] = useState("");
   const [isTeacher, setIsTeacher] = useState(false);
 
   useEffect(() => {
@@ -11,11 +12,13 @@ function TeamCard({ team, onDelete, onEdit }) {
     if (teacherId) {
       setIsTeacher(true);
     }
-  }, []);
+    setStudentsInput(editedTeam.students.map((s) => s.name).join(", "));
+  }, [editedTeam]);
 
   const handleEdit = () => {
     if (isEditing) {
-      onEdit(editedTeam);
+        const updatedStudents = studentsInput.split(",").map((s) => ({ name: s.trim() }));
+        onEdit({ ...editedTeam, students: updatedStudents });
     }
     setIsEditing(!isEditing);
   };
@@ -26,6 +29,10 @@ function TeamCard({ team, onDelete, onEdit }) {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const handleStudentsChange = (e) => {
+    setStudentsInput(e.target.value);
   };
 
   return (
@@ -58,9 +65,9 @@ function TeamCard({ team, onDelete, onEdit }) {
           <TextField
             fullWidth
             margin="normal"
-            label="Course ID"
-            name="courseId"
-            value={editedTeam.courseId}
+            label="Course Name"
+            name="courseName"
+            value={editedTeam.courseName}
             onChange={handleChange}
           />
           <TextField
@@ -69,13 +76,8 @@ function TeamCard({ team, onDelete, onEdit }) {
             label="Students"
             name="students"
             placeholder="Enter students, separated by commas"
-            value={editedTeam.students.map((s) => s.name).join(", ")} // Map to names for editing
-            onChange={(e) =>
-              setEditedTeam({
-                ...editedTeam,
-                students: e.target.value.split(",").map((s) => ({ name: s.trim() })), // Update names in students array
-              })
-            }
+            value={studentsInput}
+            onChange={handleStudentsChange}
           />
         </>
       ) : (
@@ -116,7 +118,7 @@ function TeamCard({ team, onDelete, onEdit }) {
             <Button
             variant="contained"
             color="error"
-            onClick={() => onDelete(team.groupName)}
+            onClick={() => onDelete(team.groupId)} 
             >
             Delete
             </Button>

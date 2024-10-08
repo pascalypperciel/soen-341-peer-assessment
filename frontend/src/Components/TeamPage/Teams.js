@@ -34,14 +34,14 @@ function Teams() {
     fetchTeams();
   }, [urlEndpoint]);
 
-  const handleDelete = (teamName) => {
-    setTeamsData(teamsData.filter((team) => team.teamName !== teamName));
+  const handleDelete = (groupId) => {
+    setTeamsData(teamsData.filter((team) => team.groupId !== groupId));
   };
 
   const handleEdit = (updatedTeam) => {
     setTeamsData(
       teamsData.map((team) =>
-        team.teamName === updatedTeam.teamName ? updatedTeam : team
+        team.groupId === updatedTeam.groupId ? updatedTeam : team
       )
     );
   };
@@ -64,7 +64,7 @@ function Teams() {
             onAddTeam={handleAddTeam}
             onClose={() => setShowModal(false)}
           />
-      </div>
+        </div>
       )}
 
       <TeamsList teams={teamsData} onDelete={handleDelete} onEdit={handleEdit} />
