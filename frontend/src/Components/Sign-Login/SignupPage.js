@@ -5,7 +5,6 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import homeStudent from "./homeStudent";
 
 const SignupPage = () => {
   const [isTeacher, setIsTeacher] = useState(true);
@@ -62,7 +61,7 @@ const SignupPage = () => {
 
       if (response.status === 200) {
         console.log("Signup successful");
-        navigate("/homeStudent");
+        navigate("/teams");
       } else {
         console.error("Signup failed");
       }
@@ -93,8 +92,17 @@ const SignupPage = () => {
 
       if (response.ok) {
         const user = await response.json();
+
+        if (isTeacher) {
+          localStorage.removeItem("student_id");
+          localStorage.setItem("teacher_id", user.teacher_id);
+        } else {
+          localStorage.removeItem("teacher_id");
+          localStorage.setItem("student_id", user.student_id);
+        }
+
         console.log("Login successful:", user);
-        navigate("/homeStudent");
+        navigate("/teams");
       } else {
         console.error("Login failed");
       }

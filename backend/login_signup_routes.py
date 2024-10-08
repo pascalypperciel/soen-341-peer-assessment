@@ -4,7 +4,6 @@ from flask_cors import CORS
 import pyodbc
 from dotenv import load_dotenv
 
-
 login_signup_routes = Blueprint('login_signup_routes', __name__)
 
 @login_signup_routes.route('/studentSignup', methods=['POST'])
@@ -93,7 +92,7 @@ def studentLogin():
                 #store the stud ID in a session once logged in
                 session['student_id']= StudentID
 
-                return {'message': 'Login successful'}, 200
+                return {'message': 'Login successful', 'student_id': StudentID}, 200
             else:
                 return {'message': 'Incorrect password'}, 401
         else:
