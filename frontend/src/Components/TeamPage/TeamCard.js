@@ -1,27 +1,61 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Typography, Box, Stack } from '@mui/material';
+import { TextField, Button, Typography, Box, Stack, Alert } from '@mui/material';
 import axios from 'axios';
 
 function TeamCard({ team, onDelete, onEdit }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTeam, setEditedTeam] = useState({ ...team });
-  const [studentsInput, setStudentsInput] = useState("");
   const [isTeacher, setIsTeacher] = useState(false);
+	const [tempStudentIds, setTempStudentIds] = useState(editedTeam.students.map((s) => s.studentId).join(", "));
+	const [error, setError] = useState(null);
 
   useEffect(() => {
     const teacherId = localStorage.getItem("teacher_id");
     if (teacherId) {
       setIsTeacher(true);
     }
-    setStudentsInput(editedTeam.students.map((s) => s.name).join(", "));
-  }, [editedTeam]);
+  }, []);
 
-  const handleEdit = () => {
-    if (isEditing) {
-        const updatedStudents = studentsInput.split(",").map((s) => ({ name: s.trim() }));
-        onEdit({ ...editedTeam, students: updatedStudents });
-    }
-    setIsEditing(!isEditing);
+  const handleEdit = async () => {
+		const studentIdsArray = tempStudentIds.split(",").map(id => id.trim());
+		const updatedStudents = studentIdsArray.map((id, index) => ({
+			studentId: id,
+			name: editedTeam.students[index]?.name || "",
+		}));
+
+		const updatedData = {
+			team_id: editedTeam.groupId,
+			course_id: editedTeam.courseId,
+			team_name: editedTeam.groupName,
+			course_name: editedTeam.courseName,
+			student_ids: studentIdsArray
+		};
+
+		try {
+			const response = await axios.put('/editTeam', updatedData);
+
+			if (response.status === 200) {
+				setEditedTeam({
+					...editedTeam,
+					students: updatedStudents
+				});
+				setError(null);
+				onEdit(editedTeam);
+				setIsEditing(false);
+			} else {
+				setError("Failed to edit the team");
+			}
+		} catch (error) {
+			if (error.response && error.response.data && error.response.data.error) {
+				setError(error.response.data.error);
+			} else {
+				setError("An unknown error occurred. Please try again.");
+			}
+		}
+  };
+
+	const toggleEdit = () => {
+    setIsEditing((prevIsEditing) => !prevIsEditing);
   };
 
   const handleChange = (e) => {
@@ -32,9 +66,10 @@ function TeamCard({ team, onDelete, onEdit }) {
     }));
   };
 
-  const handleStudentsChange = (e) => {
-    setStudentsInput(e.target.value);
-  };
+	const handleStudentIdsChange = (e) => {
+		const studentIds = e.target.value; 
+		setTempStudentIds(studentIds);
+	};	
 
   const handleDelete = async () => {
     try {
@@ -87,55 +122,65 @@ function TeamCard({ team, onDelete, onEdit }) {
           <TextField
             fullWidth
             margin="normal"
-            label="Students"
+            label="Student IDs"
             name="students"
-            placeholder="Enter students, separated by commas"
-            value={studentsInput}
-            onChange={handleStudentsChange}
+            placeholder="Enter student IDs, separated by commas"
+						value={tempStudentIds}
+						onChange={handleStudentIdsChange}
           />
+					{error && (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              {error}
+            </Alert>
+          )}
         </>
       ) : (
         <>
           <Typography variant="h6" gutterBottom>
             {team.groupName}
           </Typography>
-          <Stack direction="row" spacing={1}>
-            <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                Course:
-            </Typography>
-            <Typography variant="body2" sx={{ mb: 2 }}>
-                {team.courseName}
-            </Typography>
-          </Stack>
+					<Stack spacing={2}>
+						<Stack direction="row" spacing={1}>
+							<Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+									Course:
+							</Typography>
+							<Typography variant="body2" sx={{ mb: 2 }}>
+									{team.courseName}
+							</Typography>
+						</Stack>
 
-          <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-            Students:
-          </Typography>
-          <Typography variant="body2">
-            <ul style={{ paddingLeft: '20px', margin: '0' }}>
-              {team.students.map((student, index) => (
-                <li key={index}>{student.name}</li>
-              ))}
-            </ul>
-          </Typography>
+						<Stack direction="row" spacing={1}>
+							<Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+								Students:
+							</Typography>
+							<Typography variant="body2">
+								{team.students.map((student, index) => (
+									<span key={index}>
+										{student.name} (ID: {student.studentId})
+										{index < team.students.length - 1 && <br />}
+									</span>
+								))}
+							</Typography>
+						</Stack>
+					</Stack>
         </>
       )}
       {isTeacher && (
         <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
-            <Button
-							variant="contained"
-							color={isEditing ? 'success' : 'primary'}
-							onClick={handleEdit}
-            >
+          <Button
+            variant="contained"
+            color={isEditing ? 'success' : 'primary'}
+            onClick={isEditing ? handleEdit : toggleEdit}
+          >
             {isEditing ? "Save" : "Edit"}
-            </Button>
-            <Button
-							variant="contained"
-							color="error"
-							onClick={handleDelete}
-            >
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleDelete}
+          >
             Delete
-            </Button>
+          </Button>
         </Box>
       )}
     </Box>

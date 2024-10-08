@@ -4,7 +4,6 @@ from flask_cors import CORS
 import pyodbc
 from dotenv import load_dotenv
 
-
 login_signup_routes = Blueprint('login_signup_routes', __name__)
 
 @login_signup_routes.route('/studentSignup', methods=['POST'])

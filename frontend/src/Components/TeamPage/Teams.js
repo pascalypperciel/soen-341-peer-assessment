@@ -9,6 +9,17 @@ function Teams() {
   const [showModal, setShowModal] = useState(false);
   const [urlEndpoint, setUrlEndpoint] = useState(null);
 
+  const fetchTeams = async () => {
+    if (urlEndpoint) {
+      try {
+        const response = await axios.get(urlEndpoint);
+        setTeamsData(response.data);
+      } catch (error) {
+        console.error("Could not retrieve data from server", error);
+      }
+    }
+  };
+
   useEffect(() => {
     const studentId = localStorage.getItem("student_id");
     const teacherId = localStorage.getItem("teacher_id");
@@ -21,16 +32,6 @@ function Teams() {
   }, []);
 
   useEffect(() => {
-    async function fetchTeams() {
-      if (urlEndpoint) {
-        try {
-          const response = await axios.get(urlEndpoint);
-          setTeamsData(response.data);
-        } catch (error) {
-          console.error("Could not retrieve data from server", error);
-        }
-      }
-    }
     fetchTeams();
   }, [urlEndpoint]);
 
@@ -38,12 +39,12 @@ function Teams() {
     setTeamsData(teamsData.filter((team) => team.groupId !== groupId));
   };
 
-  const handleEdit = (updatedTeam) => {
-    setTeamsData(
-      teamsData.map((team) =>
-        team.groupId === updatedTeam.groupId ? updatedTeam : team
-      )
+  const handleEdit = async (updatedTeam) => {
+    setTeamsData((teams) =>
+      teams.map((team) => (team.groupId === updatedTeam.groupId ? updatedTeam : team))
     );
+
+    await fetchTeams();
   };
 
   const handleAddTeam = (newTeam) => {
