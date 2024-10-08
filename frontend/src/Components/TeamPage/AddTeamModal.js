@@ -17,6 +17,7 @@ function AddTeamModal({ onAddTeam, onClose }) {
   const [createNewCourse, setCreateNewCourse] = useState(false);
   const fileInputRef = useRef(null);
 
+  // Fetch available courses and students on modal load
   useEffect(() => {
     const fetchCoursesAndStudents = async () => {
       try {
@@ -41,17 +42,36 @@ function AddTeamModal({ onAddTeam, onClose }) {
     }));
   };
 
-  const handleAddTeam = () => {
-    const newTeamData = { 
-      ...newTeam, 
-      course: createNewCourse ? newTeam.course : selectedCourse,
-      students: selectedStudents 
+  const handleAddTeam = async () => {
+    const teacherId = localStorage.getItem("teacher_id");
+    const courseName = createNewCourse ? newTeam.course : availableCourses.find(c => c.courseId === selectedCourse)?.name;
+
+    const teamData = {
+      team_name: newTeam.teamName,
+      course_name: courseName,
+      student_ids: selectedStudents,
+      teacher_id: teacherId,
     };
-    onAddTeam(newTeamData);
-    setNewTeam({ teamName: "", course: "", students: [] });
-    setSelectedCourse('');
-    setSelectedStudents([]);
-    onClose();
+
+    try {
+      const response = await axios.post('/makeTeamsManually', teamData);
+
+      if (response.status === 200) {
+        onAddTeam({
+          teamName: newTeam.teamName,
+          course: courseName,
+          students: selectedStudents.map(id => availableStudents.find(s => s.studentId === id)),
+        });
+        setNewTeam({ teamName: "", course: "", students: [] });
+        setSelectedCourse('');
+        setSelectedStudents([]);
+        onClose();
+      } else {
+        console.error('Failed to create team:', response.data.error);
+      }
+    } catch (error) {
+      console.error('Error creating team:', error);
+    }
   };
 
   const handleCsvUpload = (e) => {
@@ -82,11 +102,11 @@ function AddTeamModal({ onAddTeam, onClose }) {
   const handleCourseSelection = (event) => {
     const value = event.target.value;
     if (value === "createNewCourse") {
-      setCreateNewCourse(true);  
+      setCreateNewCourse(true);
       setSelectedCourse('');
     } else {
       setSelectedCourse(value);
-      setCreateNewCourse(false); 
+      setCreateNewCourse(false);
     }
   };
 

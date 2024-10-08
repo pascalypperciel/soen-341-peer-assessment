@@ -23,12 +23,6 @@ def make_team_manually():
 	if not student_ids:
 		return jsonify({"error": "No student IDs provided"}), 400
 
-	#validate student ID entries to ensure they are INTs by parsing
-	try:
-		student_ids = [int(sid.strip()) for sid in student_ids if sid.strip()]
-	except ValueError:
-		return jsonify({"error": "Invalid student ID format"}), 400
-
 	try:
 		cursor = conn.cursor()
 
@@ -271,11 +265,11 @@ def delete_team():
 	try: 
 		cursor = conn.cursor()
 
-		query1 = "DELETE FROM Groups WHERE GroupID = ?"
-		query2 = "DELETE FROM StudentGroup WHERE GroupID = ?"
+		delete_studentgroup_query = "DELETE FROM StudentGroup WHERE GroupID = ?"
+		cursor.execute(delete_studentgroup_query, (team_id,))
 
-		cursor.execute(query1, (team_id,))
-		cursor.execute(query2, (team_id,))
+		delete_groups_query = "DELETE FROM Groups WHERE GroupID = ?"
+		cursor.execute(delete_groups_query, (team_id,))
 
 		conn.commit()
 				

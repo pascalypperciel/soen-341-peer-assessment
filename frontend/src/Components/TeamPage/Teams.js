@@ -51,6 +51,11 @@ function Teams() {
     setTeamsData([...teamsData, newTeam]);
   };
 
+  const handleModalClose = () => {
+    setShowModal(false);
+    window.location.reload();
+  };
+
   return (
     <div>
       <div className="add-team-btn-container">
@@ -63,7 +68,7 @@ function Teams() {
         <div className="modal-container">
           <AddTeamModal
             onAddTeam={handleAddTeam}
-            onClose={() => setShowModal(false)}
+            onClose={handleModalClose}
           />
         </div>
       )}
