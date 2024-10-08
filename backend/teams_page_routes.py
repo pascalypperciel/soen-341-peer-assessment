@@ -13,7 +13,7 @@ teams_page_routes = Blueprint('teams_page_routes', __name__)
 #Method for instructor to manually create a team given specific fields 
 # -> student ID manual input , group id assessed based on current inputs in db
 
-@teams_page_routes.route('/maketeamsManually', methods= ['POST'])
+@teams_page_routes.route('/makeTeamsManually', methods= ['POST'])
 def make_team_manually():
      # Get the list of student IDs from the form submission (e.g., a comma-separated string or array)
     student_ids = request.form.getlist('student_ids')  # Assumes a form input named 'student_ids'
@@ -60,14 +60,9 @@ def make_team_manually():
         
     return jsonify({"message": f"New team created with GroupID {new_group_id}!"}), 200
 
-
-
-    
-
-
 #Method for instructor to create a team with a csv upload 
 # csv format is assumed to be studentID in each row, when there is an empty row, signaling of end of that specific team 
-@teams_page_routes.route('/maketeamCSV',methods=['POST'])
+@teams_page_routes.route('/makeTeamCSV',methods=['POST'])
 def make_team_CSV():
     #get the file from the front end 
     file = request.files['file']
@@ -245,3 +240,28 @@ def display_teams_student ():
 
     finally:
         cursor.close()
+
+@teams_page_routes.route('/deleteTeam',methods=['POST'])
+def delete_team():
+    data= request.get_json()
+    team_id = data['team_id']
+
+    try: 
+        cursor = conn.cursor()
+
+        query1 = "DELETE FROM Groups WHERE GroupID = ?"
+        query2 = "DELETE FROM StudentGroup WHERE GroupID = ?"
+
+        cursor.execute(query1, (team_id,))
+        cursor.execute(query2, (team_id,))
+
+        conn.commit()
+                
+    except Exception as e :
+        conn.rollback()
+        return {'error': str(e)}, 500
+    
+    finally:
+        cursor.close()
+    
+    return {'message': 'Delete successful'}, 200

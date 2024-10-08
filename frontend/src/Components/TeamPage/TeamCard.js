@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography, Box, Stack } from '@mui/material';
+import axios from 'axios';
 
 function TeamCard({ team, onDelete, onEdit }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -33,6 +34,19 @@ function TeamCard({ team, onDelete, onEdit }) {
 
   const handleStudentsChange = (e) => {
     setStudentsInput(e.target.value);
+  };
+
+  const handleDelete = async () => {
+    try {
+      const response = await axios.post('/deleteTeam', { team_id: team.groupId });
+      if (response.status === 200) {
+        onDelete(team.groupId);
+      } else {
+        console.error('Failed to delete the team:', response.data);
+      }
+    } catch (error) {
+      console.error('Error deleting team:', error);
+    }
   };
 
   return (
@@ -109,16 +123,16 @@ function TeamCard({ team, onDelete, onEdit }) {
       {isTeacher && (
         <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
             <Button
-            variant="contained"
-            color={isEditing ? 'success' : 'primary'}
-            onClick={handleEdit}
+							variant="contained"
+							color={isEditing ? 'success' : 'primary'}
+							onClick={handleEdit}
             >
             {isEditing ? "Save" : "Edit"}
             </Button>
             <Button
-            variant="contained"
-            color="error"
-            onClick={() => onDelete(team.groupId)} 
+							variant="contained"
+							color="error"
+							onClick={handleDelete}
             >
             Delete
             </Button>
