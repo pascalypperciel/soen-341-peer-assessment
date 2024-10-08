@@ -93,7 +93,7 @@ def studentLogin():
                 #store the stud ID in a session once logged in
                 session['student_id']= StudentID
 
-                return {'message': 'Login successful'}, 200
+                return {'message': 'Login successful', 'student_id': StudentID}, 200
             else:
                 return {'message': 'Incorrect password'}, 401
         else:

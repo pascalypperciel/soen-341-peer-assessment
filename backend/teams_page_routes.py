@@ -13,7 +13,7 @@ teams_page_routes = Blueprint('teams_page_routes', __name__)
 #Method for instructor to manually create a team given specific fields 
 # -> student ID manual input , group id assessed based on current inputs in db
 
-@teams_page_routes.route('maketeamsManually', methods= ['POST'])
+@teams_page_routes.route('/maketeamsManually', methods= ['POST'])
 def make_team_manually():
      # Get the list of student IDs from the form submission (e.g., a comma-separated string or array)
     student_ids = request.form.getlist('student_ids')  # Assumes a form input named 'student_ids'
@@ -121,56 +121,61 @@ def make_team_CSV():
     return jsonify({"message": "Teams successfully uploaded!"}), 200
 
 
-@teams_page_routes.route('/displayTeams',methods=['GET'])
-def display_teams():
-    #prompt the teacher to enter which class they would like to view using the course id
-    data=request.get_json()
-    course_id=data['courseID']
+@teams_page_routes.route('/displayTeamsTeacher',methods=['GET'])
+def display_teams_teacher():
+    teacher_id = request.args.get('teacher_id')
 
-    if not course_id:
-        return jsonify({"error": "courseID is required"}), 400
-    
     try:
-         cursor = conn.cursor()
-         # find groups with matching Courseids
-         grous_query="""
-            SELECT GroupID FROM Groups WHERE CourseID= ?
-            """
-         cursor.execute(grous_query,course_id)
+        cursor = conn.cursor()
+        # find groups with matching TeacherIDs
+        grous_query="""
+        SELECT Groups.GroupID, Groups.Name, Groups.CourseID, Courses.Name
+        FROM Groups 
+        JOIN Courses ON Courses.CourseID = Groups.CourseID
+        WHERE Courses.TeacherID = ?
+        """
+        cursor.execute(grous_query,teacher_id)
 
-         #fetch all rows from the response to exctracrt the groupids with the respective courseid
-         groups_result=cursor.fetchall()
+        #fetch all rows from the response to extract the groupids with the respective courseid
+        groups_result=cursor.fetchall()
 
-         if not groups_result:
+        if not groups_result:
             return jsonify({"message": "No groups found for this course"}), 404
-         #list of all group ids
-         group_ids=[group[0] for group in groups_result]
-
-
+        
         # Preparing list to return 
-         groups_in_course = []
+        groups_in_course = []
+
         #find the students with a certain group matching the course id
-         for group in groups_result:
-            group_id = group[0]  # Extract the GroupID
-            # Query to get all students in the current group
-            students_query = """
-                SELECT Students.StudentID, Students.Name
-                FROM Students
-                JOIN StudentGroup ON Students.StudentID = StudentGroup.StudentID
-                WHERE StudentGroup.GroupID = ?
-            """
-            cursor.execute(students_query, (group_id,))
-            #fetch all rows from query result
-            students_result = cursor.fetchall()
+        for group in groups_result:
+            group_id = group[0]  # GroupID
+            group_name = group[1]  # GroupName
+            course_id = group[2] # CourseID
+            course_name = group[3] # CourseName
 
-            #make a list of the students within the group
-            students_in_group = [{"studentId": student[0], "name": student[1]} for student in students_result]
+        # Query to get all students in the current group
+        students_query = """
+            SELECT Students.StudentID, Students.Name
+            FROM Students
+            JOIN StudentGroup ON Students.StudentID = StudentGroup.StudentID
+            WHERE StudentGroup.GroupID = ?
+        """
+        cursor.execute(students_query, (group_id,))
+        #fetch all rows from query result
+        students_result = cursor.fetchall()
 
-            #append the group to the list of groups in the class
-            groups_in_course.append(students_in_group)
+        #make a list of the students within the group
+        students_in_group = [{"studentId": student[0], "name": student[1]} for student in students_result]
 
-            #return nested list of the groups within a course
-         return jsonify(groups_in_course), 200
+        groups_in_course.append({
+                "groupId": group_id,
+                "groupName": group_name,
+                "courseId": course_id,
+                "courseName": course_name,
+                "students": students_in_group
+            })
+
+        #return nested list of the groups within a course
+        return jsonify(groups_in_course), 200
          
     except Exception as e :
         return {'error': str(e)}, 500
@@ -179,58 +184,61 @@ def display_teams():
         cursor.close()
         
 
-#Method for instructor to create a team with a csv upload 
 # csv format is assumed to be studentID in each row, when there is an empty row, signaling of end of that specific team 
-@teams_page_routes.route('/displayStudentTeam',methods=['GET'])
-def display_student_team ():
-    #assume sessions implemented in login route
-    if 'student_id' not in session:
-        return redirect(url_for('login'))
-
-    #assign student_id based on sessions
-    student_id = session['student_id']
+@teams_page_routes.route('/displayTeamsStudent',methods=['GET'])
+def display_teams_student ():
+    student_id = request.args.get('student_id')
 
     try:
-
         cursor = conn.cursor()
 
         #query for groups the student is apart of
         query = """
-            SELECT GroupID
+            SELECT Groups.GroupID, Groups.Name, Groups.CourseID
             FROM StudentGroup
-            WHERE StudentID = ?
+            JOIN Groups ON Groups.GroupID = StudentGroup.GroupID
+            WHERE StudentGroup.StudentID = ?
         """
+        cursor.execute(query, (student_id,))
 
-        cursor.excecute(query, (student_id))
-
-        #fetch all groups student is in
-        group_ids = [row[0] for row in cursor.fetchall()]
+        groups_result = cursor.fetchall()
 
         #if no groups return message 
-        if not group_ids:
+        if not groups_result:
             return jsonify({"message": f"No groups for this student!"}), 404
         
-    #In each group find the other team members
+        #In each group find the other team members
+        groups_with_students = []
 
-        groups_with_students = {}
-        for group_id in group_ids:
+        for group in groups_result:
+            group_id = group[0]  # GroupID
+            group_name = group[1]  # GroupName
+            course_id = group[2]  # CourseID
+
             # Query to get all students in this group
-            student_query = """
-                SELECT StudentID
-                FROM StudentGroup
-                WHERE GroupID = ?
+            students_query = """
+                SELECT Students.StudentID, Students.Name
+                FROM Students
+                JOIN StudentGroup ON Students.StudentID = StudentGroup.StudentID
+                WHERE StudentGroup.GroupID = ?
             """
-            cursor.execute(student_query, (group_id,))
-            student_ids_in_group = [row[0] for row in cursor.fetchall()]
+            cursor.execute(students_query, (group_id,))
+            students_result = cursor.fetchall()
 
-            # Add the group and its list of students
-            groups_with_students[group_id] = student_ids_in_group
+            students_in_group = [{"studentId": student[0], "name": student[1]} for student in students_result]
+
+            # Append the group to the list of groups
+            groups_with_students.append({
+                "groupId": group_id,
+                "groupName": group_name,
+                "courseId": course_id,
+                "students": students_in_group
+            })
+
+        return jsonify(groups_with_students), 200
 
     except pyodbc.Error as e:
         return jsonify({"error": f"Database error: {str(e)}"}), 500
 
     finally:
         cursor.close()
-
-    # Return a JSON response with the student's groups and all students in those groups
-    return jsonify({"student_id": student_id, "groups_with_students": groups_with_students}), 200
