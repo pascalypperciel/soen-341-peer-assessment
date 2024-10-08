@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Typography, Box, Stack, Alert } from '@mui/material';
+import { TextField, Button, Typography, Box, Stack, Alert, Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import axios from 'axios';
 
-function TeamCard({ team, onDelete, onEdit }) {
+function TeamCard({ team, teams, onDelete, onEdit }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTeam, setEditedTeam] = useState({ ...team });
   const [isTeacher, setIsTeacher] = useState(false);
-	const [tempStudentIds, setTempStudentIds] = useState(editedTeam.students.map((s) => s.studentId).join(", "));
+	const [availableStudents, setAvailableStudents] = useState([]);
+	const [selectedStudents, setSelectedStudents] = useState([]);
 	const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -16,19 +17,29 @@ function TeamCard({ team, onDelete, onEdit }) {
     }
   }, []);
 
-  const handleEdit = async () => {
-		const studentIdsArray = tempStudentIds.split(",").map(id => id.trim());
-		const updatedStudents = studentIdsArray.map((id, index) => ({
-			studentId: id,
-			name: editedTeam.students[index]?.name || "",
-		}));
+	useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const response = await axios.get('/getAllStudents');
+        setAvailableStudents(response.data);
+      } catch (error) {
+        console.error('Failed to fetch students:', error);
+      }
+    };
 
+    if (isEditing) {
+      fetchStudents();
+      setSelectedStudents(editedTeam.students.map((s) => s.studentId));
+    }
+  }, [editedTeam.students, isEditing]);
+
+  const handleEdit = async () => {
 		const updatedData = {
 			team_id: editedTeam.groupId,
 			course_id: editedTeam.courseId,
 			team_name: editedTeam.groupName,
 			course_name: editedTeam.courseName,
-			student_ids: studentIdsArray
+			student_ids: selectedStudents
 		};
 
 		try {
@@ -37,7 +48,7 @@ function TeamCard({ team, onDelete, onEdit }) {
 			if (response.status === 200) {
 				setEditedTeam({
 					...editedTeam,
-					students: updatedStudents
+					students: availableStudents.filter((student) => selectedStudents.includes(student.studentId))
 				});
 				setError(null);
 				onEdit(editedTeam);
@@ -66,10 +77,13 @@ function TeamCard({ team, onDelete, onEdit }) {
     }));
   };
 
-	const handleStudentIdsChange = (e) => {
-		const studentIds = e.target.value; 
-		setTempStudentIds(studentIds);
-	};	
+	const handleStudentSelection = (studentId) => {
+    setSelectedStudents((prevSelected) =>
+      prevSelected.includes(studentId)
+        ? prevSelected.filter((id) => id !== studentId)
+        : [...prevSelected, studentId] 
+    );
+  };
 
   const handleDelete = async () => {
     try {
@@ -119,15 +133,23 @@ function TeamCard({ team, onDelete, onEdit }) {
             value={editedTeam.courseName}
             onChange={handleChange}
           />
-          <TextField
-            fullWidth
-            margin="normal"
-            label="Student IDs"
-            name="students"
-            placeholder="Enter student IDs, separated by commas"
-						value={tempStudentIds}
-						onChange={handleStudentIdsChange}
-          />
+          <Typography variant="body1" sx={{ mt: 2, mb: 1 }}>
+            Select Students:
+          </Typography>
+          <FormGroup>
+            {availableStudents.map((student) => (
+              <FormControlLabel
+                key={student.studentId}
+                control={
+                  <Checkbox
+                    checked={selectedStudents.includes(student.studentId)}
+                    onChange={() => handleStudentSelection(student.studentId)}
+                  />
+                }
+                label={`${student.name} (ID: ${student.studentId})`}
+              />
+            ))}
+          </FormGroup>
 					{error && (
             <Alert severity="error" sx={{ mt: 2 }}>
               {error}

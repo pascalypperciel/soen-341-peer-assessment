@@ -8,6 +8,7 @@ function TeamsList({ teams, onDelete, onEdit }) {
         <TeamCard
           key={index}
           team={team}
+          teams={teams}
           onDelete={onDelete}
           onEdit={onEdit}
         />

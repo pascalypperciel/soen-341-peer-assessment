@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import TeamsList from './TeamsList';
 import AddTeamModal from './AddTeamModal';
@@ -9,7 +9,7 @@ function Teams() {
   const [showModal, setShowModal] = useState(false);
   const [urlEndpoint, setUrlEndpoint] = useState(null);
 
-  const fetchTeams = async () => {
+  const fetchTeams = useCallback(async () => {
     if (urlEndpoint) {
       try {
         const response = await axios.get(urlEndpoint);
@@ -18,7 +18,7 @@ function Teams() {
         console.error("Could not retrieve data from server", error);
       }
     }
-  };
+  }, [urlEndpoint]);
 
   useEffect(() => {
     const studentId = localStorage.getItem("student_id");
@@ -33,7 +33,7 @@ function Teams() {
 
   useEffect(() => {
     fetchTeams();
-  }, [urlEndpoint]);
+  }, [urlEndpoint, fetchTeams]);
 
   const handleDelete = (groupId) => {
     setTeamsData(teamsData.filter((team) => team.groupId !== groupId));

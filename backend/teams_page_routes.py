@@ -10,13 +10,14 @@ import csv
 
 teams_page_routes = Blueprint('teams_page_routes', __name__)
 
-#Method for instructor to manually create a team given specific fields 
-# -> student ID manual input , group id assessed based on current inputs in db
-
 @teams_page_routes.route('/makeTeamsManually', methods= ['POST'])
 def make_team_manually():
-	 # Get the list of student IDs from the form submission (e.g., a comma-separated string or array)
-	student_ids = request.form.getlist('student_ids')  # Assumes a form input named 'student_ids'
+	data = request.get_json()
+
+	team_name = data.get('team_name')
+	course_name = data.get('course_name')
+	student_ids = data.get('student_ids')
+	teacher_id = data.get('teacher_id')
 	
 	#if no students return error 
 	if not student_ids:
@@ -28,37 +29,60 @@ def make_team_manually():
 	except ValueError:
 		return jsonify({"error": "Invalid student ID format"}), 400
 
-	#db connection -> live server implementation
-	cursor = conn.curso
 	try:
-		#Find the largest groupID such that you can increment and assign to new group
-		cursor.execute("SELECT MAX(groupID) FROM StudentGroup")
-		result = cursor.fetchone()
+		cursor = conn.cursor()
 
-		# If there are no entries, we start from GroupID = 1, otherwise increment
-		current_group_id = result[0] if result[0] is not None else 0
-		new_group_id = current_group_id + 1
-	
-		#insert the group into the proper table 
-		query = """"
-		INSERT INTO StudentGroup (StudentID, GroupID)
-		VALUES (%d, %d)
+		# Course
+		course_id = 0
+		check_course_query = """
+		SELECT CourseID FROM Courses WHERE Name = ?
+		"""
+		cursor.execute(check_course_query, (course_name,))
+		result = cursor.fetchone()
+		if not result:		
+			insert_course_query = """
+			INSERT INTO Courses (Name, TeacherID)
+			VALUES (?, ?);
+			"""
+			cursor.execute(insert_course_query, (course_name, teacher_id))
+			conn.commit()
+			cursor.execute(check_course_query, (course_name,))
+			result = cursor.fetchone()
+			course_id = result[0]
+		else:
+			course_id = result[0]
+
+		# Group
+		insert_group_query = """
+			INSERT INTO Groups (Name, CourseID)
+			VALUES (?, ?);
+			"""
+		cursor.execute(insert_group_query, (team_name, course_id))
+		check_group_query = """
+			SELECT GroupID FROM Groups WHERE Name = ?
+			"""
+		cursor.execute(check_group_query, (team_name,))
+		result = cursor.fetchone()
+		group_id = result[0]
+
+		# StudentGroup
+		insert_student_group_query = """
+		INSERT INTO StudentGroup (GroupID, StudentID)
+		VALUES (?, ?)
 		"""
 		for student_id in student_ids:
-			cursor.execute(query, (student_id, new_group_id))
+			cursor.execute(insert_student_group_query, (group_id,student_id))
 
-		#commit the hroups to db
 		conn.commit()
 
-	except pyodbc.Error as err:
+	except Exception as e :
 		conn.rollback()
-		return jsonify({"error": f"Database error: {str(err)}"}), 500
+		return {'error': str(e)}, 500
  
-
 	finally:
 		cursor.close()
-		
-	return jsonify({"message": f"New team created with GroupID {new_group_id}!"}), 200
+
+	return {'message': 'Inserts successful'}, 200
 
 #Method for instructor to create a team with a csv upload 
 # csv format is assumed to be studentID in each row, when there is an empty row, signaling of end of that specific team 
@@ -115,7 +139,6 @@ def make_team_CSV():
 		cursor.close()  
 	return jsonify({"message": "Teams successfully uploaded!"}), 200
 
-
 @teams_page_routes.route('/displayTeamsTeacher',methods=['GET'])
 def display_teams_teacher():
 	teacher_id = request.args.get('teacher_id')
@@ -147,27 +170,27 @@ def display_teams_teacher():
 			course_id = group[2] # CourseID
 			course_name = group[3] # CourseName
 
-		# Query to get all students in the current group
-		students_query = """
-			SELECT Students.StudentID, Students.Name
-			FROM Students
-			JOIN StudentGroup ON Students.StudentID = StudentGroup.StudentID
-			WHERE StudentGroup.GroupID = ?
-		"""
-		cursor.execute(students_query, (group_id,))
-		#fetch all rows from query result
-		students_result = cursor.fetchall()
+			# Query to get all students in the current group
+			students_query = """
+				SELECT Students.StudentID, Students.Name
+				FROM Students
+				JOIN StudentGroup ON Students.StudentID = StudentGroup.StudentID
+				WHERE StudentGroup.GroupID = ?
+			"""
+			cursor.execute(students_query, (group_id,))
+			#fetch all rows from query result
+			students_result = cursor.fetchall()
 
-		#make a list of the students within the group
-		students_in_group = [{"studentId": student[0], "name": student[1]} for student in students_result]
+			#make a list of the students within the group
+			students_in_group = [{"studentId": student[0], "name": student[1]} for student in students_result]
 
-		groups_in_course.append({
-				"groupId": group_id,
-				"groupName": group_name,
-				"courseId": course_id,
-				"courseName": course_name,
-				"students": students_in_group
-			})
+			groups_in_course.append({
+					"groupId": group_id,
+					"groupName": group_name,
+					"courseId": course_id,
+					"courseName": course_name,
+					"students": students_in_group
+				})
 
 		#return nested list of the groups within a course
 		return jsonify(groups_in_course), 200
@@ -177,8 +200,7 @@ def display_teams_teacher():
 	
 	finally: 
 		cursor.close()
-		
-
+	
 # csv format is assumed to be studentID in each row, when there is an empty row, signaling of end of that specific team 
 @teams_page_routes.route('/displayTeamsStudent',methods=['GET'])
 def display_teams_student ():
@@ -336,3 +358,65 @@ def edit_team():
 		cursor.close()
 	
 	return {'message': 'Edit successful'}, 200
+
+@teams_page_routes.route('/getAllStudents', methods=['GET'])
+def get_all_students():
+	try: 
+		cursor = conn.cursor()
+
+		query = """SELECT StudentID, Name FROM Students"""
+		cursor.execute(query)
+		students_result = cursor.fetchall()
+
+		if students_result:
+			students_array = []
+			
+			for student in students_result:
+				student_id = student[0]  # ID
+				student_name = student[1]  # Name
+
+				students_array.append({
+					"studentId": student_id,
+					"name": student_name
+				})
+
+			return jsonify(students_array), 200
+		else:
+			return {'message': 'No students found'}, 401
+
+	except Exception as e:
+		return {'error': str(e)}, 500
+
+	finally:
+		cursor.close()
+
+@teams_page_routes.route('/getAllCourses', methods=['GET'])
+def get_all_courses():
+	try: 
+		cursor = conn.cursor()
+
+		query = """SELECT CourseID, Name FROM Courses"""
+		cursor.execute(query)
+		courses_result = cursor.fetchall()
+
+		if courses_result:
+			courses_array = []
+			
+			for course in courses_result:
+				course_id = course[0]  # ID
+				course_name = course[1]  # Name
+
+				courses_array.append({
+					"courseId": course_id,
+					"name": course_name
+				})
+
+			return jsonify(courses_array), 200
+		else:
+			return {'message': 'No courses found'}, 401
+
+	except Exception as e:
+		return {'error': str(e)}, 500
+
+	finally:
+		cursor.close()

@@ -1,16 +1,37 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Papa from 'papaparse';
-import { Modal, TextField, Button, Box, Typography } from '@mui/material';
+import { Modal, TextField, Button, Box, Typography, FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText, OutlinedInput } from '@mui/material';
+import axios from 'axios';
 import '../../App.css';
 
 function AddTeamModal({ onAddTeam, onClose }) {
   const [newTeam, setNewTeam] = useState({
     teamName: "",
     course: "",
-    students: "",
+    students: [],
   });
-
+  const [availableCourses, setAvailableCourses] = useState([]);
+  const [availableStudents, setAvailableStudents] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState('');
+  const [selectedStudents, setSelectedStudents] = useState([]);
+  const [createNewCourse, setCreateNewCourse] = useState(false);
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    const fetchCoursesAndStudents = async () => {
+      try {
+        const coursesResponse = await axios.get('/getAllCourses');
+        setAvailableCourses(coursesResponse.data);
+
+        const studentsResponse = await axios.get('/getAllStudents');
+        setAvailableStudents(studentsResponse.data);
+      } catch (error) {
+        console.error('Failed to fetch courses or students:', error);
+      }
+    };
+
+    fetchCoursesAndStudents();
+  }, []);
 
   const handleNewTeamChange = (e) => {
     const { name, value } = e.target;
@@ -21,10 +42,15 @@ function AddTeamModal({ onAddTeam, onClose }) {
   };
 
   const handleAddTeam = () => {
-    const studentsArray = newTeam.students.split(",").map((s) => s.trim());
-    const newTeamData = { ...newTeam, students: studentsArray };
+    const newTeamData = { 
+      ...newTeam, 
+      course: createNewCourse ? newTeam.course : selectedCourse,
+      students: selectedStudents 
+    };
     onAddTeam(newTeamData);
-    setNewTeam({ teamName: "", course: "", students: "" });
+    setNewTeam({ teamName: "", course: "", students: [] });
+    setSelectedCourse('');
+    setSelectedStudents([]);
     onClose();
   };
 
@@ -50,7 +76,25 @@ function AddTeamModal({ onAddTeam, onClose }) {
   };
 
   const handleFileButtonClick = () => {
-    fileInputRef.current.click(); 
+    fileInputRef.current.click();
+  };
+
+  const handleCourseSelection = (event) => {
+    const value = event.target.value;
+    if (value === "createNewCourse") {
+      setCreateNewCourse(true);  
+      setSelectedCourse('');
+    } else {
+      setSelectedCourse(value);
+      setCreateNewCourse(false); 
+    }
+  };
+
+  const handleStudentSelection = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setSelectedStudents(typeof value === 'string' ? value.split(',') : value);
   };
 
   const buttonStyle = {
@@ -84,24 +128,59 @@ function AddTeamModal({ onAddTeam, onClose }) {
           value={newTeam.teamName}
           onChange={handleNewTeamChange}
         />
-        <TextField
-          fullWidth
-          margin="normal"
-          label="Course"
-          name="course"
-          value={newTeam.course}
-          onChange={handleNewTeamChange}
-        />
-        <TextField
-          fullWidth
-          margin="normal"
-          label="Students"
-          name="students"
-          placeholder="Enter students, separated by commas"
-          value={newTeam.students}
-          onChange={handleNewTeamChange}
-        />
-        
+
+        <FormControl fullWidth margin="normal">
+          <InputLabel id="select-course-label">Select Course</InputLabel>
+          <Select
+            labelId="select-course-label"
+            value={selectedCourse || (createNewCourse ? "createNewCourse" : "")}
+            label="Select Course"
+            onChange={handleCourseSelection}
+          >
+            {availableCourses.map((course) => (
+              <MenuItem key={course.courseId} value={course.courseId}>
+                {course.name}
+              </MenuItem>
+            ))}
+            <MenuItem value="createNewCourse">Create New Course</MenuItem>
+          </Select>
+        </FormControl>
+
+        {createNewCourse && (
+          <TextField
+            fullWidth
+            margin="normal"
+            label="New Course Name"
+            name="course"
+            value={newTeam.course}
+            onChange={handleNewTeamChange}
+          />
+        )}
+
+        <FormControl fullWidth margin="normal">
+          <InputLabel id="select-students-label">Select Students</InputLabel>
+          <Select
+            labelId="select-students-label"
+            multiple
+            value={selectedStudents}
+            onChange={handleStudentSelection}
+            input={<OutlinedInput label="Select Students" />}
+            renderValue={(selected) =>
+              availableStudents
+                .filter((student) => selected.includes(student.studentId))
+                .map((student) => `${student.name} (ID: ${student.studentId})`)
+                .join(', ')
+            }
+          >
+            {availableStudents.map((student) => (
+              <MenuItem key={student.studentId} value={student.studentId}>
+                <Checkbox checked={selectedStudents.includes(student.studentId)} />
+                <ListItemText primary={`${student.name} (ID: ${student.studentId})`} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
         <Button 
           variant="contained" 
           sx={buttonStyle}
