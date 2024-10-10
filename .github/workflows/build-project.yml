@@ -34,6 +34,11 @@ jobs:
       with:
         python-version: '3.8'
 
+    - name: Set PYTHONPATH
+      run: |
+        export PYTHONPATH=$PYTHONPATH:$(pwd)
+
+
     - name: Install backend dependencies
       run: |
         python -m venv venv
@@ -42,6 +47,7 @@ jobs:
 
     - name: Run backend tests
       run: |
+        export PYTHONPATH=$PYTHONPATH:$(pwd)
         source venv/bin/activate
         pytest backend/tests/test_backend_setup.py
 
