@@ -1,9 +1,8 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
-from db import conn
+from backend.db import conn
 #blueprints
 from login_signup_routes import login_signup_routes
-
 from teams_page_routes import teams_page_routes 
 
 app = Flask(__name__)

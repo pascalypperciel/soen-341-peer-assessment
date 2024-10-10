@@ -1,7 +1,5 @@
 from flask import Blueprint,request,jsonify,redirect,url_for,session
-from db import conn
-from flask_cors import CORS
-import pyodbc
+from backend.db import conn
 from dotenv import load_dotenv
 
 login_signup_routes = Blueprint('login_signup_routes', __name__)
