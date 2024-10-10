@@ -7,7 +7,7 @@
     "frontend": "cd frontend && npm start",
     "backend": "cd backend && flask run",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "test": "react-scripts test --env=jsdom --ci --coverage --config=./jest.config.js",
     "eject": "react-scripts eject"
   },
   "dependencies": {

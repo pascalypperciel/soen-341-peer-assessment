@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import Papa from 'papaparse';
 import { Modal, TextField, Button, Box, Typography, FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText, OutlinedInput, IconButton, Tooltip } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import axios from 'axios';
@@ -17,7 +16,6 @@ function AddTeamModal({ onAddTeam, onClose }) {
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [createNewCourse, setCreateNewCourse] = useState(false);
   const fileInputRef = useRef(null);
-  const [showTipModal, setShowTipModal] = useState(false);
 
   // Fetch available courses and students on modal load
   useEffect(() => {
@@ -214,7 +212,6 @@ function AddTeamModal({ onAddTeam, onClose }) {
           <Typography variant="h6" component="h3">Or Upload CSV</Typography>
           <Tooltip title="Each row should contain the following columns. The first column is an existing student ID, the second column is the name of the team, and the last column is the name of the course.">
             <IconButton 
-              onClick={() => setShowTipModal(true)} 
               sx={{ ml: 1, p: 0 }}
             >
               <InfoIcon />

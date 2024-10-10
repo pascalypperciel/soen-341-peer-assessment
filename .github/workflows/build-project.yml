@@ -73,24 +73,25 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Cache Node.js modules
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+    # - name: Cache Node.js modules
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: ~/.npm
+    #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-node-
 
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14'
+        node-version: '18'
 
     - name: Install frontend dependencies
       run: |
         cd frontend
         npm install
         npm install react-router-dom axios @mui/material @emotion/react @emotion/styled
+        npm install --save-dev @babel/preset-env @babel/preset-react babel-jest @babel/plugin-proposal-private-property-in-object
 
     - name: Run frontend tests
       run: |
