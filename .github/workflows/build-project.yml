@@ -33,11 +33,18 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.8'
+    
+    - name: Parse and set DB connection environment variables
+      run: |
+        echo "${{ secrets.DB_CONNECTION }}" > temp_env_file
+        while IFS= read -r line; do
+          echo "$line" >> $GITHUB_ENV
+        done < temp_env_file
+        rm temp_env_file
 
     - name: Set PYTHONPATH
       run: |
         export PYTHONPATH=$PYTHONPATH:$(pwd)
-
 
     - name: Install backend dependencies
       run: |
