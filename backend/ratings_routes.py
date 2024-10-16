@@ -1,0 +1,97 @@
+from flask import Blueprint,request,jsonify,redirect,url_for,session,render_template
+from backend.db import conn
+from dotenv import load_dotenv
+
+ratings_routes = Blueprint('ratings_routes', __name__)
+
+
+#this route retrieves all groups the student is in, returns the groups
+#and their attributes as a JSON list such that front end can display
+#in the format they desire
+
+@ratings_routes.route('/getStudentGroups',  methods='GET')
+def get_Student_Groups():
+    # Get the student ID from the session
+    student_id = session.get('student_id')
+
+    if not student_id:
+        return jsonify({"error": "Student not logged in!"}), 401
+
+    try:
+        cursor = conn.cursor()
+
+        # Query for groups the student is a part of
+        query = """
+            SELECT Groups.GroupID, Groups.Name AS GroupName, Groups.CourseID, Courses.Name AS CourseName
+            FROM StudentGroup
+            JOIN Groups ON Groups.GroupID = StudentGroup.GroupID
+            JOIN Courses ON Courses.CourseID = Groups.CourseID
+            WHERE StudentGroup.StudentID = ?
+        """
+        cursor.execute(query, (student_id,))
+
+        groups_result = cursor.fetchall()
+
+        # If no groups, return a message
+        if not groups_result:
+            return jsonify({"message": f"No groups for this student!"}), 404
+
+        # Convert the query result into a list of dictionaries
+        groups_list = [
+            {
+                "GroupID": group[0],
+                "GroupName": group[1],
+                "CourseID": group[2],
+                "CourseName": group[3]
+            }
+            for group in groups_result
+        ]
+
+        # Return the list of groups as a JSON object, can be manipulated as needed by front end 
+        return jsonify(groups_list), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
+# this route gets the unrated students based the group the end user 
+# chose from the front end. assumed the group_id is passed into url
+# 
+# searches for that group and verifies all students inside without a
+# rating by the user 
+@ratings_routes.route('/getStudentRatees/<int:group_id>', methods= 'GET')
+def get_student_ratees(group_id):
+     
+    if not group_id:
+        return jsonify({"error": "Student not logged in!"}), 401
+
+    cursor = conn.cursor()
+
+    #not sure about this query, joins are really weird to me still
+    #
+    # take the student id and their respective names from stud table
+    # join the stud table and stud groups table where the stud id is 
+    # the same
+    # left join all the ratings, studid =rateeid and r groupid = sq groupid
+    #
+    #
+    # Where the groupid is the one the user chose and the ratee id is null
+    #
+
+    query = """
+       SELECT s.StudentID, s.Name
+        FROM Students s
+        JOIN StudentGroup sg ON s.StudentID = sg.StudentID
+        LEFT JOIN Ratings r ON s.StudentID = r.RateeID AND r.RaterID = @RaterID AND r.GroupID = sg.GroupID
+        WHERE sg.GroupID = @GroupID
+        AND s.StudentID <> @RaterID
+        AND r.RateeID IS NULL;
+
+    """
+    cursor.execute(query, group_id)
+    students = cursor.fetchall()
+    conn.close()
+
+    # Return the results as a JSON response using jsonify, return all eligible students to be rated 
+    return jsonify({'students': [{'StudentID': student.StudentID, 'Name': student.Name} for student in students]})
