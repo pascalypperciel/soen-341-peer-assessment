@@ -62,6 +62,9 @@ def get_Student_Groups():
 # rating by the user 
 @ratings_routes.route('/getStudentRatees/<int:group_id>', methods= 'GET')
 def get_student_ratees(group_id):
+
+    student_id = session.get('student_id')
+
      
     if not group_id:
         return jsonify({"error": "Student not logged in!"}), 401
@@ -83,15 +86,33 @@ def get_student_ratees(group_id):
        SELECT s.StudentID, s.Name
         FROM Students s
         JOIN StudentGroup sg ON s.StudentID = sg.StudentID
-        LEFT JOIN Ratings r ON s.StudentID = r.RateeID AND r.RaterID = @RaterID AND r.GroupID = sg.GroupID
-        WHERE sg.GroupID = @GroupID
-        AND s.StudentID <> @RaterID
+        LEFT JOIN Ratings r ON s.StudentID = r.RateeID AND r.RaterID = ? AND r.GroupID = sg.GroupID
+        WHERE sg.GroupID = ?
+        AND s.StudentID <> ?
         AND r.RateeID IS NULL;
 
     """
-    cursor.execute(query, group_id)
+    cursor.execute(query, (student_id,group_id,student_id))
     students = cursor.fetchall()
     conn.close()
 
     # Return the results as a JSON response using jsonify, return all eligible students to be rated 
     return jsonify({'students': [{'StudentID': student.StudentID, 'Name': student.Name} for student in students]})
+
+
+@ratings_routes.route('/InsertStudRatings', methods= 'POST')
+def insert_Stud_Ratings():
+
+    rater_id = session.get('student_id')
+    #ratee_id = its based on what they click on the front end 
+
+    #groupid assume passed in like other func?
+
+    #obtaining infromation from the signup form
+    data= request.get_json()
+    ratee_id=data['ratee_id']
+    group_id=data['group_id']
+    cooperation_rating = data['cooperation_rating']
+    conceptual_contribution_rating = data['conceptual_contribution_rating']
+    practical_contribution_rating = data['practical_contribution_rating']
+    work_ethic_rating = data['work_ethic_rating']
