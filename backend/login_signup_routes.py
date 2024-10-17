@@ -25,7 +25,8 @@ def studentSignup():
 
         cursor.execute(StudentSignup_query, StudentSignup_values)
         conn.commit()
-                
+        
+
     except Exception as e :
         return {'error': str(e)}, 500
     
@@ -97,6 +98,8 @@ def studentLogin():
         # placeholder page for now 
             return {'message': 'Student not found'}, 401
         
+    
+
     except Exception as e :
         return {'error': str(e)}, 500
     
@@ -122,7 +125,7 @@ def teacherLogin():
         if result:
             storedPassword = result[0]
             teacherID = result[1]
-            session['teacher_id']= teacherID
+            session['session_id']= teacherID
             
             if storedPassword == password:
                 return {'message': 'Login successful', 'teacher_id': teacherID}, 200
