@@ -25,9 +25,9 @@ function Teams() {
     const teacherId = localStorage.getItem("teacher_id");
 
     if (studentId) {
-      setUrlEndpoint(`/displayTeamsStudent?student_id=${studentId}`);
+      setUrlEndpoint(`http://localhost:5000/displayTeamsStudent?student_id=${studentId}`);
     } else if (teacherId) {
-      setUrlEndpoint(`/displayTeamsTeacher?teacher_id=${teacherId}`);
+      setUrlEndpoint(`http://localhost:5000/displayTeamsTeacher?teacher_id=${teacherId}`);
     }
   }, []);
 
