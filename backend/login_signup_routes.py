@@ -28,6 +28,7 @@ def studentSignup():
         
 
     except Exception as e :
+        print("Error:", e)
         return {'error': str(e)}, 500
     
     finally:
@@ -59,6 +60,7 @@ def teacherSignup():
         conn.commit()
         
     except Exception as e :
+        print("Error:", e)
         return {'error': str(e)}, 500
     
     finally:
@@ -101,6 +103,7 @@ def studentLogin():
     
 
     except Exception as e :
+        print("Error:", e)
         return {'error': str(e)}, 500
     
     finally:
@@ -135,6 +138,7 @@ def teacherLogin():
             return {'message': 'Teacher not found'}, 401
 
     except Exception as e:
+        print("Error:", e)
         return {'error': str(e)}, 500
 
     finally:
