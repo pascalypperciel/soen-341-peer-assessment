@@ -106,7 +106,7 @@ describe('Signup and Login Page', () => {
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith(
-        '/teacherLogin?username=teacher_user&password=password123',
+        'http://localhost:5000/teacherLogin?username=teacher_user&password=password123',
         {
           method: 'GET',
           headers: {
@@ -144,7 +144,7 @@ describe('Signup and Login Page', () => {
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith(
-        '/studentLogin?studentID=99999999&password=password123',
+        'http://localhost:5000/studentLogin?studentID=99999999&password=password123',
         {
           method: 'GET',
           headers: {
