@@ -100,13 +100,12 @@ def get_student_ratees(group_id):
     return jsonify({'students': [{'StudentID': student.StudentID, 'Name': student.Name} for student in students]})
 
 
+#get the JSON obj from front end with all metrics to be inserted, unwrap 
+#and insert into db 
 @ratings_routes.route('/InsertStudRatings', methods= 'POST')
 def insert_Stud_Ratings():
 
     rater_id = session.get('student_id')
-    #ratee_id = its based on what they click on the front end 
-
-    #groupid assume passed in like other func?
 
     #obtaining infromation from the signup form
     data= request.get_json()
@@ -116,3 +115,25 @@ def insert_Stud_Ratings():
     conceptual_contribution_rating = data['conceptual_contribution_rating']
     practical_contribution_rating = data['practical_contribution_rating']
     work_ethic_rating = data['work_ethic_rating']
+
+    # SQL query to insert the ratings into the database
+    query = """
+        INSERT INTO Ratings (CooperationRating, ConceptualContributionRating, PracticalContributionRating, WorkEthicRating, RaterID, RateeID, GroupID)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    """
+
+    # Execute the query with the provided data
+    cursor = conn.cursor()
+    cursor.execute(query, (
+        cooperation_rating,
+        conceptual_contribution_rating,
+        practical_contribution_rating,
+        work_ethic_rating,
+        rater_id,
+        ratee_id,
+        group_id
+    ))
+    conn.commit()
+    cursor.close()
+
+    return jsonify({"message": "Rating successfully inserted."}), 201
