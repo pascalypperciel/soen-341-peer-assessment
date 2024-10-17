@@ -51,7 +51,7 @@ const SignupPage = () => {
       return;
     }
 
-    const url = isTeacher ? "/teacherSignup" : "/studentSignup";
+    const url = isTeacher ? "http://localhost:5000/teacherSignup" : "http://localhost:5000/studentSignup";
     try {
       const response = await axios.post(url, {
         [isTeacher ? "username" : "studentID"]: signupData.idOrUsername,
@@ -79,8 +79,8 @@ const SignupPage = () => {
     }
 
     const url = isTeacher
-      ? `/teacherLogin?username=${signupData.idOrUsername}&password=${signupData.password}` // Pass parameters in the URL
-      : `/studentLogin?studentID=${signupData.idOrUsername}&password=${signupData.password}`;
+      ? `http://localhost:5000/teacherLogin?username=${signupData.idOrUsername}&password=${signupData.password}` // Pass parameters in the URL
+      : `http://localhost:5000/studentLogin?studentID=${signupData.idOrUsername}&password=${signupData.password}`;
 
     try {
       const response = await fetch(url, {

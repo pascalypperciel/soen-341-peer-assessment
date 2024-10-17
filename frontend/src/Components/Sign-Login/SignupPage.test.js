@@ -38,7 +38,7 @@ describe('Signup and Login Page', () => {
     fireEvent.click(screen.getByRole('button', { name: /Sign Up/i }));
 
     await waitFor(() => {
-      expect(axios.post).toHaveBeenCalledWith('/teacherSignup', {
+      expect(axios.post).toHaveBeenCalledWith('http://localhost:5000/teacherSignup', {
         username: 'teacher_user',
         name: 'John Doe',
         password: 'password123',
@@ -71,7 +71,7 @@ describe('Signup and Login Page', () => {
     fireEvent.click(screen.getByRole('button', { name: /Sign Up/i }));
 
     await waitFor(() => {
-      expect(axios.post).toHaveBeenCalledWith('/studentSignup', {
+      expect(axios.post).toHaveBeenCalledWith('http://localhost:5000/studentSignup', {
         studentID: '99999999',
         name: 'Jane Doe',
         password: 'password123',
