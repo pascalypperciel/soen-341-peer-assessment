@@ -7,8 +7,10 @@ ratings_routes = Blueprint('ratings_routes', __name__)
 
 @ratings_routes.route('/display_ratings', methods=['GET'])
 def display_ratings():
+    #Assuming sessionid is always student id for student login 
     stud_id = session['session_id']
 
+    #finding all ratings associated to student id of student 
     query = """
     SELECT CooperationRating, ConceptualContributionRating, PracticalContributionRating, WorkEthicRating 
     FROM Ratings
