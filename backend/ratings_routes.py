@@ -71,17 +71,6 @@ def get_student_ratees(group_id):
 
     cursor = conn.cursor()
 
-    #not sure about this query, joins are really weird to me still
-    #
-    # take the student id and their respective names from stud table
-    # join the stud table and stud groups table where the stud id is 
-    # the same
-    # left join all the ratings, studid =rateeid and r groupid = sq groupid
-    #
-    #
-    # Where the groupid is the one the user chose and the ratee id is null
-    #
-
     query = """
        SELECT s.StudentID, s.Name
         FROM Students s
