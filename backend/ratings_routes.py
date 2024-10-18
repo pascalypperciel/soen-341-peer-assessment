@@ -9,7 +9,7 @@ ratings_routes = Blueprint('ratings_routes', __name__)
 #and their attributes as a JSON list such that front end can display
 #in the format they desire
 
-@ratings_routes.route('/getStudentGroups',  methods='GET')
+@ratings_routes.route('/getStudentGroups',  methods=['GET'])
 def get_Student_Groups():
     # Get the student ID from the session
     student_id = session.get('student_id')
@@ -60,7 +60,7 @@ def get_Student_Groups():
 # 
 # searches for that group and verifies all students inside without a
 # rating by the user 
-@ratings_routes.route('/getStudentRatees/<int:group_id>', methods= 'GET')
+@ratings_routes.route('/getStudentRatees/<int:group_id>', methods= ['GET'])
 def get_student_ratees(group_id):
 
     student_id = session.get('student_id')
@@ -69,9 +69,10 @@ def get_student_ratees(group_id):
     if not group_id:
         return jsonify({"error": "Student not logged in!"}), 401
 
-    cursor = conn.cursor()
+    try:
+        cursor = conn.cursor()
 
-    query = """
+        query = """
        SELECT s.StudentID, s.Name
         FROM Students s
         JOIN StudentGroup sg ON s.StudentID = sg.StudentID
@@ -81,17 +82,22 @@ def get_student_ratees(group_id):
         AND r.RateeID IS NULL;
 
     """
-    cursor.execute(query, (student_id,group_id,student_id))
-    students = cursor.fetchall()
-    conn.close()
+        cursor.execute(query, (student_id,group_id,student_id))
+        students = cursor.fetchall()
+   
+        #close after fetch
+        conn.close()
 
-    # Return the results as a JSON response using jsonify, return all eligible students to be rated 
-    return jsonify({'students': [{'StudentID': student.StudentID, 'Name': student.Name} for student in students]})
+        # Return the results as a JSON response using jsonify, return all eligible students to be rated 
+        return jsonify({'students': [{'StudentID': student.StudentID, 'Name': student.Name} for student in students]})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 #get the JSON obj from front end with all metrics to be inserted, unwrap 
 #and insert into db 
-@ratings_routes.route('/InsertStudRatings', methods= 'POST')
+@ratings_routes.route('/InsertStudRatings', methods= ['POST'])
 def insert_Stud_Ratings():
 
     rater_id = session.get('student_id')
