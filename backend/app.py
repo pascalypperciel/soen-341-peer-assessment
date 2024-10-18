@@ -4,11 +4,14 @@ from backend.db import conn
 #blueprints
 from backend.login_signup_routes import login_signup_routes
 from backend.teams_page_routes import teams_page_routes 
+from backend.ratings_routes import ratings_routes
 
 app = Flask(__name__)
 app.secret_key = 'SuperStrongKey'
 app.register_blueprint(login_signup_routes)
 app.register_blueprint(teams_page_routes)
+app.register_blueprint(ratings_routes)
+
 CORS(app)
 
 # The following route is a test and will be deleted soon
