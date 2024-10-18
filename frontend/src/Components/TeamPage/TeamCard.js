@@ -20,7 +20,7 @@ function TeamCard({ team, teams, onDelete, onEdit }) {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await axios.get('/getAllStudents');
+        const response = await axios.get('http://localhost:5000/getAllStudents');
         setAvailableStudents(response.data);
       } catch (error) {
         console.error('Failed to fetch students:', error);
@@ -43,7 +43,7 @@ function TeamCard({ team, teams, onDelete, onEdit }) {
     };
 
     try {
-      const response = await axios.put('/editTeam', updatedData);
+      const response = await axios.put('http://localhost:5000/editTeam', updatedData);
 
       if (response.status === 200) {
         setEditedTeam({
@@ -93,7 +93,7 @@ function TeamCard({ team, teams, onDelete, onEdit }) {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.post('/deleteTeam', { team_id: team.groupId });
+      const response = await axios.post('http://localhost:5000/deleteTeam', { team_id: team.groupId });
       if (response.status === 200) {
         onDelete(team.groupId);
       } else {

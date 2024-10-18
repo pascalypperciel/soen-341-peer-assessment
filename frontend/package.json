@@ -7,7 +7,7 @@
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^6.1.2",
     "@mui/material": "^6.1.2",
-    "@testing-library/react": "^13.4.0",
+    "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.7",
     "papaparse": "^5.4.1",
@@ -41,7 +41,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5000",
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-env": "^7.25.8",

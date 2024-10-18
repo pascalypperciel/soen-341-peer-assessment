@@ -21,10 +21,10 @@ function AddTeamModal({ onAddTeam, onClose }) {
   useEffect(() => {
     const fetchCoursesAndStudents = async () => {
       try {
-        const coursesResponse = await axios.get('/getAllCourses');
+        const coursesResponse = await axios.get('http://localhost:5000/getAllCourses');
         setAvailableCourses(coursesResponse.data);
 
-        const studentsResponse = await axios.get('/getAllStudents');
+        const studentsResponse = await axios.get('http://localhost:5000/getAllStudents');
         setAvailableStudents(studentsResponse.data);
       } catch (error) {
         console.error('Failed to fetch courses or students:', error);
@@ -54,7 +54,7 @@ function AddTeamModal({ onAddTeam, onClose }) {
     };
 
     try {
-      const response = await axios.post('/makeTeamsManually', teamData);
+      const response = await axios.post('http://localhost:5000/makeTeamsManually', teamData);
 
       if (response.status === 200) {
         onAddTeam({
@@ -83,7 +83,7 @@ function AddTeamModal({ onAddTeam, onClose }) {
     formData.append('teacher_id', localStorage.getItem("teacher_id"));
   
     if (file) {
-      axios.post('/makeTeamCSV', formData)
+      axios.post('http://localhost:5000/makeTeamCSV', formData)
         .then(response => {
           console.log("CSV Upload Success:", response.data);
           onClose();
