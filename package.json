@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.5.0",
     "concurrently": "^9.0.1"
   },
   "scripts": {
@@ -7,10 +8,11 @@
     "frontend": "cd frontend && npm start",
     "backend": "cd backend && flask run",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "concurrently \"cd frontend && npm test -- --watchAll=false\" \"cd backend && pytest\"",
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "axios": "^1.7.7",
     "react-router-dom": "^6.26.2"
   }
 }
