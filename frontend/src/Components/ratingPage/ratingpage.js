@@ -65,10 +65,13 @@ const RatingPage = () => {
   const [ethicRating, setEthicRating] = useState(0);
   const [rateeId, setRatedRating] = useState("");
   const [groupId, setGroupId] = useState("");
+  const [comments, setComment] = useState("");
   const [availableStudents, setAvailableStudents] = useState([]);
   const [availableGroups, setAvailableGroups] = useState([]);
   const [error, setError] = useState(null);
   const [studentId, setStudentId] = useState(null);
+  const [raterId, setRaterId] = useState(null);
+  const navigate = useNavigate();
 
   const handleCooperationChange = (event, newValue) => {
     setCooperationRating(newValue);
@@ -90,13 +93,17 @@ const RatingPage = () => {
     setRatedRating(event.target.value);
   };
 
+  const handleCommentSelection = (event) => {
+    setComment(event.target.value);
+  };
+
   const handleGroupSelection = async (event) => {
     const selectedGroupId = event.target.value;
     setGroupId(selectedGroupId);
     await fetchRatees(selectedGroupId);
   };
 
-  const handleRatingSubmission = () => {
+  const handleRatingSubmission = async () => {
     console.log("Submitting Ratings...");
 
     if (
@@ -120,48 +127,46 @@ const RatingPage = () => {
       conceptual_contribution_rating: conceptualRating,
       practical_contribution_rating: practicalRating,
       work_ethic_rating: ethicRating,
+      comment: comments,
+      rater_id: raterId,
     };
 
     console.log("Submitting rating data:", ratingData);
 
-    fetch("/InsertStudRatings", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(ratingData),
-      credentials: "include",
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        if (data.message) {
-          alert(`Rating submitted for ${rateeId}!`);
-        } else if (data.error) {
-          console.error(data.error);
-          alert(`Error: ${data.error}`);
-        }
-      })
-      .catch((error) => console.error("Error inserting rating:", error));
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/InsertStudRatings",
+        ratingData
+      );
+
+      if (response.status === 201 && response.data.message) {
+        alert(`Rating submitted for ${rateeId}!`);
+        navigate("/teams");
+      } else if (response.data.error) {
+        console.error(response.data.error);
+        alert(`Error: ${response.data.error}`);
+      }
+    } catch (error) {
+      console.error("Error inserting rating:", error);
+      alert("Failed to submit rating. Please try again.");
+    }
   };
 
   useEffect(() => {
     const id = localStorage.getItem("student_id");
     if (id) {
-      setStudentId(id);
+      setRaterId(id);
     } else {
       setError("No student ID found in local storage.");
     }
   }, []);
 
   useEffect(() => {
-    if (studentId) {
+    if (raterId) {
       const fetchGroups = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:5000/getStudentGroups?student_id=${studentId}`
+            `http://localhost:5000/getStudentGroups?student_id=${raterId}`
           );
           setAvailableGroups(response.data);
         } catch (err) {
@@ -171,12 +176,12 @@ const RatingPage = () => {
 
       fetchGroups();
     }
-  }, [studentId]);
+  }, [raterId]);
 
   const fetchRatees = async (selectedGroupId) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/getStudentRatees/${selectedGroupId}?student_id=${studentId}`
+        `http://localhost:5000/getStudentRatees/${selectedGroupId}?student_id=${raterId}`
       );
       setAvailableStudents(response.data.students);
     } catch (err) {
@@ -272,6 +277,7 @@ const RatingPage = () => {
           </p>
           <StyledRating
             name="conceptual-rating"
+            value={conceptualRating}
             IconContainerComponent={IconContainer}
             getLabelText={(value) => customIcons[value].label}
             highlightSelectedOnly
@@ -287,6 +293,7 @@ const RatingPage = () => {
           </p>
           <StyledRating
             name="practical-rating"
+            value={practicalRating}
             IconContainerComponent={IconContainer}
             getLabelText={(value) => customIcons[value].label}
             highlightSelectedOnly
@@ -302,6 +309,7 @@ const RatingPage = () => {
           </p>
           <StyledRating
             name="ethic-rating"
+            value={ethicRating}
             IconContainerComponent={IconContainer}
             getLabelText={(value) => customIcons[value].label}
             highlightSelectedOnly
@@ -316,7 +324,15 @@ const RatingPage = () => {
             Use this section to provide any overall impressions or suggestions
             for improvement.
           </p>
-          <TextField multiline rows={4} variant="outlined" fullWidth />
+          <TextField
+            name="comment"
+            label="Comment"
+            multiline
+            rows={4}
+            variant="outlined"
+            onChange={handleCommentSelection}
+            fullWidth
+          />
         </div>
 
         <Button
