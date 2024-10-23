@@ -18,6 +18,15 @@ body {
   margin-bottom: 20px;
 }
 
+.container-rating .textfield {
+  margin: 20px;
+}
+/*Submit button*/
+.container-rating .custom-button {
+  padding: 12px 24px; /* Adjust padding as needed */
+  margin: 12px 24px;
+}
+
 /* Push the footer to the bottom */
 footer {
   margin-top: auto; /* Ensures footer stays at the bottom */

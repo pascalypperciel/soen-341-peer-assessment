@@ -33,7 +33,7 @@ const Header = () => {
               <Link to="/ratingPage">Rate a Student</Link>
             </li>
             <li>
-              <Link to="/selectStudent">Something</Link>
+              <Link to="">Something</Link>
             </li>
           </ul>
 

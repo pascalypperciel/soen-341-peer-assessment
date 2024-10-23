@@ -111,7 +111,7 @@ def insert_Stud_Ratings():
 	work_ethic_rating = data['work_ethic_rating']
 	comment = data['comment']
 	cooperation_comment = data['cooperation_comment']
-	comconceptual_contribution_comment = data['comconceptual_contribution_comment']
+	conceptual_contribution_comment = data['conceptual_contribution_comment']
 	practical_contribution_comment = data['practical_contribution_comment']
 	work_ethic_comment = data['work_ethic_comment']
 
@@ -134,7 +134,7 @@ def insert_Stud_Ratings():
 			group_id,
 			comment,
 			cooperation_comment,
-			comconceptual_contribution_comment,
+			conceptual_contribution_comment,
 			practical_contribution_comment,
 			work_ethic_comment
 		))
