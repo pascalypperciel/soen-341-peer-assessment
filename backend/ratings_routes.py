@@ -12,7 +12,7 @@ ratings_routes = Blueprint('ratings_routes', __name__)
 @ratings_routes.route('/getStudentGroups',  methods=['GET'])
 def get_Student_Groups():
     # Get the student ID from the session
-    student_id = session.get('student_id')
+    student_id = request.args.get('student_id')
 
     if not student_id:
         return jsonify({"error": "Student not logged in!"}), 401
@@ -62,8 +62,7 @@ def get_Student_Groups():
 # rating by the user 
 @ratings_routes.route('/getStudentRatees/<int:group_id>', methods= ['GET'])
 def get_student_ratees(group_id):
-
-    student_id = session.get('student_id')
+    student_id = request.args.get('student_id')
 
      
     if not group_id:
@@ -99,11 +98,9 @@ def get_student_ratees(group_id):
 #and insert into db 
 @ratings_routes.route('/InsertStudRatings', methods= ['POST'])
 def insert_Stud_Ratings():
-
-    rater_id = session.get('student_id')
-
     #obtaining infromation from the signup form
     data= request.get_json()
+    rater_id=data['rater_id']
     ratee_id=data['ratee_id']
     group_id=data['group_id']
     cooperation_rating = data['cooperation_rating']
