@@ -3,8 +3,9 @@ import logo from "../Assets/entire-logo.png";
 import "./header.css";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { useNavigate } from "react-router-dom"; // Use useNavigate instead of useHistory
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import AddTeamModal from "./TeamPage/AddTeamModal";
 
 const Header = () => {
   const [isTeacher, setIsTeacher] = useState(false);
@@ -14,11 +15,10 @@ const Header = () => {
     const studentId = localStorage.getItem("student_id");
     const teacherId = localStorage.getItem("teacher_id");
 
-    // Determine if the user is a teacher or student
     if (teacherId) {
-      setIsTeacher(true); // User is a teacher
+      setIsTeacher(true);
     } else if (studentId) {
-      setIsTeacher(false); // User is a student
+      setIsTeacher(false);
     }
   }, []);
 
@@ -28,7 +28,12 @@ const Header = () => {
     navigate("/");
   };
 
-  //ADD SOMETHING FOR THE BACKEND
+  const [showModal, setShowModal] = useState(false);
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    window.location.reload();
+  };
 
   return (
     <header>
@@ -45,7 +50,26 @@ const Header = () => {
                   <Link to="/teams">Home</Link>
                 </li>
                 <li>
-                  <Link to=""></Link>
+                  <span
+                    onClick={() => setShowModal(true)}
+                    className="add-team-btn"
+                    style={{
+                      cursor: "pointer",
+                      color: "#1860C3",
+                      textDecoration: "none",
+                    }}
+                  >
+                    Add New Team
+                  </span>
+
+                  {showModal && (
+                    <div className="modal-container">
+                      <AddTeamModal
+                        onAddTeam={handleAddTeam}
+                        onClose={handleModalClose}
+                      />
+                    </div>
+                  )}
                 </li>
                 <li>
                   <Link to=""></Link>
@@ -71,7 +95,7 @@ const Header = () => {
               className="logout-button"
               variant="contained"
               size="medium"
-              onClick={handleLogout} // Attach logout handler
+              onClick={handleLogout}
             >
               Log out
             </Button>
