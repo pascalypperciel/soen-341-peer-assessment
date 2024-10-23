@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
-import TeamsList from './TeamsList';
-import AddTeamModal from './AddTeamModal';
-import '../../App.css';
+import React, { useState, useEffect, useCallback } from "react";
+import axios from "axios";
+import TeamsList from "./TeamsList";
+import AddTeamModal from "./AddTeamModal";
+import "../../App.css";
+import Header from "../header/header";
 
 function Teams() {
   const [teamsData, setTeamsData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [urlEndpoint, setUrlEndpoint] = useState(null);
+  const [isTeacher, setIsTeacher] = useState(false);
 
   const fetchTeams = useCallback(async () => {
     if (urlEndpoint) {
@@ -25,9 +27,14 @@ function Teams() {
     const teacherId = localStorage.getItem("teacher_id");
 
     if (studentId) {
-      setUrlEndpoint(`http://localhost:5000/displayTeamsStudent?student_id=${studentId}`);
+      setUrlEndpoint(
+        `http://localhost:5000/displayTeamsStudent?student_id=${studentId}`
+      );
     } else if (teacherId) {
-      setUrlEndpoint(`http://localhost:5000/displayTeamsTeacher?teacher_id=${teacherId}`);
+      setUrlEndpoint(
+        `http://localhost:5000/displayTeamsTeacher?teacher_id=${teacherId}`
+      );
+      setIsTeacher(true);
     }
   }, []);
 
@@ -41,7 +48,9 @@ function Teams() {
 
   const handleEdit = async (updatedTeam) => {
     setTeamsData((teams) =>
-      teams.map((team) => (team.groupId === updatedTeam.groupId ? updatedTeam : team))
+      teams.map((team) =>
+        team.groupId === updatedTeam.groupId ? updatedTeam : team
+      )
     );
 
     await fetchTeams();
@@ -58,22 +67,27 @@ function Teams() {
 
   return (
     <div>
-      <div className="add-team-btn-container">
-        <button className="add-team-btn" onClick={() => setShowModal(true)}>
-          Add New Team
-        </button>
-      </div>
+      <Header />
 
-      {showModal && (
-        <div className="modal-container">
-          <AddTeamModal
-            onAddTeam={handleAddTeam}
-            onClose={handleModalClose}
-          />
+      {isTeacher && (
+        <div className="add-team-btn-container">
+          <button className="add-team-btn" onClick={() => setShowModal(true)}>
+            Add New Team
+          </button>
         </div>
       )}
 
-      <TeamsList teams={teamsData} onDelete={handleDelete} onEdit={handleEdit} />
+      {showModal && (
+        <div className="modal-container">
+          <AddTeamModal onAddTeam={handleAddTeam} onClose={handleModalClose} />
+        </div>
+      )}
+
+      <TeamsList
+        teams={teamsData}
+        onDelete={handleDelete}
+        onEdit={handleEdit}
+      />
     </div>
   );
 }
