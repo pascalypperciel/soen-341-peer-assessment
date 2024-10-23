@@ -13,6 +13,7 @@ const SignupPage = () => {
     idOrUsername: "",
     password: "",
   });
+
   const [isLogin, setIsLogin] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
   const navigate = useNavigate();
