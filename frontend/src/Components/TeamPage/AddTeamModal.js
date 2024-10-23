@@ -21,7 +21,7 @@ function AddTeamModal({ onAddTeam, onClose }) {
   useEffect(() => {
     const fetchCoursesAndStudents = async () => {
       try {
-        const coursesResponse = await axios.get('http://localhost:5000/getAllCourses');
+        const coursesResponse = await axios.get(`http://localhost:5000/getAllCourses?teacher_id=${localStorage.getItem("teacher_id")}`);
         setAvailableCourses(coursesResponse.data);
 
         const studentsResponse = await axios.get('http://localhost:5000/getAllStudents');

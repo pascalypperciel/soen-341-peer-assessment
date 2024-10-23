@@ -411,11 +411,13 @@ def get_all_students():
 
 @teams_page_routes.route('/getAllCourses', methods=['GET'])
 def get_all_courses():
+	teacher_id = request.args.get('teacher_id')
+
 	try: 
 		cursor = conn.cursor()
 
-		query = """SELECT CourseID, Name FROM Courses"""
-		cursor.execute(query)
+		query = """SELECT CourseID, Name FROM Courses WHERE TeacherID = ?"""
+		cursor.execute(query, (teacher_id,))
 		courses_result = cursor.fetchall()
 
 		if courses_result:
