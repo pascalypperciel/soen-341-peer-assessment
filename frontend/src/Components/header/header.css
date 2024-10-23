@@ -1,61 +1,56 @@
-/* General header styling */
 .header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 40px;
-    background-color: #f8f9fa; /* Optional background color */
-  }
-  
-  .header-logo img {
-    width: 150px; /* Adjust the size of your logo */
-    height: auto;
-  }
-  
-  /* Navigation styling */
-  .nav-bar {
-    display: flex;
-    justify-content: space-between;
-    flex-grow: 1;
-    align-items: center;
-  }
-  
-  .center-links {
-    display: flex;
-    flex-grow: 1;
-    justify-content: center; /* Center the Home, News, and Contact links */
-    list-style-type: none;
-  }
-  
-  .center-links li {
-    margin: 0 30px;
-    font-weight: bold;
-    padding: 10px;
-    border-radius: 10px;
-    transition: text-shadow 0.3s ease;
-  }
-  
-  .center-links li a {
-    text-decoration: none; /* Remove underline from links */
-    color: #912338; /* Set the text color */
-  }
-  
-  .center-links a:hover {
-    color: #e31f26;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); /* Adds shadow */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background-color: #f8f9fa;
+}
 
-  }
-  
+.header-logo img {
+  width: 150px;
+  height: auto;
+}
+
+.nav-bar {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.center-links {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  list-style-type: none;
+}
+
+.center-links li {
+  margin: 0 30px;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 10px;
+  transition: text-shadow 0.3s ease;
+}
+
+.center-links li a {
+  text-decoration: none;
+  color: #912338;
+}
+
+.center-links a:hover {
+  color: #e31f26;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
 .nav-bar .logout-button {
-    background-color: #912338; 
-    color: #ffffff; 
-    font-weight: bold;
-    border-radius: 8px; 
-    font-size: 12px;
-  }
-  
-  .nav-bar .logout-button:hover {
-    background-color: #f1aeb5; 
-  }
-  
-  
+  background-color: #912338;
+  color: #ffffff;
+  font-weight: bold;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.nav-bar .logout-button:hover {
+  background-color: #f1aeb5;
+}

@@ -1,0 +1,24 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.container-rating {
+  position: relative;
+  margin: auto;
+  min-height: 100vh;
+  max-width: 1200px;
+  min-height: 600px;
+}
+
+.evaluation {
+  margin-bottom: 20px;
+}
+
+/* Push the footer to the bottom */
+footer {
+  margin-top: auto; /* Ensures footer stays at the bottom */
+}

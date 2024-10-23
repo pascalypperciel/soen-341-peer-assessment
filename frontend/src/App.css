@@ -39,24 +39,16 @@
 
 .layout {
   display: flex;
-  flex-direction: column;       /* Stack header, main, and footer */
-  height: 100vh;               /* Full viewport height */
+  flex-direction: column;
+  height: 100vh;
 }
 
 .main-content {
-  display: flex;                /* Use flexbox for the main content */
-  flex: 1;                     /* Allow it to grow and fill available space */
-  justify-content: center;      /* Center horizontally */
-  align-items: center;          /* Center vertically */
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
 }
-
-.footer {
-  /* Add your footer styles */
-  /* Example: */
-  padding: 20px;
-  background-color: #f8f9fa;
-}
-
 
 /* Styling for teams page */
 
@@ -93,8 +85,6 @@
 .team-card li {
   margin: 5px 0;
 }
-
-
 
 /* Modal styling */
 .modal {
@@ -185,9 +175,9 @@
 }
 
 .modal-container {
-  position: fixed; 
-  top: 50%;    
-  left: 50%;   
+  position: fixed;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   justify-content: center;
   align-items: center;
