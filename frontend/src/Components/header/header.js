@@ -5,10 +5,11 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import AddTeamModal from "./TeamPage/AddTeamModal";
+import AddTeamModal from "../TeamPage/AddTeamModal";
 
 const Header = () => {
   const [isTeacher, setIsTeacher] = useState(false);
+  const [teamsData, setTeamsData] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,6 +22,10 @@ const Header = () => {
       setIsTeacher(false);
     }
   }, []);
+
+  const handleAddTeam = (newTeam) => {
+    setTeamsData([...teamsData, newTeam]);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("userToken");
@@ -55,7 +60,8 @@ const Header = () => {
                     className="add-team-btn"
                     style={{
                       cursor: "pointer",
-                      color: "#1860C3",
+                      backgroundColor: "transparent",
+                      color: "#912338",
                       textDecoration: "none",
                     }}
                   >
