@@ -108,7 +108,6 @@ const RatingPage = () => {
   //modal close
   const handleModalClose = () => {
     setShowModal(false);
-    window.location.reload();
   };
 
   //set all the variables with there value
@@ -552,7 +551,11 @@ const RatingPage = () => {
         </div>
 
         <Stack spacing={2} direction="row" justifyContent="center">
-          <Button variant="contained" onClick={handleSubmit}>
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            className="custom-button"
+          >
             Submit Ratings
           </Button>
         </Stack>
