@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Rating from "@mui/material/Rating";
 import PropTypes from "prop-types";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
 import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";
@@ -13,14 +18,14 @@ import { useNavigate } from "react-router-dom";
 import Header from "../header/header";
 import Footer from "../footer/footer";
 import "./ratingPage.css";
-
-//Styling the icon for the rating
+import axios from "axios";
+// Styling the icon for the rating
 const StyledRating = styled(Rating)(({ theme }) => ({
   "& .MuiRating-iconEmpty .MuiSvgIcon-root": {
     color: theme.palette.action.disabled,
   },
 }));
-//Styling the icon for the rating
+
 const customIcons = {
   1: {
     icon: <SentimentVeryDissatisfiedIcon color="error" />,
@@ -43,22 +48,27 @@ const customIcons = {
     label: "Very Satisfied",
   },
 };
-//Styling the icon for the rating
+
 function IconContainer(props) {
   const { value, ...other } = props;
   return <span {...other}>{customIcons[value].icon}</span>;
 }
-//Styling the icon for the rating
+
 IconContainer.propTypes = {
   value: PropTypes.number.isRequired,
 };
+
 const RatingPage = () => {
   const [cooperationRating, setCooperationRating] = useState(0);
   const [conceptualRating, setConceptualRating] = useState(0);
   const [practicalRating, setPracticalRating] = useState(0);
   const [ethicRating, setEthicRating] = useState(0);
-  const [rateeId, setRatedRating] = useState(0);
-  const [groupId, setGroupId] = useState(0);
+  const [rateeId, setRatedRating] = useState("");
+  const [groupId, setGroupId] = useState("");
+  const [availableStudents, setAvailableStudents] = useState([]);
+  const [availableGroups, setAvailableGroups] = useState([]);
+  const [error, setError] = useState(null);
+  const [studentId, setStudentId] = useState(null);
 
   const handleCooperationChange = (event, newValue) => {
     setCooperationRating(newValue);
@@ -76,16 +86,30 @@ const RatingPage = () => {
     setEthicRating(newValue);
   };
 
+  const handleStudentSelection = (event) => {
+    setRatedRating(event.target.value);
+  };
+
+  const handleGroupSelection = async (event) => {
+    const selectedGroupId = event.target.value;
+    setGroupId(selectedGroupId);
+    await fetchRatees(selectedGroupId);
+  };
+
   const handleRatingSubmission = () => {
-    console.log("Submitting Ratings..."); // Confirm button click
+    console.log("Submitting Ratings...");
 
     if (
-      cooperationRating === null ||
-      conceptualRating === null ||
-      practicalRating === null ||
-      ethicRating === null
+      cooperationRating === 0 ||
+      conceptualRating === 0 ||
+      practicalRating === 0 ||
+      ethicRating === 0 ||
+      !rateeId ||
+      !groupId
     ) {
-      alert("Please complete all ratings before submitting.");
+      alert(
+        "Please complete all ratings and select a student and group before submitting."
+      );
       return;
     }
 
@@ -98,10 +122,8 @@ const RatingPage = () => {
       work_ethic_rating: ethicRating,
     };
 
-    // Log the rating data
     console.log("Submitting rating data:", ratingData);
 
-    // Make the API call with the collected ratingData
     fetch("/InsertStudRatings", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -119,16 +141,54 @@ const RatingPage = () => {
           alert(`Rating submitted for ${rateeId}!`);
         } else if (data.error) {
           console.error(data.error);
+          alert(`Error: ${data.error}`);
         }
       })
       .catch((error) => console.error("Error inserting rating:", error));
+  };
+
+  useEffect(() => {
+    const id = localStorage.getItem("student_id");
+    if (id) {
+      setStudentId(id);
+    } else {
+      setError("No student ID found in local storage.");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (studentId) {
+      const fetchGroups = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:5000/getStudentGroups?student_id=${studentId}`
+          );
+          setAvailableGroups(response.data);
+        } catch (err) {
+          setError(err.response?.data?.error || "Error fetching groups");
+        }
+      };
+
+      fetchGroups();
+    }
+  }, [studentId]);
+
+  const fetchRatees = async (selectedGroupId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/getStudentRatees/${selectedGroupId}?student_id=${studentId}`
+      );
+      setAvailableStudents(response.data.students);
+    } catch (err) {
+      setError(err.response?.data?.error || "Error fetching students");
+    }
   };
 
   return (
     <div>
       <Header />
       <div className="container-rating">
-        <h2> Welcome to the Peer Evaluation Page </h2>
+        <h2>Welcome to the Peer Evaluation Page</h2>
         <p>
           This evaluation enables students to assess the contributions and
           performance of their teammates across four essential dimensions:
@@ -139,7 +199,7 @@ const RatingPage = () => {
         </p>
 
         <div className="instruction">
-          <h4> Anonymous Evaluation Process</h4>
+          <h4>Anonymous Evaluation Process</h4>
           <p>
             This evaluation is conducted anonymously to encourage honest and
             constructive feedback. Participants will rate their teammates on a
@@ -149,7 +209,44 @@ const RatingPage = () => {
         </div>
 
         <div className="student">
-          <p>The student that you are evaluating:</p>
+          <p>Please select a group:</p>
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="select-group">Teams</InputLabel>
+              <Select
+                labelId="select-group"
+                value={groupId}
+                label="Group"
+                onChange={handleGroupSelection}
+              >
+                {availableGroups.map((group) => (
+                  <MenuItem key={group.GroupID} value={group.GroupID}>
+                    {group.CourseName}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+
+          <p>Please select a student:</p>
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="select-student">Student</InputLabel>
+              <Select
+                labelId="select-student"
+                value={rateeId}
+                label="Student"
+                onChange={handleStudentSelection}
+                disabled={!groupId}
+              >
+                {availableStudents.map((student) => (
+                  <MenuItem key={student.StudentID} value={student.StudentID}>
+                    {student.Name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
         </div>
 
         <div className="evaluation">
