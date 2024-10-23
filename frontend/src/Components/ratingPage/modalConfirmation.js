@@ -1,32 +1,33 @@
-// ModalConfirmation.jsx
 import React from "react";
-import PropTypes from "prop-types";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 
-const ModalConfirmation = ({ onClose, ratingData, onSubmit }) => {
+const ModalConfirmation = ({ open, onClose, onSubmit, ratings }) => {
+  // Check if ratings is defined
+  if (!ratings) return null;
+
   return (
-    <div className="modal">
-      <h2>Confirm Submission</h2>
-      <p>Are you sure you want to submit the following ratings?</p>
+    <Modal open={open} onClose={onClose}>
+      <Box
+        sx={
+          {
+            /* styles */
+          }
+        }
+      >
+        <h2>Confirm Ratings</h2>
+        <p>Cooperation Rating: {ratings.cooperationRating}</p>
+        <p>Conceptual Contribution Rating: {ratings.conceptualRating}</p>
+        <p>Practical Contribution Rating: {ratings.practicalRating}</p>
+        <p>Work Ethic Rating: {ratings.ethicRating}</p>
+        {/* Add more details as needed */}
 
-      <ul>
-        <li>Cooperation Rating: {ratingData.cooperationRating}</li>
-        <li>Conceptual Contribution Rating: {ratingData.conceptualRating}</li>
-        <li>Practical Contribution Rating: {ratingData.practicalRating}</li>
-        <li>Work Ethic Rating: {ratingData.ethicRating}</li>
-        <li>Comments: {ratingData.comments}</li>
-        {/* Add any other details you want to display */}
-      </ul>
-
-      <button onClick={onSubmit}>Confirm</button>
-      <button onClick={onClose}>Cancel</button>
-    </div>
+        <Button onClick={onSubmit}>Confirm</Button>
+        <Button onClick={onClose}>Cancel</Button>
+      </Box>
+    </Modal>
   );
-};
-
-ModalConfirmation.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  ratingData: PropTypes.object.isRequired,
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default ModalConfirmation;

@@ -20,6 +20,8 @@ import Header from "../header/header";
 import Footer from "../footer/footer";
 import "./ratingPage.css";
 import axios from "axios";
+import ModalConfirmation from "./modalConfirmation";
+
 // Styling the icon for the rating
 const StyledRating = styled(Rating)(({ theme }) => ({
   "& .MuiRating-iconEmpty .MuiSvgIcon-root": {
@@ -99,7 +101,15 @@ const RatingPage = () => {
   const [availableGroups, setAvailableGroups] = useState([]);
   const [error, setError] = useState(null);
   const [raterId, setRaterId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
   const navigate = useNavigate();
+
+  //modal close
+  const handleModalClose = () => {
+    setShowModal(false);
+    window.location.reload();
+  };
 
   //set all the variables with there value
   const handleCooperationChange = (event, newValue) => {
@@ -157,10 +167,7 @@ const RatingPage = () => {
   };
 
   //When the button Submit is clicked
-  const handleRatingSubmission = async () => {
-    console.log("Submitting Ratings...");
-
-    //check that all the rating are completed
+  const handleSubmit = () => {
     if (
       cooperationRating === 0 ||
       conceptualRating === 0 ||
@@ -175,6 +182,10 @@ const RatingPage = () => {
       return;
     }
 
+    setShowModal(true);
+  };
+
+  const handleModalSubmit = async () => {
     //Initialize the variable with there value
     const ratingData = {
       ratee_id: rateeId,
@@ -540,16 +551,31 @@ const RatingPage = () => {
           />
         </div>
 
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleRatingSubmission}
-          className="custom-button"
-        >
-          Submit
-        </Button>
+        <Stack spacing={2} direction="row" justifyContent="center">
+          <Button variant="contained" onClick={handleSubmit}>
+            Submit Ratings
+          </Button>
+        </Stack>
       </div>
       <Footer />
+      <ModalConfirmation
+        open={showModal}
+        onClose={handleModalClose}
+        onSubmit={handleModalSubmit}
+        ratings={{
+          cooperationRating,
+          conceptualRating,
+          practicalRating,
+          ethicRating,
+          cooperationComment,
+          conceptualComment,
+          practicalComment,
+          ethicComment,
+          rateeId,
+          groupId,
+          comments,
+        }} // Pass the ratings and comments
+      />
     </div>
   );
 };

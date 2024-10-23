@@ -25,6 +25,7 @@ body {
 .container-rating .custom-button {
   padding: 12px 24px; /* Adjust padding as needed */
   margin: 12px 24px;
+  background-color: #912338;
 }
 
 /* Push the footer to the bottom */
