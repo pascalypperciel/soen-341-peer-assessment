@@ -13,6 +13,7 @@ const SignupPage = () => {
     idOrUsername: "",
     password: "",
   });
+
   const [isLogin, setIsLogin] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
   const navigate = useNavigate();
@@ -51,7 +52,9 @@ const SignupPage = () => {
       return;
     }
 
-    const url = isTeacher ? "http://localhost:5000/teacherSignup" : "http://localhost:5000/studentSignup";
+    const url = isTeacher
+      ? "http://localhost:5000/teacherSignup"
+      : "http://localhost:5000/studentSignup";
     try {
       const response = await axios.post(url, {
         [isTeacher ? "username" : "studentID"]: signupData.idOrUsername,

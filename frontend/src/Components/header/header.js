@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../Assets/entire-logo.png";
 import "./header.css";
 import Button from "@mui/material/Button";
@@ -7,7 +7,20 @@ import { useNavigate } from "react-router-dom"; // Use useNavigate instead of us
 import { Link } from "react-router-dom";
 
 const Header = () => {
+  const [isTeacher, setIsTeacher] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const studentId = localStorage.getItem("student_id");
+    const teacherId = localStorage.getItem("teacher_id");
+
+    // Determine if the user is a teacher or student
+    if (teacherId) {
+      setIsTeacher(true); // User is a teacher
+    } else if (studentId) {
+      setIsTeacher(false); // User is a student
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("userToken");
@@ -26,15 +39,31 @@ const Header = () => {
 
         <nav className="nav-bar">
           <ul className="center-links">
-            <li>
-              <Link to="/teams">Home</Link>
-            </li>
-            <li>
-              <Link to="/ratingPage">Rate a Student</Link>
-            </li>
-            <li>
-              <Link to="">Something</Link>
-            </li>
+            {isTeacher ? (
+              <>
+                <li>
+                  <Link to="/teams">Home</Link>
+                </li>
+                <li>
+                  <Link to=""></Link>
+                </li>
+                <li>
+                  <Link to=""></Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link to="/teams">Home</Link>
+                </li>
+                <li>
+                  <Link to="/ratingPage">Rate a Student</Link>
+                </li>
+                <li>
+                  <Link to=""></Link>
+                </li>
+              </>
+            )}
           </ul>
 
           <Box sx={{ "& button": { m: 1 } }}>

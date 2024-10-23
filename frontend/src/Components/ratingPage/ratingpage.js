@@ -266,6 +266,7 @@ const RatingPage = () => {
   return (
     <div>
       <Header />
+      {error && <div className="error-message">{error}</div>}
       <div className="container-rating">
         <h1>Welcome to the Peer Evaluation Page</h1>
         <p>
