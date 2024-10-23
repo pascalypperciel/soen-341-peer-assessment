@@ -9,6 +9,7 @@ function Teams() {
   const [teamsData, setTeamsData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [urlEndpoint, setUrlEndpoint] = useState(null);
+  const [isTeacher, setIsTeacher] = useState(false);
 
   const fetchTeams = useCallback(async () => {
     if (urlEndpoint) {
@@ -33,6 +34,7 @@ function Teams() {
       setUrlEndpoint(
         `http://localhost:5000/displayTeamsTeacher?teacher_id=${teacherId}`
       );
+      setIsTeacher(true);
     }
   }, []);
 
@@ -66,11 +68,14 @@ function Teams() {
   return (
     <div>
       <Header />
-      <div className="add-team-btn-container">
-        <button className="add-team-btn" onClick={() => setShowModal(true)}>
-          Add New Team
-        </button>
-      </div>
+
+      {isTeacher && (
+        <div className="add-team-btn-container">
+          <button className="add-team-btn" onClick={() => setShowModal(true)}>
+            Add New Team
+          </button>
+        </div>
+      )}
 
       {showModal && (
         <div className="modal-container">

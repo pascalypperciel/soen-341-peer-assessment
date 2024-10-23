@@ -12,7 +12,7 @@ const Header = () => {
   const handleLogout = () => {
     localStorage.removeItem("userToken");
 
-    navigate("/test"); // Change to your login route
+    navigate("/");
   };
 
   //ADD SOMETHING FOR THE BACKEND
