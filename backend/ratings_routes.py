@@ -110,12 +110,16 @@ def insert_Stud_Ratings():
 	practical_contribution_rating = data['practical_contribution_rating']
 	work_ethic_rating = data['work_ethic_rating']
 	comment = data['comment']
+	cooperation_comment = data['cooperation_comment']
+	comconceptual_contribution_comment = data['comconceptual_contribution_comment']
+	practical_contribution_comment = data['practical_contribution_comment']
+	work_ethic_comment = data['work_ethic_comment']
 
 	try:
 		# SQL query to insert the ratings into the database
 		query = """
-			INSERT INTO Ratings (CooperationRating, ConceptualContributionRating, PracticalContributionRating, WorkEthicRating, RaterID, RateeID, GroupID, Comment)
-			VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+			INSERT INTO Ratings (CooperationRating, ConceptualContributionRating, PracticalContributionRating, WorkEthicRating, RaterID, RateeID, GroupID, Comment, CooperationComment, ConceptualContributionComment, PracticalContributionComment, WorkEthicComment)
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		"""
 
 		# Execute the query with the provided data
@@ -128,7 +132,11 @@ def insert_Stud_Ratings():
 			rater_id,
 			ratee_id,
 			group_id,
-			comment
+			comment,
+			cooperation_comment,
+			comconceptual_contribution_comment,
+			practical_contribution_comment,
+			work_ethic_comment
 		))
 
 		conn.commit()

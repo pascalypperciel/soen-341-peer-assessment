@@ -36,7 +36,12 @@ CREATE TABLE Ratings (
     GroupID INT,
     FOREIGN KEY (RaterID) REFERENCES Students(StudentID),
     FOREIGN KEY (RateeID) REFERENCES Students(StudentID),
-    FOREIGN KEY (GroupID) REFERENCES Groups(GroupID)
+    FOREIGN KEY (GroupID) REFERENCES Groups(GroupID),
+    Comment VARCHAR(MAX),
+    CooperationComment VARCHAR(MAX),
+    ConceptualContributionComment VARCHAR(MAX),
+    PracticalContributionComment VARCHAR(MAX),
+    WorkEthicComment VARCHAR(MAX),
 );
 
 CREATE TABLE StudentGroup (
