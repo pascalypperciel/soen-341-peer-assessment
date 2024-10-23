@@ -69,14 +69,6 @@ function Teams() {
     <div>
       <Header />
 
-      {isTeacher && (
-        <div className="add-team-btn-container">
-          <button className="add-team-btn" onClick={() => setShowModal(true)}>
-            Add New Team
-          </button>
-        </div>
-      )}
-
       {showModal && (
         <div className="modal-container">
           <AddTeamModal onAddTeam={handleAddTeam} onClose={handleModalClose} />
