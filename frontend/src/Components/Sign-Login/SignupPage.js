@@ -75,14 +75,10 @@ const SignupPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setValidationErrors(validationErrors);
-      return;
-    }
 
+    // Directly send the request without validation
     const url = isTeacher
-      ? `http://localhost:5000/teacherLogin?username=${signupData.idOrUsername}&password=${signupData.password}` // Pass parameters in the URL
+      ? `http://localhost:5000/teacherLogin?username=${signupData.idOrUsername}&password=${signupData.password}`
       : `http://localhost:5000/studentLogin?studentID=${signupData.idOrUsername}&password=${signupData.password}`;
 
     try {
@@ -107,9 +103,20 @@ const SignupPage = () => {
         console.log("Login successful:", user);
         navigate("/teams");
       } else {
-        console.error("Login failed");
+        const data = await response.json();
+        const errorMessage = data.message || "Login failed";
+        setValidationErrors({
+          general: errorMessage,
+          ...(data.message.includes("password") && { password: errorMessage }),
+          ...(data.message.includes("not found") && {
+            idOrUsername: errorMessage,
+          }),
+        });
       }
     } catch (error) {
+      setValidationErrors({
+        general: "Either your ",
+      });
       console.error("Error:", error);
     }
   };
