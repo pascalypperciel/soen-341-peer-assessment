@@ -127,11 +127,11 @@ def teacherLogin():
 
         if result:
             storedPassword = result[0]
-            teacherID = result[1]
-            session['session_id']= teacherID
+            teacher_id = result[1]
+            session['teacher_id']= teacher_id
             
             if storedPassword == password:
-                return {'message': 'Login successful', 'teacher_id': teacherID}, 200
+                return {'message': 'Login successful', 'teacher_id': teacher_id}, 200
             else:
                 return {'message': 'Incorrect password'}, 401
         else:
