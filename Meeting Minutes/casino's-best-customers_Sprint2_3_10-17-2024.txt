@@ -1,0 +1,38 @@
+Meeting #6
+
+Meeting Title: Wrapping up Sprint#2
+Date: October 17th, 2024
+Time: 4:00 pm
+
+Attendees:
+-Justin Lombardi
+-Antonino Guarraci
+-Massimo Caruso
+-Jessica Codreanu
+-Pascal Ypperciel
+-Parsa Darbani
+
+Absentees: None
+
+
+
+Agenda:
+	- Assess tasks that needed to be completed to reach deadline
+
+Topics Discussed
+
+- Assess tasks that needed to be completed to reach deadline
+	- Finish testing and writing tasks to complete second sprint 
+	- Upload meeting minutes and other documentation to GitHub 
+
+Descisions made:None
+	
+Next Steps:
+
+	-Finish up Sprint 2
+	
+Next meeting:
+ 
+	-2024-31-10
+	-4:00pm
+	-Lab class room

@@ -1,0 +1,65 @@
+Meeting #4
+
+Meeting Title: Starting Sprint #2
+Date: October 3rd, 2024
+Time: 2:00 pm
+
+Attendees:
+-Justin Lombardi
+-Antonino Guarraci
+-Massimo Caruso
+-Jessica Codreanu
+-Pascal Ypperciel
+-Parsa Darbani
+
+Absentees: None
+
+
+
+Agenda:
+	- Organize and assign tasks for sprint 2
+	- reflect on sprint 1 
+	- Identify improvments to be made for sprint 2 
+
+Topics Discussed
+
+Organize and assign tasks for sprint 2
+
+	- Goals for sprint 2 were defined 
+	- All tasks seperated into front-end and back-end 
+	- Back-end:
+		-Justin, Pascal, Antonino
+	-Front-end:
+		- Massimo, Jessicam, Parsa
+
+Reflect on sprint 1 
+	-In retrospect, we could have had better time management 
+	-Backend should have better defined outputs of routes and APIs 
+	 to futher aid front-end team 
+
+Identify improvments to be made for sprint 2 
+	-Have back-end team complete their portions more in advance
+	-Add more comments and documentation of API function to aid the 
+	 front-end team 
+
+		
+Descisions made: 
+
+Assigned teams for sprint 2
+
+- Back-end:
+		-Justin, Pascal, Antonino
+-Front-end:
+		- Massimo, Jessicam, Parsa
+
+	
+
+Next Steps:
+
+	-Start on development of sprint 2
+
+Next meeting:
+ 
+	-2024-10-10
+	-4:00pm
+	-Lab class room

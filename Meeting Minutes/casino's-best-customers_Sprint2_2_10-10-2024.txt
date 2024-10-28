@@ -1,0 +1,48 @@
+Meeting #5
+
+Meeting Title: Evaluating Progress During Sprint#2
+Date: October 10th, 2024
+Time: 4:00 pm
+
+Attendees:
+-Justin Lombardi
+-Antonino Guarraci
+-Massimo Caruso
+-Jessica Codreanu
+-Pascal Ypperciel
+-Parsa Darbani
+
+Absentees: None
+
+
+
+Agenda:
+	- Assess progression of tasks in Sprint 2
+	- Trouble shoot and bug fix completed tasks 
+	- Identify tasks that need help completing
+Topics Discussed
+
+Assess progression of tasks in Sprint 2
+
+	- All back-end members made significant progress or are almost completed their portions
+	- Front-end team beggining development based on APIs and design previously discussed
+
+Trouble shoot and bug fix completed tasks 
+	-Fix small bugs and ensure fucntionality of completed APIs 
+
+- Identify tasks that need help completing
+	- All tasks on track to be completed on time 
+	- Both teams making good progress
+	
+Descisions made:None
+	
+Next Steps:
+
+	-Keep working on sprint 2 
+	
+
+Next meeting:
+ 
+	-2024-17-10
+	-4:00pm
+	-Lab class room
