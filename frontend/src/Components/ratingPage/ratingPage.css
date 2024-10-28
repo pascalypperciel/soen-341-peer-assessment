@@ -1,0 +1,34 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.container-rating {
+  position: relative;
+  margin: auto;
+  min-height: 100vh;
+  max-width: 1200px;
+  min-height: 600px;
+}
+
+.evaluation {
+  margin-bottom: 20px;
+}
+
+.container-rating .textfield {
+  margin: 20px;
+}
+/*Submit button*/
+.container-rating .custom-button {
+  padding: 12px 24px; /* Adjust padding as needed */
+  margin: 12px 24px;
+  background-color: #912338;
+}
+
+/* Push the footer to the bottom */
+footer {
+  margin-top: auto; /* Ensures footer stays at the bottom */
+}
