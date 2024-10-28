@@ -1,53 +1,70 @@
-# Peer Assessment System
-## Description of the project:
-#### Identified Problem
-In group projects, it can be difficult for teachers/professors to accurately assess the contribution of each member, and students may feel reluctant to provide honest feedback due to fear of confrontation or bias. This lack of transparency can lead to imbalanced grading and frustration among team members who feel their efforts are not fairly recognized. Consequently, students may not receive the constructive feedback necessary for personal growth and improvement in collaborative settings.
+# Getting Started with Create React App
 
-#### Proposed Solution
-We are building a web application to fix the problem. This project allows university students doing group projects to rate their group members on a numeric scale based on different criteria. These reviews are anonymous thus increasing the likelihood of honest reviews. The teachers can manage their courses and the different groups. 
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-    
-Overall, this system will give genuine feedback to the students and the instructor in charge of the course. 
+## Available Scripts
 
-## Technology Used
-#### Frontend
-React.JS
+In the project directory, you can run:
 
-#### Backend
-Flask (Python)
+### `npm start`
 
-#### Database
-SQL server hosted on Microsoft Azure Cloud Computing Services
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-## Team members and roles:
-* #### Massimo Caruso   -  Frontend
-  - Background: Second year Software Engineering student.
-  - Access: Contributor (Read/Write)
-* #### Parsa Darbani    -  Frontend
-  - Background: Second year Software Engineering student.
-  - Access: Contributor (Read/Write)
-* #### Jessica Codreanu -  Frontend
-  - Background: Second year Software Engineering student.
-  - Access: Contributor (Read/Write)
-* #### Anthony Guarraci -  Backend
-  - Background: Second year Software Engineering student.
-  - Access: Contributor (Read/Write)
-* #### Justin Lombardi  -  Backend
-  - Background: Second year Software Engineering student.
-  - Access: Contributor (Read/Write)
-* #### Pascal Ypperciel -  Backend & Database  
-  - Background: Third year Computer Engineering student.
-  - Access: Admin (Read/Write + Repository Management)
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
+### `npm test`
 
-#### Contributor
-Code contribution, push code, create/delete branches, pull requests, open and take issues.   
-#### Admin
-Same as Contributor but can also manage repository settings, manage collaborators, etc.
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-## Repository's Rules
-Currently, we have a rule where PR requires at least one approuval from a reviewer to be accepeted and merged.
-  
+### `npm run build`
 
-  
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `npm run eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+
+### Analyzing the Bundle Size
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+
+### Making a Progressive Web App
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
