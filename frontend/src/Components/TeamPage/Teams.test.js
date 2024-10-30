@@ -36,6 +36,7 @@ describe('Teams Page', () => {
     // Teams display check
       expect(screen.getByText('Team Alpha')).toBeInTheDocument();
       expect(screen.getByText('Team Beta')).toBeInTheDocument();
+  });
 
   // Teams render check (teacher)
   test('renders the Teams page and fetches teams data for a teacher', async () => {
@@ -110,6 +111,9 @@ describe('Teams Page', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Team Alpha')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
       expect(screen.getByText('Team Beta')).toBeInTheDocument();
     });
 
@@ -141,6 +145,9 @@ describe('Teams Page', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Team Alpha')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
       expect(screen.getByText('Team Beta')).toBeInTheDocument();
     });
 
