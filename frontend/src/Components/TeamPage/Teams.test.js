@@ -43,8 +43,8 @@ describe('Teams Page', () => {
     localStorage.setItem('teacher_id', '12345');
 
     const mockTeamsData = [
-      { groupId: 3, name: 'Team Gamma', students: [] },
-      { groupId: 4, name: 'Team Delta', students: [] },
+      { groupId: 3, groupName: 'Team Gamma', students: [] },
+      { groupId: 4, groupName: 'Team Delta', students: [] },
     ];
 
     axios.get.mockResolvedValueOnce({ data: mockTeamsData });
