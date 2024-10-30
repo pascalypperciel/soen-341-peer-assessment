@@ -7,13 +7,20 @@ on:
       - completed
 
 jobs:
-  test-signup-login:
+  setup:
     uses: ./.github/workflows/user-story-0.yml
     with:
       python-version: '3.8'
       node-version: '18'
 
+  test-signup-login:
+    runs-on: ubuntu-latest
+    needs: setup
+
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
     - name: Run Signup/Login tests
       run: |
         export PYTHONPATH=$PYTHONPATH:$(pwd)
@@ -21,13 +28,13 @@ jobs:
         pytest backend/tests/test_signup_login.py
 
   test-frontend-signup-login:
-    needs: test-signup-login
-    uses: ./.github/workflows/user-story-0.yml
-    with:
-      python-version: '3.8'
-      node-version: '18'
+    runs-on: ubuntu-latest
+    needs: setup
 
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
     - name: Run frontend tests for signup/login
       run: |
         cd frontend
