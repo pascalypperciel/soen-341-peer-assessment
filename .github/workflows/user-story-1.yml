@@ -1,4 +1,4 @@
-name: Build the Project
+name: User Story 1 - Build the Project and Environment
 
 on:
   push:
@@ -12,9 +12,17 @@ on:
   workflow_dispatch:
     branches:
       - '**'
+  workflow_call:
+    inputs:
+      python-version:
+        required: true
+        type: string
+      node-version:
+        required: true
+        type: string
 
 jobs:
-  backend-tests:
+  backend-tests: #sets up the backend and does a quick test
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +32,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.8'
+        python-version: ${{ inputs.python-version }}
 
     - name: Install ODBC Driver for SQL Server
       run: |
@@ -68,7 +76,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '18'
+        node-version: ${{ inputs.node-version }}
 
     - name: Install frontend dependencies
       run: |
@@ -80,4 +88,4 @@ jobs:
     - name: Run frontend tests
       run: |
         cd frontend
-        npm run test -- --ci --coverage
+        npm run test -- --ci --coverage frontend/src/App.test.js
