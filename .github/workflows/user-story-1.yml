@@ -1,35 +1,46 @@
-name: User Story 1 - Signup and Login Tests
+name: User Story 1 - Build the Project and Environment
 
 on:
-  workflow_run:
-    workflows: ["User Story 0 - Build the Project and Environment"]
-    types:
-      - completed
+  push:
+    branches:
+      - main
+      - 'sprint-*'
+  pull_request:
+    branches:
+      - main
+      - 'sprint-*'
+  workflow_dispatch:
+    branches:
+      - '**'
+  workflow_call:
+    inputs:
+      python-version:
+        required: true
+        type: string
+      node-version:
+        required: true
+        type: string
 
 jobs:
-  test-signup-login:
+  backend-tests: #sets up the backend and does a quick test
     runs-on: ubuntu-latest
 
     steps:
-    # setup
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # setup
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.8'
+        python-version: ${{ inputs.python-version }}
 
-    # setup
     - name: Install ODBC Driver for SQL Server
       run: |
         curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
         curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
         sudo apt-get update
         sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18
-
-    # setup
+    
     - name: Parse and set DB connection environment variables
       run: |
         echo "${{ secrets.DB_CONNECTION }}" > temp_env_file
@@ -38,40 +49,35 @@ jobs:
         done < temp_env_file
         rm temp_env_file
 
-    # setup
     - name: Set PYTHONPATH
       run: |
         export PYTHONPATH=$PYTHONPATH:$(pwd)
 
-    # setup
     - name: Install backend dependencies
       run: |
         python -m venv venv
         source venv/bin/activate
         pip install -r requirements.txt
 
-    - name: Run Signup/Login tests
+    - name: Run backend tests
       run: |
         export PYTHONPATH=$PYTHONPATH:$(pwd)
         source venv/bin/activate
-        pytest backend/tests/test_signup_login.py
+        pytest backend/tests/test_backend_setup.py
 
-  test-frontend-signup-login:
+  frontend-tests:
     runs-on: ubuntu-latest
-    needs: test-signup-login
+    needs: backend-tests
 
     steps:
-    # setup
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # setup
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '18'
+        node-version: ${{ inputs.node-version }}
 
-    # setup
     - name: Install frontend dependencies
       run: |
         cd frontend
@@ -79,7 +85,7 @@ jobs:
         npm install react-router-dom axios @mui/material @emotion/react @emotion/styled
         npm install --save-dev @babel/preset-env @babel/preset-react babel-jest @babel/plugin-proposal-private-property-in-object
 
-    - name: Run frontend tests for signup/login
+    - name: Run frontend tests
       run: |
         cd frontend
-        npm run test -- --ci --coverage
+        npm run test -- --ci --coverage frontend/src/App.test.js
