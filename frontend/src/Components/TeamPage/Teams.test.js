@@ -17,8 +17,8 @@ describe('Teams Page', () => {
     localStorage.setItem('student_id', '99999999');
 
     const mockTeamsData = [
-      { groupId: 1, name: 'Team Alpha' },
-      { groupId: 2, name: 'Team Beta' },
+      { groupId: 1, name: 'Team Alpha', students: [] },
+      { groupId: 2, name: 'Team Beta', students: [] },
     ];
 
     axios.get.mockResolvedValueOnce({ data: mockTeamsData });
@@ -43,8 +43,8 @@ describe('Teams Page', () => {
     localStorage.setItem('teacher_id', '12345');
 
     const mockTeamsData = [
-      { groupId: 3, name: 'Team Gamma' },
-      { groupId: 4, name: 'Team Delta' },
+      { groupId: 3, name: 'Team Gamma', students: [] },
+      { groupId: 4, name: 'Team Delta', students: [] },
     ];
 
     axios.get.mockResolvedValueOnce({ data: mockTeamsData });
@@ -67,7 +67,7 @@ describe('Teams Page', () => {
   test('adds a new team', async () => {
     localStorage.setItem('teacher_id', '12345');
 
-    const mockTeamsData = [{ groupId: 1, name: 'Team Alpha' }];
+    const mockTeamsData = [{ groupId: 1, name: 'Team Alpha', students: [] }];
 
     axios.get.mockResolvedValueOnce({ data: mockTeamsData });
 
@@ -97,8 +97,8 @@ describe('Teams Page', () => {
     localStorage.setItem('teacher_id', '12345');
 
     const mockTeamsData = [
-      { groupId: 1, name: 'Team Alpha' },
-      { groupId: 2, name: 'Team Beta' },
+      { groupId: 1, name: 'Team Alpha', students: [] },
+      { groupId: 2, name: 'Team Beta', students: [] },
     ];
 
     axios.get.mockResolvedValueOnce({ data: mockTeamsData });
@@ -131,8 +131,8 @@ describe('Teams Page', () => {
     localStorage.setItem('teacher_id', '12345');
 
     const mockTeamsData = [
-      { groupId: 1, name: 'Team Alpha' },
-      { groupId: 2, name: 'Team Beta' },
+      { groupId: 1, name: 'Team Alpha', students: [] },
+      { groupId: 2, name: 'Team Beta', students: [] },
     ];
 
     axios.get.mockResolvedValueOnce({ data: mockTeamsData });
