@@ -34,9 +34,8 @@ describe('Teams Page', () => {
     });
 
     // Teams display check
-    expect(screen.getByText('Team Alpha')).toBeInTheDocument();
-    expect(screen.getByText('Team Beta')).toBeInTheDocument();
-  });
+      expect(screen.getByText('Team Alpha')).toBeInTheDocument();
+      expect(screen.getByText('Team Beta')).toBeInTheDocument();
 
   // Teams render check (teacher)
   test('renders the Teams page and fetches teams data for a teacher', async () => {
