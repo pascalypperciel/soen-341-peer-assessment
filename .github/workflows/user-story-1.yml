@@ -1,11 +1,6 @@
 name: User Story 1 - Signup and Login Tests
 
 on:
-  push:
-    branches:
-      - main
-      - 'sprint-*'
-      - 'remove-code-duplication-tests'
   workflow_run:
     workflows: ["User Story 0 - Build the Project and Environment"]
     types:
