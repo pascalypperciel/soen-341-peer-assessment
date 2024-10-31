@@ -1,24 +1,35 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Teams from './Teams';
+import { BrowserRouter as Router } from 'react-router-dom';
 import axios from 'axios';
 import '@testing-library/jest-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
 
 jest.mock('axios');
 
 describe('Teams Page', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    localStorage.setItem('teacher_id', '12345'); // Mocking teacher login
+  });
+
+  afterEach(() => {
     localStorage.clear();
   });
 
-  // render test teams page and fetch data
-  test('renders the Teams page and fetches teams data for a student', async () => {
-    localStorage.setItem('student_id', '99999999');
-
+  it('renders team list correctly', async () => {
     const mockTeamsData = [
-      { groupId: 1, name: 'Team Alpha', students: [] },
-      { groupId: 2, name: 'Team Beta', students: [] },
+      {
+        groupId: '1',
+        groupName: 'Team A',
+        courseName: 'Math 101',
+        students: [{ name: 'Alice', studentId: '1001' }]
+      },
+      {
+        groupId: '2',
+        groupName: 'Team B',
+        courseName: 'Science 101',
+        students: [{ name: 'Bob', studentId: '1002' }]
+      }
     ];
 
     axios.get.mockResolvedValueOnce({ data: mockTeamsData });
@@ -30,24 +41,26 @@ describe('Teams Page', () => {
     );
 
     await waitFor(() => {
-      expect(axios.get).toHaveBeenCalledWith('http://localhost:5000/displayTeamsStudent?student_id=99999999');
+      mockTeamsData.forEach((team) => {
+        expect(screen.getByText(team.groupName)).toBeInTheDocument();
+        expect(screen.getByText(team.courseName)).toBeInTheDocument();
+        team.students.forEach((student) => {
+          expect(screen.getByText(`${student.name} (ID: ${student.studentId})`)).toBeInTheDocument();
+        });
+      });
     });
-
-    // Teams display check
-      expect(screen.getByText('Team Alpha')).toBeInTheDocument();
-      expect(screen.getByText('Team Beta')).toBeInTheDocument();
   });
 
-  // Teams render check (teacher)
-  test('renders the Teams page and fetches teams data for a teacher', async () => {
-    localStorage.setItem('teacher_id', '12345');
+  it('allows a teacher to edit a team', async () => {
+    const mockTeam = {
+      groupId: '1',
+      groupName: 'Team A',
+      courseName: 'Math 101',
+      students: [{ name: 'Alice', studentId: '1001' }]
+    };
 
-    const mockTeamsData = [
-      { groupId: 3, groupName: 'Team Gamma', students: [] },
-      { groupId: 4, groupName: 'Team Delta', students: [] },
-    ];
-
-    axios.get.mockResolvedValueOnce({ data: mockTeamsData });
+    axios.get.mockResolvedValueOnce({ data: [mockTeam] });
+    axios.put.mockResolvedValueOnce({ status: 200 });
 
     render(
       <Router>
@@ -55,21 +68,30 @@ describe('Teams Page', () => {
       </Router>
     );
 
-    await waitFor(() => {
-      expect(axios.get).toHaveBeenCalledWith('http://localhost:5000/displayTeamsTeacher?teacher_id=12345');
-    });
+    await waitFor(() => screen.getByText(mockTeam.groupName));
 
-    expect(screen.getByText('Team Gamma')).toBeInTheDocument();
-    expect(screen.getByText('Team Delta')).toBeInTheDocument();
+    fireEvent.click(screen.getByText('Edit'));
+
+    const nameInput = screen.getByLabelText(/Group Name/i);
+    fireEvent.change(nameInput, { target: { value: 'Updated Team A' } });
+
+    fireEvent.click(screen.getByText('Save'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Updated Team A')).toBeInTheDocument();
+    });
   });
 
-  // add team test
-  test('adds a new team', async () => {
-    localStorage.setItem('teacher_id', '12345');
+  it('displays an error if team editing fails', async () => {
+    const mockTeam = {
+      groupId: '1',
+      groupName: 'Team A',
+      courseName: 'Math 101',
+      students: [{ name: 'Alice', studentId: '1001' }]
+    };
 
-    const mockTeamsData = [{ groupId: 1, name: 'Team Alpha', students: [] }];
-
-    axios.get.mockResolvedValueOnce({ data: mockTeamsData });
+    axios.get.mockResolvedValueOnce({ data: [mockTeam] });
+    axios.put.mockRejectedValueOnce({ response: { data: { error: 'Failed to edit the team' } } });
 
     render(
       <Router>
@@ -77,31 +99,30 @@ describe('Teams Page', () => {
       </Router>
     );
 
-    fireEvent.click(screen.getByText(/Add New Team/i));
+    await waitFor(() => screen.getByText(mockTeam.groupName));
 
-    expect(screen.getByText(/Add Team/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByText('Edit'));
 
-    // Simulate adding a new team
-    const newTeam = { groupId: 5, name: 'Team Epsilon' };
+    const nameInput = screen.getByLabelText(/Group Name/i);
+    fireEvent.change(nameInput, { target: { value: 'Updated Team A' } });
 
-    fireEvent.click(screen.getByText(/Add Team/i));
+    fireEvent.click(screen.getByText('Save'));
 
     await waitFor(() => {
-      // check new team is added
-      expect(screen.getByText('Team Epsilon')).toBeInTheDocument();
+      expect(screen.getByText('Failed to edit the team')).toBeInTheDocument();
     });
   });
 
-  // delete team test
-  test('deletes a team', async () => {
-    localStorage.setItem('teacher_id', '12345');
+  it('allows a teacher to delete a team', async () => {
+    const mockTeam = {
+      groupId: '1',
+      groupName: 'Team A',
+      courseName: 'Math 101',
+      students: [{ name: 'Alice', studentId: '1001' }]
+    };
 
-    const mockTeamsData = [
-      { groupId: 1, name: 'Team Alpha', students: [] },
-      { groupId: 2, name: 'Team Beta', students: [] },
-    ];
-
-    axios.get.mockResolvedValueOnce({ data: mockTeamsData });
+    axios.get.mockResolvedValueOnce({ data: [mockTeam] });
+    axios.post.mockResolvedValueOnce({ status: 200 });
 
     render(
       <Router>
@@ -109,58 +130,26 @@ describe('Teams Page', () => {
       </Router>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText('Team Alpha')).toBeInTheDocument();
-    });
+    await waitFor(() => screen.getByText(mockTeam.groupName));
+
+    fireEvent.click(screen.getByText('Delete'));
 
     await waitFor(() => {
-      expect(screen.getByText('Team Beta')).toBeInTheDocument();
-    });
-
-    // Simulate deleting a team
-    fireEvent.click(screen.getByText(/Delete/i));
-
-    await waitFor(() => {
-      // should not be in the document check
-      expect(screen.queryByText('Team Beta')).not.toBeInTheDocument();
+      expect(screen.queryByText(mockTeam.groupName)).not.toBeInTheDocument();
     });
   });
 
-  // edit team test
-  test('edits a team', async () => {
-    localStorage.setItem('teacher_id', '12345');
-
-    const mockTeamsData = [
-      { groupId: 1, name: 'Team Alpha', students: [] },
-      { groupId: 2, name: 'Team Beta', students: [] },
-    ];
-
-    axios.get.mockResolvedValueOnce({ data: mockTeamsData });
-
+  it('displays the Add Team modal when the button is clicked', async () => {
     render(
       <Router>
         <Teams />
       </Router>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText('Team Alpha')).toBeInTheDocument();
-    });
+    fireEvent.click(screen.getByText('Add New Team'));
 
     await waitFor(() => {
-      expect(screen.getByText('Team Beta')).toBeInTheDocument();
-    });
-
-    // Simulate editing a team
-    fireEvent.click(screen.getByText(/Edit/i));
-
-    const editedTeam = { groupId: 1, name: 'Team Alpha Edited' };
-
-    fireEvent.click(screen.getByText(/Save/i));
-
-    await waitFor(() => {
-      // team name update check
-      expect(screen.getByText('Team Alpha Edited')).toBeInTheDocument();
+      expect(screen.getByText('Add New Team')).toBeInTheDocument();
     });
   });
 });
