@@ -68,7 +68,7 @@ describe('Teams Page', () => {
       </Router>
     );
 
-    await waitFor(() => screen.getByText(mockTeam.groupName));
+    await screen.findByText(mockTeam.groupName);
 
     fireEvent.click(screen.getByText('Edit'));
 
@@ -99,7 +99,7 @@ describe('Teams Page', () => {
       </Router>
     );
 
-    await waitFor(() => screen.getByText(mockTeam.groupName));
+    await screen.findByText(mockTeam.groupName);
 
     fireEvent.click(screen.getByText('Edit'));
 
@@ -130,7 +130,7 @@ describe('Teams Page', () => {
       </Router>
     );
 
-    await waitFor(() => screen.getByText(mockTeam.groupName));
+    await screen.findByText(mockTeam.groupName);
 
     fireEvent.click(screen.getByText('Delete'));
 
@@ -149,7 +149,7 @@ describe('Teams Page', () => {
     fireEvent.click(screen.getByText('Add New Team'));
 
     await waitFor(() => {
-      expect(screen.getByText('Add New Team')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Add Team/i })).toBeInTheDocument();
     });
   });
 });
