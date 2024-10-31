@@ -1,0 +1,41 @@
+name: User Story 3 - Teams Page Test
+
+on:
+  workflow_run:
+    workflows: ["User Story 1 - Build the Project and Environment"]
+    types:
+      - completed
+
+jobs:
+  setup:
+    uses: ./.github/workflows/user-story-1.yml
+    with:
+      python-version: '3.8'
+      node-version: '18'
+
+  test-teamspage:
+    runs-on: ubuntu-latest
+    needs: setup
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run TeamsPage tests
+      run: |
+        export PYTHONPATH=$PYTHONPATH:$(pwd)
+        source venv/bin/activate
+        pytest backend/tests/test_teams.py
+
+  test-frontend-teamspage:
+    runs-on: ubuntu-latest
+    needs: setup
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run frontend tests for Teams Page
+      run: |
+        cd frontend
+        npm run test -- --ci --coverage frontend/src/Components/TeamPage/TeamPage.test.js
