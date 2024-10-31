@@ -12,6 +12,12 @@ jobs:
     with:
       python-version: '3.8'
       node-version: '18'
+    secrets:
+      db-driver: ${{ secrets.DB_DRIVER }}
+      db-server: ${{ secrets.DB_SERVER }}
+      db-database: ${{ secrets.DB_DATABASE }}
+      db-username: ${{ secrets.DB_USERNAME }}
+      db-password: ${{ secrets.DB_PASSWORD }}
 
   test-teamspage:
     runs-on: ubuntu-latest
@@ -20,6 +26,22 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+
+    - name: Download Python virtual environment
+      uses: actions/download-artifact@v4
+      with:
+        name: venv
+        path: . 
+
+    - name: Extract venv artifact
+      run: |
+        unzip -q venv.zip -d .
+
+    - name: Ensure venv directory structure
+      run: |
+        if [ ! -d "venv/bin" ]; then
+          mv venv/* ./venv
+        fi
 
     - name: Run TeamsPage tests
       run: |
@@ -35,7 +57,23 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Download Python virtual environment
+      uses: actions/download-artifact@v4
+      with:
+        name: venv
+        path: .
+
+    - name: Extract venv artifact
+      run: |
+        unzip -q venv.zip -d .
+
+    - name: Ensure venv directory structure
+      run: |
+        if [ ! -d "venv/bin" ]; then
+          mv venv/* ./venv
+        fi
+
     - name: Run frontend tests for Teams Page
       run: |
         cd frontend
-        npm run test -- --ci --coverage frontend/src/Components/TeamPage/TeamPage.test.js
+        npm run test -- --ci --coverage frontend/src/Components/TeamPage/Teams.test.js

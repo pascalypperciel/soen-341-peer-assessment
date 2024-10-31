@@ -20,10 +20,27 @@ on:
       node-version:
         required: true
         type: string
+    secrets:
+      db-driver:
+        required: true
+      db-server:
+        required: true
+      db-database:
+        required: true
+      db-username:
+        required: true
+      db-password:
+        required: true
 
 jobs:
-  backend-tests: #sets up the backend and does a quick test
+  backend-tests:
     runs-on: ubuntu-latest
+    env:
+      DB_DRIVER: ${{ secrets.db-driver || secrets.DB_DRIVER }}
+      DB_SERVER: ${{ secrets.db-server || secrets.DB_SERVER }}
+      DB_DATABASE: ${{ secrets.db-database || secrets.DB_DATABASE }}
+      DB_USERNAME: ${{ secrets.db-username || secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.db-password || secrets.DB_PASSWORD }}
 
     steps:
     - name: Checkout code
@@ -40,14 +57,14 @@ jobs:
         curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
         sudo apt-get update
         sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18
-    
+
     - name: Parse and set DB connection environment variables
       run: |
-        echo "${{ secrets.DB_CONNECTION }}" > temp_env_file
-        while IFS= read -r line; do
-          echo "$line" >> $GITHUB_ENV
-        done < temp_env_file
-        rm temp_env_file
+        echo "DB_DRIVER=$DB_DRIVER" >> $GITHUB_ENV
+        echo "DB_SERVER=$DB_SERVER" >> $GITHUB_ENV
+        echo "DB_DATABASE=$DB_DATABASE" >> $GITHUB_ENV
+        echo "DB_USERNAME=$DB_USERNAME" >> $GITHUB_ENV
+        echo "DB_PASSWORD=$DB_PASSWORD" >> $GITHUB_ENV
 
     - name: Set PYTHONPATH
       run: |
@@ -64,10 +81,22 @@ jobs:
         export PYTHONPATH=$PYTHONPATH:$(pwd)
         source venv/bin/activate
         pytest backend/tests/test_backend_setup.py
+    
+    - name: Upload Python virtual environment
+      uses: actions/upload-artifact@v4
+      with:
+        name: venv
+        path: venv
 
   frontend-tests:
     runs-on: ubuntu-latest
     needs: backend-tests
+    env:
+      DB_DRIVER: ${{ secrets.db-driver || secrets.DB_DRIVER }}
+      DB_SERVER: ${{ secrets.db-server || secrets.DB_SERVER }}
+      DB_DATABASE: ${{ secrets.db-database || secrets.DB_DATABASE }}
+      DB_USERNAME: ${{ secrets.db-username || secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.db-password || secrets.DB_PASSWORD }}
 
     steps:
     - name: Checkout code
