@@ -133,30 +133,25 @@ const RatingPage = () => {
 
   const handleCommentSelection = (event) => {
     const value = event.target.value;
-    if (!value) return null;
-    setComment(value);
+    setComment(value || "");
   };
 
   const handleCooperationComment = (event) => {
     const value = event.target.value;
-    if (!value) return null;
-    setCooperationComment(value);
+    setCooperationComment(value || "");
   };
 
   const handleConceptualComment = (event) => {
     const value = event.target.value;
-    if (!value) return null;
-    setConceptualComment(value);
+    setConceptualComment(value || "");
   };
   const handlePracticalComment = (event) => {
     const value = event.target.value;
-    if (!value) return null;
-    setPracticalComment(value);
+    setPracticalComment(value || "");
   };
   const handleEthicComment = (event) => {
     const value = event.target.value;
-    if (!value) return null;
-    setEthicComment(value);
+    setEthicComment(value || "");
   };
 
   const handleGroupSelection = async (event) => {
@@ -309,7 +304,7 @@ const RatingPage = () => {
               >
                 {availableGroups.map((group) => (
                   <MenuItem key={group.GroupID} value={group.GroupID}>
-                    {group.CourseName}
+                    {group.GroupName}
                   </MenuItem>
                 ))}
               </Select>
