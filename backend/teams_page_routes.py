@@ -325,7 +325,23 @@ def edit_team():
 
 	try: 
 		cursor = conn.cursor()
-		
+
+		# existing students
+		existing_student_ids_query = """
+		SELECT StudentID FROM StudentGroup WHERE GroupID = ?
+		"""
+		cursor.execute(existing_student_ids_query, (team_id,))
+		existing_student_ids = [row[0] for row in cursor.fetchall()]
+	
+		# removed students
+		removed_students = [student_id for student_id in existing_student_ids if student_id not in new_student_ids]
+		if removed_students:
+			delete_ratings_query = """
+			DELETE FROM Ratings WHERE RateeID = ? AND GroupID = ?
+			"""
+			for student_id in removed_students:
+				cursor.execute(delete_ratings_query, (student_id, team_id))
+				
 		# check if the student ids exist
 		missing_students = []
 		check_student_id_query = """
@@ -405,6 +421,35 @@ def get_all_students():
 			return jsonify(students_array), 200
 		else:
 			return {'message': 'No students found'}, 401
+
+	except Exception as e:
+		return {'error': str(e)}, 500
+
+	finally:
+		cursor.close()
+
+@teams_page_routes.route('/getGroupedStudents', methods=['GET'])
+def get_grouped_students():
+	course_id = request.args.get('course_id')
+
+	try: 
+		cursor = conn.cursor()
+
+		query = """
+		SELECT DISTINCT StudentGroup.StudentID
+		FROM StudentGroup
+		LEFT JOIN Groups ON Groups.GroupID = StudentGroup.GroupID
+		LEFT JOIN Courses ON Courses.CourseID = Groups.CourseID
+		WHERE Courses.CourseID = ?
+		"""
+		cursor.execute(query, (course_id,))
+		students_result = cursor.fetchall()
+
+		if students_result:
+			students_array = [{"studentId": student[0]} for student in students_result]
+			return jsonify(students_array), 200
+		else:
+			return jsonify([]), 200
 
 	except Exception as e:
 		return {'error': str(e)}, 500

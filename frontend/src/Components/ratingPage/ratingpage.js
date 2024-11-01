@@ -21,6 +21,7 @@ import Footer from "../footer/footer";
 import "./ratingPage.css";
 import axios from "axios";
 import ModalConfirmation from "./modalConfirmation";
+import Typography from "@mui/material/Typography";
 
 // Styling the icon for the rating
 const StyledRating = styled(Rating)(({ theme }) => ({
@@ -133,30 +134,25 @@ const RatingPage = () => {
 
   const handleCommentSelection = (event) => {
     const value = event.target.value;
-    if (!value) return null;
-    setComment(value);
+    setComment(value || "");
   };
 
   const handleCooperationComment = (event) => {
     const value = event.target.value;
-    if (!value) return null;
-    setCooperationComment(value);
+    setCooperationComment(value || "");
   };
 
   const handleConceptualComment = (event) => {
     const value = event.target.value;
-    if (!value) return null;
-    setConceptualComment(value);
+    setConceptualComment(value || "");
   };
   const handlePracticalComment = (event) => {
     const value = event.target.value;
-    if (!value) return null;
-    setPracticalComment(value);
+    setPracticalComment(value || "");
   };
   const handleEthicComment = (event) => {
     const value = event.target.value;
-    if (!value) return null;
-    setEthicComment(value);
+    setEthicComment(value || "");
   };
 
   const handleGroupSelection = async (event) => {
@@ -309,7 +305,7 @@ const RatingPage = () => {
               >
                 {availableGroups.map((group) => (
                   <MenuItem key={group.GroupID} value={group.GroupID}>
-                    {group.CourseName}
+                    {group.GroupName}
                   </MenuItem>
                 ))}
               </Select>
@@ -326,22 +322,28 @@ const RatingPage = () => {
               },
             }}
           >
-            <FormControl fullWidth>
-              <InputLabel id="select-student">Student</InputLabel>
-              <Select
-                labelId="select-student"
-                value={rateeId}
-                label="Student"
-                onChange={handleStudentSelection}
-                disabled={!groupId}
-              >
-                {availableStudents.map((student) => (
-                  <MenuItem key={student.StudentID} value={student.StudentID}>
-                    {student.Name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            {groupId && availableStudents.length > 0 ? (
+              <FormControl fullWidth>
+                <InputLabel id="select-student">Student</InputLabel>
+                <Select
+                  labelId="select-student"
+                  value={rateeId}
+                  label="Student"
+                  onChange={handleStudentSelection}
+                  disabled={!groupId} // Disable if no group is selected
+                >
+                  {availableStudents.map((student) => (
+                    <MenuItem key={student.StudentID} value={student.StudentID}>
+                      {student.Name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            ) : (
+              <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+                No student to rate.
+              </Typography>
+            )}
           </Box>
         </div>
 
