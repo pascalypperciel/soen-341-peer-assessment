@@ -22,7 +22,7 @@ on:
         type: string
 
 jobs:
-  backend-tests: #sets up the backend and does a quick test
+  backend-tests:
     runs-on: ubuntu-latest
 
     steps:
