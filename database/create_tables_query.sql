@@ -51,3 +51,10 @@ CREATE TABLE StudentGroup (
     FOREIGN KEY (StudentID) REFERENCES Students(StudentID),
     FOREIGN KEY (GroupID) REFERENCES Groups(GroupID)
 );
+
+CREATE TABLE Announcement (
+    AnnouncementID INT PRIMARY KEY IDENTITY(1,1),
+    Announcement VARCHAR(MAX) NOT NULL,
+    CourseID INT,
+    FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
+);
