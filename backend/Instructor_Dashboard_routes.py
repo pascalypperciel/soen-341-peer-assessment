@@ -7,12 +7,10 @@ import pyodbc
 instructor_dashboard_routes = Blueprint('instructor_dashboard_routes', __name__)
 
 
-#this route retrieves all groups the student is in, returns the groups
-#and their attributes as a JSON list such that front end can display
-#in the format they desire
+#this route retrieves all ratings associated to all the students in their course
 @instructor_dashboard_routes.route('/getStudentRatings', methods=['GET'])
 def get_student_ratings():
-    # Get the teacher ID from the request arguments
+    # Get the teacher ID from the session id 
     teacher_id = session.get('teacher_id')
 
     if not teacher_id:
@@ -84,8 +82,7 @@ def get_student_ratings():
 
 @instructor_dashboard_routes.route('/getStudentRatingsTEST', methods=['GET'])
 def get_student_ratings_TEST():
-    # Get the teacher ID from the request arguments
-    teacher_id = 1 or 2 or 3
+    teacher_id = 1 
 
     if not teacher_id:
         return jsonify({"error": "Teacher not logged in!"}), 401
