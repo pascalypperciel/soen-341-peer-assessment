@@ -17,7 +17,7 @@ def fetch_as_dict(cursor):
 @instructor_dashboard_routes.route('/getStudentRatings', methods=['GET'])
 def get_student_ratings():
     # Use a placeholder teacher_id for testing
-    teacher_id = 17
+    teacher_id = session["teacher_id"]
 
     if not teacher_id:
         return jsonify({"error": "Teacher not logged in!"}), 401
