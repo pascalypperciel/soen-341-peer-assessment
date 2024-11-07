@@ -3,6 +3,7 @@ import Header from "../header/header";
 import Footer from "../footer/footer";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import "./long-summary.css";
 
 const LongSummary = () => {
   const [ratings, setRatings] = useState([]);
@@ -56,6 +57,7 @@ const LongSummary = () => {
   return (
     <div>
       <Header />
+      <div className= "container-long">
       {error && <p>{error}</p>}
       {Object.keys(rateeGroups).length > 0 ? (
         Object.values(rateeGroups).map((ratee) => (
@@ -106,6 +108,8 @@ const LongSummary = () => {
       ) : (
         <p>No ratings available for this group.</p>
       )}
+      </div>
+      
       <Footer />
     </div>
   );

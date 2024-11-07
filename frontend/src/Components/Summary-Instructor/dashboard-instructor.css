@@ -1,0 +1,43 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.container-dashboard {
+    position: relative;
+    margin: auto;
+    min-height: 95vh;
+    max-width: 1200px;
+    min-height: 600px;
+  }
+
+.table-dashboard{
+    padding: 10px;
+}
+
+.table-dashboard tr th{
+    padding: 20px;
+    border:none;
+}
+
+.table-dashboard tr td{
+    text-align: center;
+    border:none;
+}
+
+.container-dashboard button {
+    padding: 12px 24px; 
+    margin: 12px 24px;
+    color: #912338;
+    background-color: transparent;
+    border:none;
+    font-size: 15px;
+    font-weight: bold;
+  }
+
+.container-dashboard h1{
+    padding:10px;
+}

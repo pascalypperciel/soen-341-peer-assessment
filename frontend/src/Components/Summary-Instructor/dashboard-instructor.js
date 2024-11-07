@@ -3,6 +3,7 @@ import Header from "../header/header";
 import Footer from "../footer/footer";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./dashboard-instructor.css";
 
 const Dashboard = () => {
   const [ratings, setRatings] = useState([]);
@@ -45,15 +46,15 @@ const Dashboard = () => {
   return (
     <div>
       <Header />
-      <div>
+      <div className = "container-dashboard">
         <h1>Groups for Teacher {teacherId}</h1>
         {error && <p>{error}</p>}
         {groups.length > 0 ? (
-          <table>
+          <table className = "table-dashboard">
             <thead>
               <tr>
                 <th>Group Name</th>
-                <th>Actions</th> {/* Add a column for the action buttons */}
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -64,12 +65,12 @@ const Dashboard = () => {
                     <button
                       onClick={() => handleButtonClick(groupName, "Summary")}
                     >
-                      Summary
+                      Summary of Results
                     </button>
                     <button
                       onClick={() => handleButtonClick(groupName, "Detail")}
                     >
-                      Detail
+                      Detailed Results
                     </button>
                   </td>
                 </tr>

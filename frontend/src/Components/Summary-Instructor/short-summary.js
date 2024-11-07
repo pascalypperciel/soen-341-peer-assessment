@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Header from "../header/header";
 import { useLocation } from "react-router-dom";
+import "./short-summary.css";
+import Footer from "../footer/footer";
 
 const ShortSummary = () => {
   const [ratings, setRatings] = useState([]);
@@ -63,72 +65,75 @@ const ShortSummary = () => {
 
   return (
     <div>
-      <Header />
-      <h2>Student Ratings</h2>
-      {error && <p>{error}</p>}
-      <table style={{ borderCollapse: "collapse" }} border="1">
-        <thead>
-          <tr>
-            <th>Student ID</th>
-            <th>Student Name</th>
-            <th>Team Name</th>
-            <th>Cooperation</th>
-            <th>Conceptual Contribution</th>
-            <th>Practical Contribution</th>
-            <th>Work Ethic</th>
-            <th>Average</th>
-            <th>Peers Who Responded</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Object.values(rateeAverages).length > 0 ? (
-            Object.values(rateeAverages).map((ratee) => {
-              const {
-                RateeID,
-                RateeName,
-                GroupName,
-                CooperationTotal,
-                ConceptualTotal,
-                PracticalTotal,
-                WorkEthicTotal,
-                numResponses,
-              } = ratee;
-
-              const avgCooperation = (CooperationTotal / numResponses).toFixed(
-                2
-              );
-              const avgConceptual = (ConceptualTotal / numResponses).toFixed(2);
-              const avgPractical = (PracticalTotal / numResponses).toFixed(2);
-              const avgWorkEthic = (WorkEthicTotal / numResponses).toFixed(2);
-              const overallAverage = (
-                (parseFloat(avgCooperation) +
-                  parseFloat(avgConceptual) +
-                  parseFloat(avgPractical) +
-                  parseFloat(avgWorkEthic)) /
-                4
-              ).toFixed(2);
-
-              return (
-                <tr key={RateeID}>
-                  <td>{RateeID}</td>
-                  <td>{RateeName}</td>
-                  <td>{GroupName}</td>
-                  <td>{avgCooperation}</td>
-                  <td>{avgConceptual}</td>
-                  <td>{avgPractical}</td>
-                  <td>{avgWorkEthic}</td>
-                  <td>{overallAverage}</td>
-                  <td>{numResponses}</td>
-                </tr>
-              );
-            })
-          ) : (
+      <Header /> 
+      <div className = "container-short">
+        <h2>Student Ratings</h2>
+        {error && <p>{error}</p>}
+        <table className = "table-short" >
+          <thead>
             <tr>
-              <td colSpan="9">No ratings available.</td>
+              <th>Student ID</th>
+              <th>Student Name</th>
+              <th>Team Name</th>
+              <th>Cooperation</th>
+              <th>Conceptual Contribution</th>
+              <th>Practical Contribution</th>
+              <th>Work Ethic</th>
+              <th>Average</th>
+              <th>Peers Who Responded</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {Object.values(rateeAverages).length > 0 ? (
+              Object.values(rateeAverages).map((ratee) => {
+                const {
+                  RateeID,
+                  RateeName,
+                  GroupName,
+                  CooperationTotal,
+                  ConceptualTotal,
+                  PracticalTotal,
+                  WorkEthicTotal,
+                  numResponses,
+                } = ratee;
+
+                const avgCooperation = (CooperationTotal / numResponses).toFixed(
+                  2
+                );
+                const avgConceptual = (ConceptualTotal / numResponses).toFixed(2);
+                const avgPractical = (PracticalTotal / numResponses).toFixed(2);
+                const avgWorkEthic = (WorkEthicTotal / numResponses).toFixed(2);
+                const overallAverage = (
+                  (parseFloat(avgCooperation) +
+                    parseFloat(avgConceptual) +
+                    parseFloat(avgPractical) +
+                    parseFloat(avgWorkEthic)) /
+                  4
+                ).toFixed(2);
+
+                return (
+                  <tr key={RateeID}>
+                    <td>{RateeID}</td>
+                    <td>{RateeName}</td>
+                    <td>{GroupName}</td>
+                    <td>{avgCooperation}</td>
+                    <td>{avgConceptual}</td>
+                    <td>{avgPractical}</td>
+                    <td>{avgWorkEthic}</td>
+                    <td>{overallAverage}</td>
+                    <td>{numResponses}</td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan="9">No ratings available.</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+      <Footer />
     </div>
   );
 };

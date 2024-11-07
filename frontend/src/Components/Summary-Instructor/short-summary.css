@@ -1,0 +1,31 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.container-short{
+    position: relative;
+    margin: auto;
+    min-height: 100vh;
+    max-width: 1200px;
+    min-height: 600px;
+  }
+
+.table-short{
+    border-collapse: collapse;
+    
+}
+
+.table-short tr,td,th{
+    border: solid 2px;
+    padding: 15px;
+    text-align: center;
+}
+
+.table-short tr th {
+    color: #912338; /* Text color */
+    border-color:#000000 ; /* Reset the border color to default */
+}
