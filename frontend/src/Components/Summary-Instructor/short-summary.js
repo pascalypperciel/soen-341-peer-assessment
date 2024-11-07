@@ -1,63 +1,133 @@
-// StudentRatingsTable.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Header from "../header/header";
+import { useLocation } from "react-router-dom";
 
-const StudentRatingsTable = () => {
+const ShortSummary = () => {
   const [ratings, setRatings] = useState([]);
   const [error, setError] = useState(null);
+  const location = useLocation();
+  const { groupName } = location.state || {};
 
   useEffect(() => {
-    // Fetch student ratings from the backend
-    axios
-      .get("http://localhost:5000/getStudentRatings")
-      .then((response) => {
-        // Log the response data to see if it's being fetched properly
-        console.log("Response from backend:", response.data);
+    const teacherId = localStorage.getItem("teacher_id");
 
+    axios
+      .get(`http://localhost:5000/getStudentRatings?teacher_id=${teacherId}`)
+      .then((response) => {
         setRatings(response.data);
-        setError(null); // Reset the error state if the request succeeds
+        setError(null);
       })
       .catch((err) => {
-        // Handle error if the API call fails
         setError("Failed to load student ratings");
         console.error("Error fetching ratings:", err);
       });
   }, []);
+
+  // Calculate the average ratings and the number of responses for each student
+  const rateeAverages = ratings
+    .filter((rating) => rating.GroupName === groupName)
+    .reduce((acc, rating) => {
+      const {
+        RateeID,
+        RateeName,
+        GroupName,
+        CooperationRating,
+        ConceptualContributionRating,
+        PracticalContributionRating,
+        WorkEthicRating,
+        RaterID,
+      } = rating;
+
+      if (!acc[RateeID]) {
+        acc[RateeID] = {
+          RateeID,
+          RateeName,
+          GroupName,
+          CooperationTotal: 0,
+          ConceptualTotal: 0,
+          PracticalTotal: 0,
+          WorkEthicTotal: 0,
+          numResponses: 0,
+        };
+      }
+
+      // Aggregate ratings and count responses only if RaterID differs from RateeID
+      if (RaterID !== RateeID) {
+        acc[RateeID].CooperationTotal += CooperationRating;
+        acc[RateeID].ConceptualTotal += ConceptualContributionRating;
+        acc[RateeID].PracticalTotal += PracticalContributionRating;
+        acc[RateeID].WorkEthicTotal += WorkEthicRating;
+        acc[RateeID].numResponses += 1;
+      }
+
+      return acc;
+    }, {});
+
   return (
     <div>
       <Header />
       <h2>Student Ratings</h2>
+      {error && <p>{error}</p>}
       <table border="1">
         <thead>
           <tr>
-            <th>Student ID </th>
+            <th>Student ID</th>
             <th>Student Name</th>
-            <th>Teams Name</th>
+            <th>Team Name</th>
             <th>Cooperation</th>
             <th>Conceptual Contribution</th>
             <th>Practical Contribution</th>
             <th>Work Ethic</th>
-            <th> Peers who reponded</th>
+            <th>Average</th>
+            <th>Peers Who Responded</th>
           </tr>
         </thead>
-        {/*  Find a way to stop*/}
         <tbody>
-          {ratings.length > 0 ? (
-            ratings.map((rating) => (
-              <tr key={rating.RatingID}>
-                <td>{rating.RateeID}</td>
-                <td>{rating.RateeName}</td>
-                <td>{rating.GroupName}</td>
-                <td>{rating.CooperationRating}</td>
-                <td>{rating.ConceptualContributionRating}</td>
-                <td>{rating.PracticalContributionRating}</td>
-                <td>{rating.WorkEthicRating}</td>
-              </tr>
-            ))
+          {Object.values(rateeAverages).length > 0 ? (
+            Object.values(rateeAverages).map((ratee) => {
+              const {
+                RateeID,
+                RateeName,
+                GroupName,
+                CooperationTotal,
+                ConceptualTotal,
+                PracticalTotal,
+                WorkEthicTotal,
+                numResponses,
+              } = ratee;
+
+              const avgCooperation = (CooperationTotal / numResponses).toFixed(
+                2
+              );
+              const avgConceptual = (ConceptualTotal / numResponses).toFixed(2);
+              const avgPractical = (PracticalTotal / numResponses).toFixed(2);
+              const avgWorkEthic = (WorkEthicTotal / numResponses).toFixed(2);
+              const overallAverage = (
+                (parseFloat(avgCooperation) +
+                  parseFloat(avgConceptual) +
+                  parseFloat(avgPractical) +
+                  parseFloat(avgWorkEthic)) /
+                4
+              ).toFixed(2);
+
+              return (
+                <tr key={RateeID}>
+                  <td>{RateeID}</td>
+                  <td>{RateeName}</td>
+                  <td>{GroupName}</td>
+                  <td>{avgCooperation}</td>
+                  <td>{avgConceptual}</td>
+                  <td>{avgPractical}</td>
+                  <td>{avgWorkEthic}</td>
+                  <td>{overallAverage}</td>
+                  <td>{numResponses}</td>
+                </tr>
+              );
+            })
           ) : (
             <tr>
-              <td colSpan="15">No ratings available.</td>
+              <td colSpan="9">No ratings available.</td>
             </tr>
           )}
         </tbody>
@@ -66,4 +136,4 @@ const StudentRatingsTable = () => {
   );
 };
 
-export default StudentRatingsTable;
+export default ShortSummary;
