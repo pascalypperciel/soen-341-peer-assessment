@@ -56,14 +56,14 @@ const LongSummary = () => {
   return (
     <div>
       <Header />
-      {error && <p>{error}</p>} {/* Display error if there's one */}
+      {error && <p>{error}</p>}
       {Object.keys(rateeGroups).length > 0 ? (
         Object.values(rateeGroups).map((ratee) => (
           <div key={ratee.rateeId}>
             <p>Team Name: {groupName}</p>
             <p>Student Name: {ratee.rateeName}</p>
             <p>ID: {ratee.rateeId}</p>
-            <table>
+            <table style={{ borderCollapse: "collapse" }} border="1">
               <thead>
                 <tr>
                   <th>Member</th>
@@ -88,7 +88,17 @@ const LongSummary = () => {
               </tbody>
             </table>
             <p>
-              Comments: {ratee.ratings[0]?.Comments || "No comments available"}
+              Comments:{" "}
+              {ratee.ratings.map((raterRating, index) => (
+                <ul key={`${ratee.rateeId}-${index}`}>
+                  <td>{raterRating.RaterID}</td>
+                  <li>{raterRating.Comment}</li>
+                  <li>{raterRating.CooperationComment}</li>
+                  <li>{raterRating.ConceptualContributionComment}</li>
+                  <li>{raterRating.PracticalContributionComment}</li>
+                  <li>{raterRating.WorkEthicComment}</li>
+                </ul>
+              ))}
             </p>
             <hr />
           </div>

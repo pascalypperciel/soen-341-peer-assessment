@@ -24,7 +24,6 @@ const ShortSummary = () => {
       });
   }, []);
 
-  // Calculate the average ratings and the number of responses for each student
   const rateeAverages = ratings
     .filter((rating) => rating.GroupName === groupName)
     .reduce((acc, rating) => {
@@ -51,8 +50,6 @@ const ShortSummary = () => {
           numResponses: 0,
         };
       }
-
-      // Aggregate ratings and count responses only if RaterID differs from RateeID
       if (RaterID !== RateeID) {
         acc[RateeID].CooperationTotal += CooperationRating;
         acc[RateeID].ConceptualTotal += ConceptualContributionRating;
@@ -69,7 +66,7 @@ const ShortSummary = () => {
       <Header />
       <h2>Student Ratings</h2>
       {error && <p>{error}</p>}
-      <table border="1">
+      <table style={{ borderCollapse: "collapse" }} border="1">
         <thead>
           <tr>
             <th>Student ID</th>
