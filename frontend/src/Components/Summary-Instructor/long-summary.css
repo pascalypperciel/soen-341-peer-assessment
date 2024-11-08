@@ -5,11 +5,114 @@ body {
   height: 100%;
   box-sizing: border-box;
 }
+.long-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.container-long {
+  position: relative;
+  margin: auto;
+  max-width: 1200px;
+  min-height: 600px;
+  width: 100%;
+  padding: 20px;
+}
 
-.container-long{
-    position: relative;
-    margin: auto;
-    min-height: 100vh;
-    max-width: 1200px;
-    min-height: 600px;
-  }
+.table-long {
+  width: 80%;
+  border-collapse: separate;
+  border-spacing: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.table-long th,
+.table-long td {
+  padding: 20px;
+  text-align: center;
+}
+
+.table-long thead {
+  background-color: #9123372f;
+}
+
+.table-long th {
+  color: #912337;
+}
+
+.table-long thead th:first-child {
+  border-top-left-radius: 10px;
+}
+
+.table-long thead th:last-child {
+  border-top-right-radius: 10px;
+}
+
+.table-long tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+
+.table-long tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+.container-long p {
+  padding: 10px;
+}
+
+.nameStudent {
+  font-size: 17px;
+  list-style-type: none;
+  background-color: transparent;
+}
+.comments {
+  margin-top: 30px;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.comment-entry {
+  margin-bottom: 20px;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.nameStudent {
+  font-size: 1.1em;
+  margin-bottom: 10px;
+  font-weight: normal;
+}
+
+.comment-type {
+  margin-bottom: 15px;
+  list-style-type: none;
+}
+
+.comment-box {
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #91233709;
+  border-left: 5px solid #912337;
+}
+
+.comment-box p {
+  margin: 0;
+  font-size: 1em;
+  line-height: 1.5;
+}
+
+.comment-box b {
+  font-weight: bold;
+}
+
+.comment-box p {
+  font-size: 1em;
+  line-height: 1.4;
+}

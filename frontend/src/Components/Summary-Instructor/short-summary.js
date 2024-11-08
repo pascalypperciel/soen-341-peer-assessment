@@ -64,12 +64,12 @@ const ShortSummary = () => {
     }, {});
 
   return (
-    <div>
-      <Header /> 
-      <div className = "container-short">
-        <h2>Student Ratings</h2>
+    <div className="short-page ">
+      <Header />
+      <div className="container-short">
+        <h1>Student Ratings</h1>
         {error && <p>{error}</p>}
-        <table className = "table-short" >
+        <table className="table-short">
           <thead>
             <tr>
               <th>Student ID</th>
@@ -97,10 +97,12 @@ const ShortSummary = () => {
                   numResponses,
                 } = ratee;
 
-                const avgCooperation = (CooperationTotal / numResponses).toFixed(
+                const avgCooperation = (
+                  CooperationTotal / numResponses
+                ).toFixed(2);
+                const avgConceptual = (ConceptualTotal / numResponses).toFixed(
                   2
                 );
-                const avgConceptual = (ConceptualTotal / numResponses).toFixed(2);
                 const avgPractical = (PracticalTotal / numResponses).toFixed(2);
                 const avgWorkEthic = (WorkEthicTotal / numResponses).toFixed(2);
                 const overallAverage = (
