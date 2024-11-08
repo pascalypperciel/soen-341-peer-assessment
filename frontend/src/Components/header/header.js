@@ -78,9 +78,6 @@ const Header = () => {
                   )}
                 </li>
                 <li>
-                  <Link to="/shortsummary"> Summary </Link>
-                </li>
-                <li>
                   <Link to="/dashboardinstructor"> Dashboard </Link>
                 </li>
               </>
