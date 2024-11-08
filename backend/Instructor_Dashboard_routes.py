@@ -27,33 +27,36 @@ def get_student_ratings():
 
         query = """
         SELECT 
-            Ratings.RatingID,
-            Ratings.CooperationRating,
-            Ratings.ConceptualContributionRating,
-            Ratings.PracticalContributionRating,
-            Ratings.WorkEthicRating,
-            Ratings.Comment,
-            Ratings.CooperationComment,
-            Ratings.ConceptualContributionComment,
-            Ratings.PracticalContributionComment,
-            Ratings.WorkEthicComment,
-            Ratings.RaterID,
-            Ratings.RateeID,
-            Students.Name AS RateeName,
-            Groups.GroupID,
-            Groups.Name AS GroupName
+            r.RatingID,
+            r.CooperationRating,
+            r.ConceptualContributionRating,
+            r.PracticalContributionRating,
+            r.WorkEthicRating,
+            r.Comment,
+            r.CooperationComment,
+            r.ConceptualContributionComment,
+            r.PracticalContributionComment,
+            r.WorkEthicComment,
+            r.RaterID,
+            r.RateeID,
+            ratee.Name AS RateeName,
+            rater.Name AS RaterName,
+            g.GroupID,
+            g.Name AS GroupName
         FROM 
-            Ratings
+            Ratings r
         JOIN 
-            Groups ON Ratings.GroupID = Groups.GroupID
+            Groups g ON r.GroupID = g.GroupID
         JOIN 
-            Courses ON Groups.CourseID = Courses.CourseID
+            Courses c ON g.CourseID = c.CourseID
         JOIN 
-            Teachers ON Teachers.TeacherID = Courses.TeacherID
+            Teachers t ON t.TeacherID = c.TeacherID
         JOIN 
-            Students ON Ratings.RateeID = Students.StudentID
+            Students ratee ON r.RateeID = ratee.StudentID
+        JOIN 
+            Students rater ON r.RaterID = rater.StudentID
         WHERE 
-            Teachers.TeacherID = ?;
+            t.TeacherID = ?;
         """
         
         # Execute the query with the teacher_id parameter
