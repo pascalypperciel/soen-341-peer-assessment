@@ -33,27 +33,30 @@ function AddTeamModal({ onAddTeam, onClose }) {
 
   useEffect(() => {
     const fetchStudents = async () => {
-      if (!selectedCourse) return;
-      
       try {
-        const studentsResponse = await axios.get('http://localhost:5000/getAllStudents');
-        const allStudents = studentsResponse.data;
-
-        const groupedStudentsResponse = await axios.get(`http://localhost:5000/getGroupedStudents?course_id=${selectedCourse}`);
-        const groupedStudents = groupedStudentsResponse.data;
-
-        const filteredStudents = allStudents.filter(
-          student => !groupedStudents.some(groupedStudent => groupedStudent.studentId === student.studentId)
-        );
-
-        setAvailableStudents(filteredStudents);
+        if (createNewCourse) {
+          const studentsResponse = await axios.get('http://localhost:5000/getAllStudents');
+          setAvailableStudents(studentsResponse.data);
+        } else if (selectedCourse) {
+          const studentsResponse = await axios.get('http://localhost:5000/getAllStudents');
+          const allStudents = studentsResponse.data;
+  
+          const groupedStudentsResponse = await axios.get(`http://localhost:5000/getGroupedStudents?course_id=${selectedCourse}`);
+          const groupedStudents = groupedStudentsResponse.data;
+  
+          const filteredStudents = allStudents.filter(
+            student => !groupedStudents.some(groupedStudent => groupedStudent.studentId === student.studentId)
+          );
+  
+          setAvailableStudents(filteredStudents);
+        }
       } catch (error) {
         console.error('Failed to fetch students:', error);
       }
     };
-
+  
     fetchStudents();
-  }, [selectedCourse]);
+  }, [selectedCourse, createNewCourse]);
 
   const handleNewTeamChange = (e) => {
     const { name, value } = e.target;
@@ -211,7 +214,7 @@ function AddTeamModal({ onAddTeam, onClose }) {
                 .map((student) => `${student.name} (ID: ${student.studentId})`)
                 .join(', ')
             }
-            disabled={selectedCourse === ''}
+            disabled={!selectedCourse && !createNewCourse}
           >
             {availableStudents.map((student) => (
               <MenuItem key={student.studentId} value={student.studentId}>
