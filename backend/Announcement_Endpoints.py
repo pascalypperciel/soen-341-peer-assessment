@@ -13,7 +13,7 @@ def Create_Announcement():
     Input:
         - JSON object containing:
             {
-                "courseID": "CS101",        # Example course ID
+                "courseID": "10111",        # Example course ID
                 "announcement": "Exam on Friday"  # Example announcement text
             }
 
@@ -56,7 +56,7 @@ def get_Announcements_Teachers():
     Input:
         - Session variable:
             {
-                "Teacher_id": "T12345"  # Example teacher ID stored in the session
+                "Teacher_id": "12345"  # Example teacher ID stored in the session
             }
 
     Output:
@@ -65,13 +65,13 @@ def get_Announcements_Teachers():
                 "announcements": [
                     {
                         "Announcement": "Assignment due next Monday",
-                        "CourseID": "CS101",
-                        "AnnouncementID": 1
+                        "CourseID": "1011",
+                        "AnnouncementID": 122
                     },
                     {
                         "Announcement": "Midterm review session on Thursday",
-                        "CourseID": "CS102",
-                        "AnnouncementID": 2
+                        "CourseID": "1021",
+                        "AnnouncementID": 123
                     }
                 ],
                 "message": "Announcements Successfully returned"
@@ -81,7 +81,7 @@ def get_Announcements_Teachers():
                 "error": "error_message"  # Details of the error
             }, status code 500
     """
-    Teacher_id = session.get('Teacher_id')
+    Teacher_id = request.args.get('Teacher_id')
     try:     
         cursor = conn.cursor()
         query = '''
@@ -111,7 +111,7 @@ def get_Announcements_Students():
     Input:
         - Session variable:
             {
-                "student_id": "S67890"  # Example student ID stored in the session
+                "student_id": "67890"  # Example student ID stored in the session
             }
 
     Output:
@@ -128,7 +128,7 @@ def get_Announcements_Students():
                 "error": "error_message"  # Details of the error
             }, status code 500
     """
-    Student_id = session.get('student_id')
+    Student_id = request.args.get('student_id')
     try:     
         cursor = conn.cursor()
         query = '''
@@ -161,9 +161,9 @@ def Update_Announcement():
     Input:
         - JSON object containing:
             {
-                "courseID": "CS101",                # Example course ID
+                "courseID": "1101",                # Example course ID
                 "announcement": "Updated exam date: next Friday",  # Updated announcement text
-                "announcementID": 1                # ID of the announcement to update
+                "announcementID": 12345                # ID of the announcement to update
             }
 
     Output:
