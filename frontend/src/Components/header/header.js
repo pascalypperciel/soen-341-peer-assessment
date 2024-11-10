@@ -78,7 +78,7 @@ const Header = () => {
                   )}
                 </li>
                 <li>
-                  <Link to=""></Link>
+                  <Link to="/dashboardinstructor"> Dashboard </Link>
                 </li>
               </>
             ) : (
