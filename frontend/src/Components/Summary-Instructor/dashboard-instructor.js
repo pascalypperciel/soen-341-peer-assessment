@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import "./dashboard-instructor.css";
 
 const Dashboard = () => {
-  const [ratings, setRatings] = useState([]);
   const [groups, setGroups] = useState([]);
   const [error, setError] = useState(null);
   const teacherId = localStorage.getItem("teacher_id");
@@ -17,7 +16,6 @@ const Dashboard = () => {
       .get(`http://localhost:5000/getStudentRatings?teacher_id=${teacherId}`)
       .then((response) => {
         console.log("Response from backend:", response.data);
-        setRatings(response.data);
         setError(null);
 
         const uniqueGroups = [
@@ -30,7 +28,7 @@ const Dashboard = () => {
         setError("Failed to load student ratings");
         console.error("Error fetching ratings:", err);
       });
-  }, []);
+  }, [teacherId]);
 
   const handleButtonClick = (groupName, viewType) => {
     const path = viewType === "Summary" ? "/shortsummary" : "/longsummary";
