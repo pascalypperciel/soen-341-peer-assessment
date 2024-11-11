@@ -1,0 +1,50 @@
+Meeting #7
+
+Meeting Title: Starting Sprint #3
+Date: October 31st, 2024
+Time: 5:00 pm
+
+Attendees:
+-Justin Lombardi
+-Antonino Guarraci
+-Massimo Caruso
+-Jessica Codreanu
+-Pascal Ypperciel
+-Parsa Darbani
+
+Absentees: None
+
+
+
+Agenda:
+	- Organize and assign tasks for sprint 3
+	- Look back at Sprint 2 and have team leader give feedback
+	- Agree on what original feature to come up with
+
+Topics Discussed
+
+Organize and assign tasks for sprint 3
+
+	- Goals for sprint 3 were defined 
+	- All tasks seperated into front-end, back-end, and acceptance tests
+	- More information in Sprint Planning PDF sheet
+
+Look back at Sprint 2 and have team leader give feedback
+	-In retrospect, time management was better this time around, possibly due to longer sprint
+	-Acceptance tests implementation were tricker to manage from different branches
+
+Agree on what original feature to come up with
+	-Team settled on implementing an Annoucement feature: Teacher can annouce message to different courses
+
+		
+Descisions made: 
+
+Next Steps:
+
+	-Start on development of sprint 3
+
+Next meeting:
+ 
+	-2024-11-07
+	-4:00pm
+	-Lab class room
