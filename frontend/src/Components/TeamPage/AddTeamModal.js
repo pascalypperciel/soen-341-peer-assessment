@@ -17,22 +17,46 @@ function AddTeamModal({ onAddTeam, onClose }) {
   const [createNewCourse, setCreateNewCourse] = useState(false);
   const fileInputRef = useRef(null);
 
-  // Fetch available courses and students on modal load
   useEffect(() => {
-    const fetchCoursesAndStudents = async () => {
+    const fetchCourses = async () => {
       try {
-        const coursesResponse = await axios.get(`http://localhost:5000/getAllCourses?teacher_id=${localStorage.getItem("teacher_id")}`);
+        const teacherId = localStorage.getItem("teacher_id");
+        const coursesResponse = await axios.get(`http://localhost:5000/getAllCourses?teacher_id=${teacherId}`);
         setAvailableCourses(coursesResponse.data);
-
-        const studentsResponse = await axios.get('http://localhost:5000/getAllStudents');
-        setAvailableStudents(studentsResponse.data);
       } catch (error) {
-        console.error('Failed to fetch courses or students:', error);
+        console.error('Failed to fetch courses:', error);
       }
     };
 
-    fetchCoursesAndStudents();
+    fetchCourses();
   }, []);
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        if (createNewCourse) {
+          const studentsResponse = await axios.get('http://localhost:5000/getAllStudents');
+          setAvailableStudents(studentsResponse.data);
+        } else if (selectedCourse) {
+          const studentsResponse = await axios.get('http://localhost:5000/getAllStudents');
+          const allStudents = studentsResponse.data;
+  
+          const groupedStudentsResponse = await axios.get(`http://localhost:5000/getGroupedStudents?course_id=${selectedCourse}`);
+          const groupedStudents = groupedStudentsResponse.data;
+  
+          const filteredStudents = allStudents.filter(
+            student => !groupedStudents.some(groupedStudent => groupedStudent.studentId === student.studentId)
+          );
+  
+          setAvailableStudents(filteredStudents);
+        }
+      } catch (error) {
+        console.error('Failed to fetch students:', error);
+      }
+    };
+  
+    fetchStudents();
+  }, [selectedCourse, createNewCourse]);
 
   const handleNewTeamChange = (e) => {
     const { name, value } = e.target;
@@ -190,6 +214,7 @@ function AddTeamModal({ onAddTeam, onClose }) {
                 .map((student) => `${student.name} (ID: ${student.studentId})`)
                 .join(', ')
             }
+            disabled={!selectedCourse && !createNewCourse}
           >
             {availableStudents.map((student) => (
               <MenuItem key={student.studentId} value={student.studentId}>

@@ -6,6 +6,9 @@ from backend.login_signup_routes import login_signup_routes
 from backend.teams_page_routes import teams_page_routes 
 from backend.feedback_routes import feedback_routes
 from backend.ratings_routes import ratings_routes
+from backend.Announcement_Endpoints import Announcement_Endpoints
+from backend.Instructor_Dashboard_routes import instructor_dashboard_routes
+
 
 app = Flask(__name__)
 app.secret_key = 'SuperStrongKey'
@@ -13,6 +16,8 @@ app.register_blueprint(login_signup_routes)
 app.register_blueprint(teams_page_routes)
 app.register_blueprint(feedback_routes)
 app.register_blueprint(ratings_routes)
+app.register_blueprint(Announcement_Endpoints)
+app.register_blueprint(instructor_dashboard_routes)
 
 CORS(app)
 

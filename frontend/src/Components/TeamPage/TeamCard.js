@@ -20,8 +20,19 @@ function TeamCard({ team, teams, onDelete, onEdit }) {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/getAllStudents');
-        setAvailableStudents(response.data);
+        const allStudentsResponse = await axios.get('http://localhost:5000/getAllStudents');
+        const allStudents = allStudentsResponse.data;
+
+        const groupedStudentsResponse = await axios.get(`http://localhost:5000/getGroupedStudents?course_id=${editedTeam.courseId}`);
+        const groupedStudents = groupedStudentsResponse.data;
+
+        const filteredStudents = allStudents.filter(student => 
+          !groupedStudents.some(groupedStudent => 
+            groupedStudent.studentId === student.studentId
+          ) || editedTeam.students.some(member => member.studentId === student.studentId)
+        );
+
+        setAvailableStudents(filteredStudents);
       } catch (error) {
         console.error('Failed to fetch students:', error);
       }
@@ -31,7 +42,7 @@ function TeamCard({ team, teams, onDelete, onEdit }) {
       fetchStudents();
       setSelectedStudents(editedTeam.students.map((s) => s.studentId));
     }
-  }, [editedTeam.students, isEditing]);
+  }, [editedTeam.courseId, editedTeam.students, isEditing]);
 
   const handleEdit = async () => {
     const updatedData = {

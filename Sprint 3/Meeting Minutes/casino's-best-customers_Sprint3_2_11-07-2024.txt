@@ -1,0 +1,42 @@
+Meeting #7
+
+Meeting Title: Evaluating Progress During Sprint #3
+Date: November 7th, 2024
+Time: 4:00 pm
+
+Attendees:
+-Justin Lombardi
+-Antonino Guarraci
+-Massimo Caruso
+-Jessica Codreanu
+-Pascal Ypperciel
+-Parsa Darbani
+
+Absentees: None
+
+
+
+Agenda:
+	- Assess progression of tasks in Sprint 3
+	- Trouble shoot and bug fix completed tasks
+Topics Discussed
+
+Assess progression of tasks in Sprint 3
+	- Due to other responsabilities, about only half of the tasks were completed
+
+Trouble shoot and bug fix completed tasks 
+	-Reporting of different bugs in current developments before creating PRs
+        -Also reported a bug from a previous commit
+	
+Descisions made:None
+	
+Next Steps:
+
+	-Keep working on sprint 3
+	
+
+Next meeting:
+ 
+	-2024-14-11
+	-4:00pm
+	-Lab class room
