@@ -3,7 +3,7 @@ import "./styles/styles.scss";
 import navigation from "./data";
 import Logo from "../Assets/conco-logo.png"
 
-import Header from "./Header2";
+import Header from "./Header";
 
 export default function Header2() {
   return (
