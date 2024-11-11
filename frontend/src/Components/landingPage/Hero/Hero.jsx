@@ -1,4 +1,5 @@
 import "./Hero.css"
+import {Link} from "react-router-dom";
 import arrow_btn from "../../Assets/landingPage/arrow_btn.png"
 import play_icon from "../../Assets/landingPage/play_icon.png"
 import pause_icon from "../../Assets/landingPage/pause_icon.png"
@@ -11,7 +12,7 @@ const Hero = ({heroData, setHeroCount, heroCount, setPlayStatus, playStatus}) =>
                 <p>{heroData.text2}</p>
             </div>
             <div className="hero-explore">
-                <p>Explore the features</p>
+            <Link to="/signup">Explore the features</Link>
                 <img src={arrow_btn} alt="" />
             </div>
             <div className="hero-dot-play">
