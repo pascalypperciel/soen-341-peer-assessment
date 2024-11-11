@@ -1,11 +1,11 @@
 import React from "react";
 import "./styles/styles.scss";
 import navigation from "./data";
-import { ReactComponent as Logo } from "./assets/concordia-university-1.svg";
+import Logo from "../Assets/conco-logo.png"
 
-import Header from "./components/Header";
+import Header from "./Header2";
 
-export default function App() {
+export default function Header2() {
   return (
     <div className="App">
       <Header items={navigation} logo={<Logo />} navPosition="center" />

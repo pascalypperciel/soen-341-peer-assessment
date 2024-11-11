@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Background from './Background/Background';
 import Hero from './Hero/Hero';
+import Header2 from '../header2/Header2';
 
 const Landing = ()  => {
   let heroData = [
@@ -19,6 +20,7 @@ const Landing = ()  => {
 
   return (
     <div>
+      <Header2 />
       <Background playStatus={playStatus} heroCount={heroCount}/>    
       <Hero
         setPlayStatus = {setPlayStatus}
