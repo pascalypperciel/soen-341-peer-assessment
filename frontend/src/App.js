@@ -7,6 +7,7 @@ import {
 
 import Home from "./Components/landingPage/Home";
 import SignupPage from "./Components/Sign-Login/SignupPage";
+import Contact from "./Components/Contact/Contact";
 import Teams from "./Components/TeamPage/Teams";
 import RatingPage from "./Components/ratingPage/ratingpage";
 import ShortSummary from "./Components/Summary-Instructor/short-summary";
@@ -17,9 +18,10 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/Home" />} />
-        <Route path="/Home" element={<Home />} />
+        <Route path="/" element={<Navigate to="/home" />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="contact" element={<Contact />}/>
         <Route path="/teams" element={<Teams />} />
         <Route path="/ratingpage" element={<RatingPage />} />
         <Route path="/shortsummary" element={<ShortSummary />} />
