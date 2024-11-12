@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import Background from './Background/Background';
 import Hero from './Hero/Hero';
-import Header2 from '../header2/Header2';
+import Main from '../header2/Main';
 
-const Landing = ()  => {
+const Home = ()  => {
   let heroData = [
     {text1:"When one teaches", text2:"two learn"},
     {text1:"To teach is", text2:"to learn twice"},
@@ -20,7 +20,7 @@ const Landing = ()  => {
 
   return (
     <div>
-      <Header2 />
+      <Main />
       <Background playStatus={playStatus} heroCount={heroCount}/>    
       <Hero
         setPlayStatus = {setPlayStatus}
@@ -33,4 +33,4 @@ const Landing = ()  => {
   );
 }
 
-export default Landing;
+export default Home;

@@ -4,7 +4,7 @@ import { gsap } from 'gsap/all';
 import HeaderNav from "./HeaderNav";
 import HeaderLogo from "./HeaderLogo";
 import HeaderBurger from "./HeaderBurger";
-import { useMediaQuery } from "./hooks";
+import { useMediaQuery } from "./hooks/hooks";
 import s from "./header.module.scss";
 
 const Header = ({ items, logo, navPosition }) => {

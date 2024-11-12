@@ -2221,6 +2221,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/gsap@^1.20.2":
+  version "1.20.2"
+  resolved "https://registry.npmjs.org/@types/gsap/-/gsap-1.20.2.tgz"
+  integrity sha512-i9nUsnS32+VTgoX5IlaCYukJpCoB3c6h3bZvO67aIRdb3z8NFTWgeUDpQutLyb1ujowp6nw37qLQNvEowqq8yw==
+
 "@types/html-minifier-terser@^6.0.0":
   version "6.1.0"
   resolved "https://registry.npmjs.org/@types/html-minifier-terser/-/html-minifier-terser-6.1.0.tgz"
