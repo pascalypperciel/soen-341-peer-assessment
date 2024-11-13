@@ -4,7 +4,7 @@
 .header {
   position: absolute;
   width: 100%;
-  height: 72px;
+  height: 0px;
   z-index: 99;
 
   @include media-query($medium-down) {
