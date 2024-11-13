@@ -9,9 +9,7 @@ export default function Main() {
   return (
     <div className="App">
       <Header items={navigation} logo={<img src={Logo} alt="Logo" height={150} />} navPosition="center" />
-      <section className="hero">
-        
-      </section>
+      
     </div>
   );
 }
