@@ -80,6 +80,9 @@ const Header = () => {
                 <li>
                   <Link to="/dashboardinstructor"> Dashboard </Link>
                 </li>
+                <li>
+                  <Link to="/Announcements">Announcements</Link>
+                </li>
               </>
             ) : (
               <>
@@ -88,6 +91,9 @@ const Header = () => {
                 </li>
                 <li>
                   <Link to="/ratingPage">Rate a Student</Link>
+                </li>
+                <li>
+                  <Link to="/Announcements">Announcements</Link>
                 </li>
                 <li>
                   <Link to=""></Link>
