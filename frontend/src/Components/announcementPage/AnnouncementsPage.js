@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { Box, Button, Typography, List, ListItem, ListItemText, Paper } from '@mui/material';
 import CreateAnnouncementModal from './CreateAnnouncementModal';
 
 const AnnouncementsPage = () => {
@@ -41,32 +42,45 @@ const AnnouncementsPage = () => {
   };
 
   return (
-    <div className="announcements-page">
-      <h1>Announcements</h1>
+    <Box sx={{ padding: 3, maxWidth: 600, margin: '0 auto' }}>
+      <Typography variant="h4" align="center" gutterBottom>
+        Announcements
+      </Typography>
       {userRole === 'teacher' ? (
         <>
-          <button onClick={() => setShowModal(true)}>Create Announcement</button>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={() => setShowModal(true)} 
+            sx={{ marginBottom: 2 }}
+          >
+            Create Announcement
+          </Button>
           <CreateAnnouncementModal
             show={showModal}
             onClose={() => setShowModal(false)}
             onCreate={handleCreateAnnouncement}
           />
         </>
-      ) : (
-        <p>Viewing as a student.</p>
+      ) : ( <div></div>
       )}
-      <ul>
-        {announcements.length > 0 ? (
-          announcements.map((announcement, index) => (
-            <li key={index}>
-              {announcement.Announcement || announcement}
-            </li>
-          ))
-        ) : (
-          <p>No announcements available.</p>
-        )}
-      </ul>
-    </div>
+
+      <Paper elevation={3} sx={{ padding: 2, marginTop: 2 }}>
+        <List>
+          {announcements.length > 0 ? (
+            announcements.map((announcement, index) => (
+              <ListItem key={index} divider>
+                <ListItemText primary={announcement.Announcement || announcement} />
+              </ListItem>
+            ))
+          ) : (
+            <Typography variant="body1" color="textSecondary" align="center">
+              No announcements available.
+            </Typography>
+          )}
+        </List>
+      </Paper>
+    </Box>
   );
 };
 

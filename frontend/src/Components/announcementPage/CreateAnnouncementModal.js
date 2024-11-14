@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } from '@mui/material';
 
 const CreateAnnouncementModal = ({ show, onClose, onCreate }) => {
   const [courseID, setCourseID] = useState('');
@@ -23,37 +24,38 @@ const CreateAnnouncementModal = ({ show, onClose, onCreate }) => {
     }
   };
 
-  if (!show) return null;
-
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <h2>Create Announcement</h2>
-        <form onSubmit={handleSubmit}>
-          <label>
-            Course ID:
-            <input
-              type="text"
-              value={courseID}
-              onChange={(e) => setCourseID(e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Announcement:
-            <textarea
-              value={announcement}
-              onChange={(e) => setAnnouncement(e.target.value)}
-              required
-            />
-          </label>
-          <button type="submit">Create</button>
-          <button type="button" onClick={onClose}>
-            Cancel
-          </button>
-        </form>
-      </div>
-    </div>
+    <Dialog open={show} onClose={onClose}>
+      <DialogTitle>Create Announcement</DialogTitle>
+      <DialogContent>
+        <TextField
+          label="Course ID"
+          fullWidth
+          margin="dense"
+          value={courseID}
+          onChange={(e) => setCourseID(e.target.value)}
+          required
+        />
+        <TextField
+          label="Announcement"
+          fullWidth
+          margin="dense"
+          multiline
+          rows={4}
+          value={announcement}
+          onChange={(e) => setAnnouncement(e.target.value)}
+          required
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} color="secondary">
+          Cancel
+        </Button>
+        <Button onClick={handleSubmit} color="primary" variant="contained">
+          Create
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
