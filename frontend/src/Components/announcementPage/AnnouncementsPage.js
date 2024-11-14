@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import CreateAnnouncementModal from './CreateAnnouncementModal';
 
@@ -6,6 +6,18 @@ const AnnouncementsPage = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [userRole, setUserRole] = useState("");
+
+  const fetchAnnouncements = useCallback(async () => {
+    try {
+      const endpoint = userRole === 'teacher' ? '/api/get_Announcements_Teachers' : '/api/get_Announcements_Students';
+      const response = await axios.get(endpoint);
+      if (response.data && response.data.announcements) {
+        setAnnouncements(response.data.announcements);
+      }
+    } catch (error) {
+      console.error('Error fetching announcements:', error);
+    }
+  }, [userRole]);
 
   useEffect(() => {
     const studentId = localStorage.getItem("student_id");
@@ -16,21 +28,13 @@ const AnnouncementsPage = () => {
     } else if (studentId) {
       setUserRole('student');
     }
-
-    fetchAnnouncements();
   }, []);
 
-  const fetchAnnouncements = async () => {
-    try {
-      const endpoint = userRole === 'teacher' ? '/api/get_Announcements_Teachers' : '/api/get_Announcements_Students';
-      const response = await axios.get(endpoint);
-      if (response.data && response.data.announcements) {
-        setAnnouncements(response.data.announcements);
-      }
-    } catch (error) {
-      console.error('Error fetching announcements:', error);
+  useEffect(() => {
+    if (userRole) {
+      fetchAnnouncements();
     }
-  };
+  }, [userRole, fetchAnnouncements]);
 
   const handleCreateAnnouncement = (newAnnouncement) => {
     setAnnouncements((prevAnnouncements) => [...prevAnnouncements, newAnnouncement]);
