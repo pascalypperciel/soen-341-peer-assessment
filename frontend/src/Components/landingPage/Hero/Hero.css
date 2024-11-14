@@ -1,6 +1,6 @@
 .hero {
   margin: 0px 120px;
-  margin-top: 350px;
+  margin-top: 180px;
 }
 
 .hero-text {
@@ -64,4 +64,5 @@
 .hero-play p {
   color: #fff;
   font-size: 19px;
+  cursor: default;
 }
