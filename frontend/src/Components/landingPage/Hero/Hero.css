@@ -58,6 +58,7 @@
     display: flex;
     align-items: center;
     gap: 30px;
+    cursor: pointer;
 }
 
 .hero-play p {
