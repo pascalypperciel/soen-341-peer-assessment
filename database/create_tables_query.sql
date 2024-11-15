@@ -56,5 +56,6 @@ CREATE TABLE Announcement (
     AnnouncementID INT PRIMARY KEY IDENTITY(1,1),
     Announcement VARCHAR(MAX) NOT NULL,
     CourseID INT,
+    Timestamp DATETIME DEFAULT GETDATE(),
     FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
 );
