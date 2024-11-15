@@ -4,6 +4,6 @@ import App from './App';
 
 test('renders Sign Up button', () => {
   render(<App />);
-  const signUpButton = screen.getByRole('button', { name: /Sign Up/i });
+  const signUpButton = screen.getByRole('link', { name: /Sign in/i });
   expect(signUpButton).toBeInTheDocument();
 });
