@@ -58,7 +58,11 @@
   },
   "jest": {
     "moduleNameMapper": {
-      "^axios$": "axios/dist/node/axios.cjs"
+      "^axios$": "axios/dist/node/axios.cjs",
+      "^gsap/all$": "gsap"
+    },
+    "transform": {
+      "^.+\\.(js|jsx)$": "babel-jest"
     }
   }
 }
