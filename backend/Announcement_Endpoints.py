@@ -13,26 +13,6 @@ def get_connection():
 
 @Announcement_Endpoints.route('/Create_Announcement', methods=['POST'])
 def Create_Announcement():
-    """
-    Endpoint to create an announcement.
-
-    Input:
-        - JSON object containing:
-            {
-                "courseID": "10111",        # Example course ID
-                "announcement": "Exam on Friday"  # Example announcement text
-            }
-
-    Output:
-        - Success: 
-            {
-                "message": "Announcement Successfully added"
-            }, status code 200
-        - Error:
-            {
-                "error": "error_message"  # Details of the error
-            }, status code 500
-    """
     data = request.get_json()
     Course_id = data['courseID']
     Announcement = data['announcement']
@@ -58,37 +38,6 @@ def Create_Announcement():
 
 @Announcement_Endpoints.route('/get_Announcements_Teachers', methods=['GET'])
 def get_Announcements_Teachers():
-    """
-    Endpoint to retrieve announcements for a teacher.
-
-    Input:
-        - Session variable:
-            {
-                "Teacher_id": "12345"  # Example teacher ID stored in the session
-            }
-
-    Output:
-        - Success:
-            {
-                "announcements": [
-                    {
-                        "Announcement": "Assignment due next Monday",
-                        "CourseID": "1011",
-                        "AnnouncementID": 122
-                    },
-                    {
-                        "Announcement": "Midterm review session on Thursday",
-                        "CourseID": "1021",
-                        "AnnouncementID": 123
-                    }
-                ],
-                "message": "Announcements Successfully returned"
-            }, status code 200
-        - Error:
-            {
-                "error": "error_message"  # Details of the error
-            }, status code 500
-    """
     Teacher_id = request.args.get('Teacher_id')
     try:     
         conn = get_connection()
@@ -101,6 +50,10 @@ def get_Announcements_Teachers():
         '''
         cursor.execute(query, (Teacher_id,))
         announcements = cursor.fetchall()
+        #Return an error if announcements is empty 
+        if not announcements:
+            return {'error': 'No announcements found for the given teacher.'}, 404
+        
         announcements_list = [{'Announcement': row[0], 'CourseID': row[1], 'AnnouncementID': row[2], 'CourseName': row[3], 'Timestamp': row[4]} for row in announcements]
         return {'announcements': announcements_list, 'message': 'Announcements Successfully returned'}, 200
     
@@ -115,29 +68,6 @@ def get_Announcements_Teachers():
 
 @Announcement_Endpoints.route('/get_Announcements_Students', methods=['GET'])
 def get_Announcements_Students(): 
-    """
-    Endpoint to retrieve announcements for a student.
-
-    Input:
-        - Session variable:
-            {
-                "student_id": "67890"  # Example student ID stored in the session
-            }
-
-    Output:
-        - Success:
-            {
-                "announcements": [
-                    "Final exam scheduled for December 10th",
-                    "Project submission deadline extended to November 20th"
-                ],
-                "message": "Announcements Successfully returned"
-            }, status code 200
-        - Error:
-            {
-                "error": "error_message"  # Details of the error
-            }, status code 500
-    """
     Student_id = request.args.get('student_id')
     try:     
         conn = get_connection()
@@ -153,6 +83,10 @@ def get_Announcements_Students():
         '''
         cursor.execute(query, (Student_id,))
         announcements = cursor.fetchall()
+        #return an error if announcements is empty 
+        if not announcements:
+            return {'error': 'No announcements found for the given teacher.'}, 404
+        
         announcements_list = [{'Announcement': row[0], 'CourseID': row[1], 'CourseName': row[2], 'Timestamp': row[3]} for row in announcements]
         return {'announcements': announcements_list, 'message': 'Announcements Successfully returned'}, 200
     
@@ -167,27 +101,6 @@ def get_Announcements_Students():
 
 @Announcement_Endpoints.route('/Update_Announcement', methods=['PUT'])
 def Update_Announcement():
-    """
-    Endpoint to update an announcement.
-
-    Input:
-        - JSON object containing:
-            {
-                "courseID": "1101",                # Example course ID
-                "announcement": "Updated exam date: next Friday",  # Updated announcement text
-                "announcementID": 12345                # ID of the announcement to update
-            }
-
-    Output:
-        - Success:
-            {
-                "message": "Announcement Successfully updated"
-            }, status code 200
-        - Error:
-            {
-                "error": "error_message"  # Details of the error
-            }, status code 500
-    """
     data = request.get_json()
     Course_id = data['courseID']
     Announcement = data['announcement']

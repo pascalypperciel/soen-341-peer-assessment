@@ -16,7 +16,6 @@ def display_ratings():
     FROM Ratings
     WHERE RateeID = %s
     """
-
     try:
     
         cursor = conn.cursor()

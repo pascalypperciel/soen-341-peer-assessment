@@ -200,6 +200,10 @@ def display_teams_teacher():
 			#fetch all rows from query result
 			students_result = cursor.fetchall()
 
+			if not students_result:
+				return jsonify({
+                    "error": f"No students found for group '{group_name}' (GroupID: {group_id})."
+                }), 400
 			#make a list of the students within the group
 			students_in_group = [{"studentId": student[0], "name": student[1]} for student in students_result]
 

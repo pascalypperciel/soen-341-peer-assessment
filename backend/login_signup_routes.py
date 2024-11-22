@@ -100,8 +100,6 @@ def studentLogin():
         # placeholder page for now 
             return {'message': 'Student not found'}, 401
         
-    
-
     except Exception as e :
         print("Error:", e)
         return {'error': str(e)}, 500
