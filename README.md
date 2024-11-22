@@ -23,21 +23,27 @@ SQL server hosted on Microsoft Azure Cloud Computing Services
 * #### Massimo Caruso   -  Frontend
   - Background: Second year Software Engineering student.
   - Access: Contributor (Read/Write)
+  - Username: Extinctable
 * #### Parsa Darbani    -  Frontend
   - Background: Second year Software Engineering student.
   - Access: Contributor (Read/Write)
+  - Username: Speciaa
 * #### Jessica Codreanu -  Frontend
   - Background: Second year Software Engineering student.
   - Access: Contributor (Read/Write)
+  - Username: Jessicuta
 * #### Anthony Guarraci -  Backend
   - Background: Second year Software Engineering student.
   - Access: Contributor (Read/Write)
+  - Username: antoguarr
 * #### Justin Lombardi  -  Backend
   - Background: Second year Software Engineering student.
   - Access: Contributor (Read/Write)
+  - Username: JustinLombardi
 * #### Pascal Ypperciel -  Backend & Database  
   - Background: Third year Computer Engineering student.
   - Access: Admin (Read/Write + Repository Management)
+  - Username: pascalypperciel
 
 
 #### Contributor
