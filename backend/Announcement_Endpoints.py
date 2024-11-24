@@ -34,6 +34,10 @@ def Create_Announcement():
             }, status code 500
     """
     data = request.get_json()
+
+    if not data or 'courseID' not in data or 'announcement' not in data:
+        return {'error': 'Missing required fields'}, 400
+    
     Course_id = data['courseID']
     Announcement = data['announcement']
     try:
@@ -189,6 +193,10 @@ def Update_Announcement():
             }, status code 500
     """
     data = request.get_json()
+
+    if not data or 'courseID' not in data or 'announcement' not in data or 'announcementID' not in data:
+        return {'error': 'Missing required fields'}, 400
+    
     Course_id = data['courseID']
     Announcement = data['announcement']
     AnnouncementID = data['announcementID']
