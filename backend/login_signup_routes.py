@@ -1,6 +1,7 @@
 from flask import Blueprint,request,jsonify,redirect,url_for,session
 from backend.db import conn
 from dotenv import load_dotenv
+from werkzeug.security import generate_password_hash, check_password_hash
 
 login_signup_routes = Blueprint('login_signup_routes', __name__)
 
@@ -16,12 +17,13 @@ def studentSignup():
     try: 
         #connect to db
         cursor = conn.cursor()
+        hashed_password =generate_password_hash(password)
 
         #query to add student to Student table using cursor
         StudentSignup_query="""
         INSERT INTO Students (StudentID, Name, Password) VALUES (?,?,?)
         """
-        StudentSignup_values=(studentID,name,password)
+        StudentSignup_values=(studentID,name,hashed_password)
 
         cursor.execute(StudentSignup_query, StudentSignup_values)
         conn.commit()
@@ -49,12 +51,13 @@ def teacherSignup():
     try: 
         #connect to db
         cursor = conn.cursor()
+        hashed_password = generate_password_hash(password)
 
         #query to add teacher to Teacher table using cursor
         TeacherSignup_query="""
         INSERT INTO Teachers (Name, Password, Username) VALUES (?, ?, ?)
         """
-        TeacherSignup_values=(name, password, username)
+        TeacherSignup_values=(name, hashed_password, username)
 
         cursor.execute(TeacherSignup_query, TeacherSignup_values)
         conn.commit()
@@ -88,7 +91,8 @@ def studentLogin():
 
         if result:
             storedPassword=result[0]
-            if storedPassword==password:
+            #use hash checker to verify
+            if check_password_hash(storedPassword, password): 
 
                 #store the stud ID in a session once logged in
                 session['student_id']= StudentID
@@ -129,8 +133,8 @@ def teacherLogin():
             storedPassword = result[0]
             teacher_id = result[1]
             session['teacher_id']= teacher_id
-            
-            if storedPassword == password:
+            #use hash checker to verify
+            if check_password_hash(storedPassword, password):
                 return {'message': 'Login successful', 'teacher_id': teacher_id}, 200
             else:
                 return {'message': 'Incorrect password'}, 401
