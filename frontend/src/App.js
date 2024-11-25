@@ -10,6 +10,7 @@ import SignupPage from "./Components/Sign-Login/SignupPage";
 import Contact from "./Components/Contact/Contact";
 import Teams from "./Components/TeamPage/Teams";
 import RatingPage from "./Components/ratingPage/ratingpage";
+import Feedback from "./Components/feedbackPage/Feedback";
 import AnnouncementsPage from "./Components/announcementPage/AnnouncementsPage";
 import ShortSummary from "./Components/Summary-Instructor/short-summary";
 import LongSummary from "./Components/Summary-Instructor/long-summary";
@@ -26,6 +27,7 @@ const App = () => {
         <Route path="contact" element={<Contact />}/>
         <Route path="/teams" element={<Teams />} />
         <Route path="/ratingpage" element={<RatingPage />} />
+        <Route path="/feedback" element={<Feedback />} />
         <Route path="/shortsummary" element={<ShortSummary />} />
         <Route path="/longsummary" element={<LongSummary />} />
         <Route path="/dashboardinstructor" element={<DashboardInstructor />} />

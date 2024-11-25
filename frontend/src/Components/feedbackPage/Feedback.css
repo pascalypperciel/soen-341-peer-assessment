@@ -1,0 +1,20 @@
+.ratings-container {
+    margin: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  table th {
+    background-color: #f4f4f4;
+  }
+  
