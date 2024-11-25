@@ -14,6 +14,10 @@ def get_connection():
 @Announcement_Endpoints.route('/Create_Announcement', methods=['POST'])
 def Create_Announcement():
     data = request.get_json()
+
+    if not data or 'courseID' not in data or 'announcement' not in data:
+        return {'error': 'Missing required fields'}, 400
+    
     Course_id = data['courseID']
     Announcement = data['announcement']
     try:
@@ -94,6 +98,10 @@ def get_Announcements_Students():
 @Announcement_Endpoints.route('/Update_Announcement', methods=['PUT'])
 def Update_Announcement():
     data = request.get_json()
+
+    if not data or 'courseID' not in data or 'announcement' not in data or 'announcementID' not in data:
+        return {'error': 'Missing required fields'}, 400
+    
     Course_id = data['courseID']
     Announcement = data['announcement']
     AnnouncementID = data['announcementID']
