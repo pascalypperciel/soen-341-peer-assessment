@@ -14,7 +14,7 @@
     "prepare": "husky install",
     "lint": "npm run lint:frontend && npm run lint:backend",
     "lint:frontend": "cd frontend && eslint 'src/**/*.{js,jsx}'",
-    "lint:backend": "flake8 backend/**/*.py"
+    "lint:backend": "flake8 backend"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
