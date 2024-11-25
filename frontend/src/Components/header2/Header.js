@@ -10,8 +10,6 @@ import s from "./header.module.scss";
 const Header = ({ items, logo, navPosition }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isSmallScreen = useMediaQuery("(max-width: 989px)");
-  const test = 3;
-  const test2 = 3;
 
   const navRef = useRef();
 
