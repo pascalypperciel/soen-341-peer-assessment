@@ -8,25 +8,18 @@ import { useMediaQuery } from "./hooks/hooks";
 import s from "./header.module.scss";
 
 const Header = ({ items, logo, navPosition }) => {
-  //Setup state to determine if menu is open or not
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isSmallScreen = useMediaQuery("(max-width: 989px)");
 
-  //Setup the Nav ref
   const navRef = useRef();
 
-  //Loop through the items and create a state of navItems with refs
-  //to use for our animation
   const [navItems] = useState(
-    items.map(item => {
-      return {
-        ...item,
-        ref: createRef()
-      };
-    })
+    items.map(item => ({
+      ...item,
+      ref: createRef()
+    }))
   );
 
-  //Setup a timeline to use
   const [menuTL] = useState(
     gsap.timeline({
       paused: true,
@@ -34,13 +27,10 @@ const Header = ({ items, logo, navPosition }) => {
     })
   );
 
-  //Setup menuTL things and account for window resize events
   useEffect(() => {
-    //Build the timeline and worry about resize events
-    if (navPosition === "right" || navPosition === "center") {
-      //Create an array with just the ref of the nav items
-      const itemsRefs = navItems.map(item => item.ref.current);
+    const itemsRefs = navItems.map(item => item.ref.current);
 
+    if (navPosition === "right" || navPosition === "center") {
       if (isSmallScreen) {
         menuTL
           .fromTo(navRef.current, { opacity: 0 }, { opacity: 1 })
@@ -52,20 +42,14 @@ const Header = ({ items, logo, navPosition }) => {
           )
           .reverse();
       } else {
-        menuTL
-          .seek(0)
-          .clear()
-          .pause();
+        menuTL.seek(0).clear().pause();
         gsap.set([navRef.current, itemsRefs], { clearProps: "all" });
       }
     }
-  }, [isSmallScreen]);
+  }, [isSmallScreen, navItems, navPosition, menuTL]);
 
-  //Setup menuTL things to work on any screen size
   useEffect(() => {
-    //Build the timeline and keep it for a full overlay all the time
     if (navPosition === "overlay") {
-      //Create an array with just the ref of the nav items
       const itemsRefs = navItems.map(item => item.ref.current);
 
       menuTL
@@ -78,14 +62,12 @@ const Header = ({ items, logo, navPosition }) => {
         )
         .reverse();
     }
-  }, []);
+  }, [navItems, navPosition, menuTL]);
 
-  //Run menuTL base on Menu State
   useEffect(() => {
     menuTL.reversed(!isMenuOpen);
-  }, [isMenuOpen]);
+  }, [isMenuOpen, menuTL]);
 
-  //onClick function to set state of menu
   const toggleNav = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -101,16 +83,14 @@ const Header = ({ items, logo, navPosition }) => {
   );
 };
 
-export default Header;
-
-//Adding some propTypes for some checks and balances
 Header.propTypes = {
   items: PropTypes.array.isRequired,
   logo: PropTypes.element.isRequired,
   navPosition: PropTypes.oneOf(["center", "right", "overlay"])
 };
 
-// Specifies the default value for the nvaPosition prop:
 Header.defaultProps = {
   navPosition: "center"
 };
+
+export default Header;

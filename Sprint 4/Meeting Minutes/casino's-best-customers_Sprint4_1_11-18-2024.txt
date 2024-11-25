@@ -1,0 +1,51 @@
+Meeting #9
+
+Meeting Title: Starting Sprint #4
+Date: November 18th, 2024
+Time: 5:00 pm
+
+Attendees:
+-Justin Lombardi
+-Antonino Guarraci
+-Massimo Caruso
+-Jessica Codreanu
+-Pascal Ypperciel
+-Parsa Darbani
+
+Absentees: None
+
+
+
+Agenda:
+	- Organize and deligate tasks for sprint 4
+	- Work on organization of code
+
+Topics Discussed
+
+- Organize and deligate tasks for sprint 4
+
+	- Each member to find and fix a bug 
+	- Make meaningful PR requests 
+	- Add a new password change/edit feature
+
+- Work on organization of code
+	- Refactor code 
+	- add more meaningful comments
+	- 
+Agree on what original feature to come up with
+	-Team settled on implementing an Annoucement feature: Teacher can annouce message to different courses
+
+		
+Descisions made: 
+	- Everyone find a bug and work on it 
+	- try to make your code more understandable and readable 
+
+Next Steps:
+
+	-Start on development of sprint 4
+
+Next meeting:
+ 
+	-2024-11-24
+	-4:00pm
+	-Lab class room

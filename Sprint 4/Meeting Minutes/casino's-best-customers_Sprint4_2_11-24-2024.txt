@@ -1,0 +1,46 @@
+Meeting #10
+
+Meeting Title: Working Through Sprint #4
+Date: November 24th, 2024
+Time: 4:00 pm
+
+Attendees:
+-Justin Lombardi
+-Antonino Guarraci
+-Massimo Caruso
+-Jessica Codreanu
+-Pascal Ypperciel
+-Parsa Darbani
+
+Absentees: None
+
+
+
+Agenda:
+	- Go over progress of sprint 4 
+	- Adress any issues that have arised
+
+Topics Discussed
+
+- Go over progress of sprint 4 
+
+	- Most memebers have identified a bug to get started on
+	- Progress of password edit/change has begun 
+
+-  Adress any issues that have arised
+	- Refactoring of total project may take too long
+		-resort to prettier and black to refactor code
+	- More PR requests need to be made 
+	 		
+Descisions made: 
+	- resort to prettier and black to refactor code
+	- Make more PR requests
+
+Next Steps:
+
+	-Continue development of sprint 4
+	-Communicate amongst members to reach submission deadline
+
+Next meeting:
+ 
+	-
