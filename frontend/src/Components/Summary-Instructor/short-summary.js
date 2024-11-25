@@ -6,11 +6,13 @@ import "./short-summary.css";
 import Footer from "../footer/footer";
 
 const ShortSummary = () => {
+  //Variables
   const [ratings, setRatings] = useState([]);
   const [error, setError] = useState(null);
   const location = useLocation();
   const { groupName } = location.state || {};
 
+  //
   useEffect(() => {
     const teacherId = localStorage.getItem("teacher_id");
 
