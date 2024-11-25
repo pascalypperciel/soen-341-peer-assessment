@@ -3,7 +3,7 @@ from backend.db import conn
 from dotenv import load_dotenv
 import pyodbc
 
-#imports for the csv reading
+# imports for the csv reading
 from io import StringIO
 import csv
 
@@ -18,7 +18,7 @@ def make_team_manually():
 	student_ids = data.get('student_ids')
 	teacher_id = data.get('teacher_id')
 	
-	#if no students return error 
+	# if no students return error 
 	if not student_ids:
 		return jsonify({"error": "No student IDs provided"}), 400
 
@@ -173,7 +173,7 @@ def display_teams_teacher():
 		"""
 		cursor.execute(grous_query,teacher_id)
 
-		#fetch all rows from the response to extract the groupids with the respective courseid
+		# fetch all rows from the response to extract the groupids with the respective courseid
 		groups_result=cursor.fetchall()
 
 		if not groups_result:
@@ -182,7 +182,7 @@ def display_teams_teacher():
 		# Preparing list to return 
 		groups_in_course = []
 
-		#find the students with a certain group matching the course id
+		# find the students with a certain group matching the course id
 		for group in groups_result:
 			group_id = group[0]  # GroupID
 			group_name = group[1]  # GroupName
@@ -197,14 +197,14 @@ def display_teams_teacher():
 				WHERE StudentGroup.GroupID = ?
 			"""
 			cursor.execute(students_query, (group_id,))
-			#fetch all rows from query result
+			# fetch all rows from query result
 			students_result = cursor.fetchall()
 
 			if not students_result:
 				return jsonify({
                     "error": f"No students found for group '{group_name}' (GroupID: {group_id})."
                 }), 400
-			#make a list of the students within the group
+			# make a list of the students within the group
 			students_in_group = [{"studentId": student[0], "name": student[1]} for student in students_result]
 
 			groups_in_course.append({
@@ -215,7 +215,7 @@ def display_teams_teacher():
 					"students": students_in_group
 				})
 
-		#return nested list of the groups within a course
+		# return nested list of the groups within a course
 		return jsonify(groups_in_course), 200
 		 
 	except Exception as e :
@@ -244,11 +244,11 @@ def display_teams_student ():
 
 		groups_result = cursor.fetchall()
 
-		#if no groups return message 
+		# if no groups return message 
 		if not groups_result:
 			return jsonify({"message": f"No groups for this student!"}), 404
 		
-		#In each group find the other team members
+		# In each group find the other team members
 		groups_with_students = []
 
 		for group in groups_result:

@@ -6,18 +6,18 @@ login_signup_routes = Blueprint('login_signup_routes', __name__)
 
 @login_signup_routes.route('/studentSignup', methods=['POST'])
 def studentSignup():
-    #obtaining infromation from the signup form
+    # obtaining infromation from the signup form
     data= request.get_json()
     studentID=data['studentID']
     name=data['name']
-    #no password hashing yet 
+    # no password hashing yet 
     password=data['password']
 
     try: 
-        #connect to db
+        # connect to db
         cursor = conn.cursor()
 
-        #query to add student to Student table using cursor
+        # query to add student to Student table using cursor
         StudentSignup_query="""
         INSERT INTO Students (StudentID, Name, Password) VALUES (?,?,?)
         """
@@ -34,23 +34,23 @@ def studentSignup():
     finally:
         cursor.close()
     
-    #temporary name for ratings page
+    # temporary name for ratings page
     return {'message': 'Signup successful'}, 200
 
 @login_signup_routes.route('/teacherSignup', methods=['POST'])
 def teacherSignup():
-    #obtaining infromation from the signup form
+    # obtaining infromation from the signup form
     data= request.get_json()
     name=data['name']
     username=data['username']
-    #no password hashing yet 
+    # no password hashing yet 
     password=data['password']
 
     try: 
-        #connect to db
+        # connect to db
         cursor = conn.cursor()
 
-        #query to add teacher to Teacher table using cursor
+        # query to add teacher to Teacher table using cursor
         TeacherSignup_query="""
         INSERT INTO Teachers (Name, Password, Username) VALUES (?, ?, ?)
         """
@@ -66,7 +66,7 @@ def teacherSignup():
     finally:
         cursor.close()
     
-    #temporary name for ratings page
+    # temporary name for ratings page
     return {'message': 'Signup successful'}, 200
 
 @login_signup_routes.route('/studentLogin', methods=['GET'])
@@ -75,10 +75,10 @@ def studentLogin():
     password = request.args.get('password')
 
     try: 
-        #connect to db
+        # connect to db
         cursor = conn.cursor()
 
-        #query to verify if student with entered StudentID and Password exists
+        # query to verify if student with entered StudentID and Password exists
         StudentLogin_query="""
         SELECT Password FROM Students WHERE StudentID = ?
         """
@@ -90,7 +90,7 @@ def studentLogin():
             storedPassword=result[0]
             if storedPassword==password:
 
-                #store the stud ID in a session once logged in
+                # store the stud ID in a session once logged in
                 session['student_id']= StudentID
 
                 return {'message': 'Login successful', 'student_id': StudentID}, 200

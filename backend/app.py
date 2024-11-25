@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from backend.db import conn
-#blueprints
+# blueprints
 from backend.login_signup_routes import login_signup_routes
 from backend.teams_page_routes import teams_page_routes 
 from backend.feedback_routes import feedback_routes

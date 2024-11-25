@@ -5,9 +5,9 @@ from dotenv import load_dotenv
 ratings_routes = Blueprint('ratings_routes', __name__)
 
 
-#this route retrieves all groups the student is in, returns the groups
-#and their attributes as a JSON list such that front end can display
-#in the format they desire
+# this route retrieves all groups the student is in, returns the groups
+# and their attributes as a JSON list such that front end can display
+# in the format they desire
 
 @ratings_routes.route('/getStudentGroups',  methods=['GET'])
 def get_Student_Groups():
@@ -47,7 +47,7 @@ def get_Student_Groups():
 			for group in groups_result
 		]
 		
-		#if the query returns nothing, send an error saying no groups found for the student
+		# if the query returns nothing, send an error saying no groups found for the student
 		if not groups_list:
 			return jsonify({"error": "No groups found for this student!"}), 404
 
@@ -102,11 +102,11 @@ def get_student_ratees(group_id):
 		cursor.close()
 
 
-#get the JSON obj from front end with all metrics to be inserted, unwrap 
-#and insert into db 
+# get the JSON obj from front end with all metrics to be inserted, unwrap 
+# and insert into db 
 @ratings_routes.route('/InsertStudRatings', methods= ['POST'])
 def insert_Stud_Ratings():
-	#obtaining infromation from the signup form
+	# obtaining infromation from the signup form
 	data= request.get_json()
 	rater_id=data['rater_id']
 	ratee_id=data['ratee_id']
