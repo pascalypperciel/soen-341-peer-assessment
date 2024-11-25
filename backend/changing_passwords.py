@@ -6,29 +6,30 @@ from werkzeug.security import generate_password_hash
 change_passwords_routes = Blueprint('change_passwords_routes', __name__)
 
 # This route intakes the studentID to update their password in the DB
-@change_passwords_routes.route('/changeStudentPassword/<int:student_id>', methods=['PUT'])
-def change_student_password(student_id):
+@change_passwords_routes.route('/changeStudentPassword', methods=['PUT'])
+def change_student_password():
     try:
         # Get the new password from the request
+        student_id = request.json.get('student_id')
         new_student_password = request.json.get('new_student_password')
 
         if not new_student_password:
             return jsonify({"error": "Need to enter a new password!"}), 401
 
-        # Hash the new password
+        # Hash the new password for added security 
         hashed_password = generate_password_hash(new_student_password)
 
-        # Connect to the database
+        # Connect to the database to access and change old password
         cursor = conn.cursor()
 
-        # Check if the student exists
+        # Check if the student exists inside db to be changed 
         cursor.execute("SELECT * FROM Students WHERE StudentID = ?", (student_id,))
         student = cursor.fetchone()
 
         if not student:
             return jsonify({"error": "Student not found"}), 404
 
-        # Update the student's password
+        # Update the student's password with hash for added security
         cursor.execute(
             "UPDATE Students SET Password = ? WHERE StudentID = ?",
             (hashed_password, student_id)
@@ -43,30 +44,32 @@ def change_student_password(student_id):
             cursor.close()
             conn.close()
 
-# This route intakes the teacherID to update their password in the DB
-@change_passwords_routes.route('/changeTeacherPassword/<int:teacher_id>', methods=['PUT'])
-def change_teacher_password(teacher_id):
+# This route intakes the teacherID to update their password in the DB with a hash for security
+@change_passwords_routes.route('/changeTeacherPassword/', methods=['PUT'])
+def change_teacher_password():
     try:
-        # Get the new password from front end 
+        # Get the new password from front end to be hashed and out in db
+        teacher_id = request.json.get('teacher_id')
         new_teacher_password = request.json.get('new_teacher_password')
-        #if no password passed end the interaction
+        
+        #if no password passed end the interaction to not make any unwanted change
         if not new_teacher_password:
             return jsonify({"error": "Need to enter a new password!"}), 401
 
-        # Hash new password
+        # Hash new password for added security
         hashed_password = generate_password_hash(new_teacher_password)
 
-        # Connect to db
+        # Connect to db to change the password
         cursor = conn.cursor()
 
-        # Check if the teacher exists
+        # Check if the teacher exists to update their password
         cursor.execute("SELECT * FROM Teachers WHERE TeacherID = ?", (teacher_id,))
         teacher = cursor.fetchone()
 
         if not teacher:
             return jsonify({"error": "Teacher not found"}), 404
 
-        # Update the teacher password
+        # Update the teacher password with the hash for added security
         cursor.execute(
             "UPDATE Teachers SET Password = ? WHERE TeacherID = ?",
             (hashed_password, teacher_id)
