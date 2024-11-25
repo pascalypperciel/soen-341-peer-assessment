@@ -1,9 +1,5 @@
-from flask import Blueprint,request,jsonify,redirect,url_for,session,render_template
+from flask import Blueprint, request, jsonify
 from backend.db import conn
-from dotenv import load_dotenv
-import pyodbc
-
-
 
 instructor_dashboard_routes = Blueprint('instructor_dashboard_routes', __name__)
 
@@ -13,7 +9,7 @@ def fetch_as_dict(cursor):
     return [dict(zip(columns, row)) for row in cursor.fetchall()]
 
 
-#this route retrieves all ratings associated to all the students in their course
+# this route retrieves all ratings associated to all the students in their course
 @instructor_dashboard_routes.route('/getStudentRatings', methods=['GET'])
 def get_student_ratings():
     # Use a placeholder teacher_id for testing
@@ -26,7 +22,7 @@ def get_student_ratings():
         cursor = conn.cursor()
 
         query = """
-        SELECT 
+        SELECT
             r.RatingID,
             r.CooperationRating,
             r.ConceptualContributionRating,
@@ -43,19 +39,19 @@ def get_student_ratings():
             rater.Name AS RaterName,
             g.GroupID,
             g.Name AS GroupName
-        FROM 
+        FROM
             Ratings r
-        JOIN 
+        JOIN
             Groups g ON r.GroupID = g.GroupID
-        JOIN 
+        JOIN
             Courses c ON g.CourseID = c.CourseID
-        JOIN 
+        JOIN
             Teachers t ON t.TeacherID = c.TeacherID
-        JOIN 
+        JOIN
             Students ratee ON r.RateeID = ratee.StudentID
-        JOIN 
+        JOIN
             Students rater ON r.RaterID = rater.StudentID
-        WHERE 
+        WHERE
             t.TeacherID = ?;
         """
         

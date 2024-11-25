@@ -5,10 +5,12 @@ from backend.db import conn
 teacher_id = '1'  # Test teacher ID
 team_id = None    # To hold created team ID for deletion/edit tests
 
+
 @pytest.fixture
 def client():
     with app.test_client() as client:
         yield client
+
 
 def test_make_team_manually(client):
     cursor = conn.cursor()
@@ -38,10 +40,9 @@ def test_make_team_manually(client):
     assert group is not None
     global team_id
     # Store the created team ID (for future tests)
-    team_id = group[0] 
+    team_id = group[0]
 
     cursor.close()
-
 
 
 def test_display_teams_teacher(client):
@@ -57,7 +58,6 @@ def test_display_teams_teacher(client):
     assert any(group['groupName'] == 'Test Team' for group in groups)
 
 
-
 def test_edit_team(client):
     global team_id
     if not team_id:
@@ -66,7 +66,7 @@ def test_edit_team(client):
     # editing team name and course
     response = client.put('/editTeam', json={
         'team_id': team_id,
-        'course_id': 1, 
+        'course_id': 1,
         'team_name': 'Edited Test Team',
         'course_name': 'Edited Test Course',
         'student_ids': [1, 2]
@@ -84,7 +84,6 @@ def test_edit_team(client):
     assert group[0] == 'Edited Test Team'
 
     cursor.close()
-
 
 
 def test_delete_team(client):
