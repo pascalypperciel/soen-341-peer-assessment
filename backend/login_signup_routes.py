@@ -1,60 +1,62 @@
-from flask import Blueprint,request,jsonify,redirect,url_for,session
+from flask import Blueprint, request, session
 from backend.db import conn
 from dotenv import load_dotenv
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 login_signup_routes = Blueprint('login_signup_routes', __name__)
+
 
 @login_signup_routes.route('/studentSignup', methods=['POST'])
 def studentSignup():
-    #obtaining infromation from the signup form
-    data= request.get_json()
-    studentID=data['studentID']
-    name=data['name']
-    #no password hashing yet 
-    password=data['password']
+    # obtaining infromation from the signup form
+    data = request.get_json()
+    studentID = data['studentID']
+    name = data['name']
+    # no password hashing yet
+    password = data['password']
 
-    try: 
-        #connect to db
+    try:
+        # connect to db
         cursor = conn.cursor()
         hashed_password =generate_password_hash(password)
 
-        #query to add student to Student table using cursor
-        StudentSignup_query="""
+        # query to add student to Student table using cursor
+        StudentSignup_query = """
         INSERT INTO Students (StudentID, Name, Password) VALUES (?,?,?)
         """
         StudentSignup_values=(studentID,name,hashed_password)
 
         cursor.execute(StudentSignup_query, StudentSignup_values)
         conn.commit()
-        
 
-    except Exception as e :
+    except Exception as e:
         print("Error:", e)
         return {'error': str(e)}, 500
     
     finally:
         cursor.close()
     
-    #temporary name for ratings page
+    # temporary name for ratings page
     return {'message': 'Signup successful'}, 200
+
 
 @login_signup_routes.route('/teacherSignup', methods=['POST'])
 def teacherSignup():
-    #obtaining infromation from the signup form
-    data= request.get_json()
-    name=data['name']
-    username=data['username']
-    #no password hashing yet 
-    password=data['password']
+    # obtaining infromation from the signup form
+    data = request.get_json()
+    name = data['name']
+    username = data['username']
+    # no password hashing yet
+    password = data['password']
 
-    try: 
-        #connect to db
+    try:
+        # connect to db
         cursor = conn.cursor()
         hashed_password = generate_password_hash(password)
 
-        #query to add teacher to Teacher table using cursor
-        TeacherSignup_query="""
+        # query to add teacher to Teacher table using cursor
+        TeacherSignup_query = """
         INSERT INTO Teachers (Name, Password, Username) VALUES (?, ?, ?)
         """
         TeacherSignup_values=(name, hashed_password, username)
@@ -62,27 +64,28 @@ def teacherSignup():
         cursor.execute(TeacherSignup_query, TeacherSignup_values)
         conn.commit()
         
-    except Exception as e :
+    except Exception as e:
         print("Error:", e)
         return {'error': str(e)}, 500
     
     finally:
         cursor.close()
     
-    #temporary name for ratings page
+    # temporary name for ratings page
     return {'message': 'Signup successful'}, 200
+
 
 @login_signup_routes.route('/studentLogin', methods=['GET'])
 def studentLogin():
     StudentID = request.args.get('studentID')
     password = request.args.get('password')
 
-    try: 
-        #connect to db
+    try:
+        # connect to db
         cursor = conn.cursor()
 
-        #query to verify if student with entered StudentID and Password exists
-        StudentLogin_query="""
+        # query to verify if student with entered StudentID and Password exists
+        StudentLogin_query = """
         SELECT Password FROM Students WHERE StudentID = ?
         """
 
@@ -92,33 +95,32 @@ def studentLogin():
         if result:
             storedPassword=result[0]
             #use hash checker to verify
-            if check_password_hash(storedPassword, password): 
+            if check_password_hash(storedPassword, password):
 
-                #store the stud ID in a session once logged in
-                session['student_id']= StudentID
+                # store the stud ID in a session once logged in
+                session['student_id'] = StudentID
 
                 return {'message': 'Login successful', 'student_id': StudentID}, 200
             else:
                 return {'message': 'Incorrect password'}, 401
         else:
-        # placeholder page for now 
+            # placeholder page for now
             return {'message': 'Student not found'}, 401
-        
-    
 
-    except Exception as e :
+    except Exception as e:
         print("Error:", e)
         return {'error': str(e)}, 500
     
     finally:
         cursor.close()
     
+
 @login_signup_routes.route('/teacherLogin', methods=['GET'])
 def teacherLogin():
     username = request.args.get('username')
     password = request.args.get('password')
 
-    try: 
+    try:
         # connect to db
         cursor = conn.cursor()
 
@@ -147,6 +149,7 @@ def teacherLogin():
 
     finally:
         cursor.close()
+
 
 @login_signup_routes.route('/logout', methods=['GET'])
 def logout():

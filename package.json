@@ -1,7 +1,8 @@
 {
   "devDependencies": {
     "@testing-library/jest-dom": "^6.5.0",
-    "concurrently": "^9.0.1"
+    "concurrently": "^9.0.1",
+    "husky": "^9.1.7"
   },
   "scripts": {
     "start": "concurrently \"npm run frontend\" \"npm run backend\"",
@@ -9,7 +10,11 @@
     "backend": "cd backend && flask run",
     "build": "react-scripts build",
     "test": "concurrently \"cd frontend && npm test -- --watchAll=false\" \"cd backend && pytest\"",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prepare": "husky install",
+    "lint": "npm run lint:frontend && npm run lint:backend",
+    "lint:frontend": "cd frontend && npx eslint src/**/*.{js,jsx} --max-warnings=0",
+    "lint:backend": "flake8 backend"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",

@@ -1,39 +1,23 @@
-from flask import Blueprint, request, jsonify, redirect, url_for, session
-from backend.db import conn
-from dotenv import load_dotenv
+from flask import Blueprint, request
 import pyodbc
 from backend.db import driver, server, database, username, password
 
 Announcement_Endpoints = Blueprint('Announcement_Endpoints', __name__)
+
 
 def get_connection():
     return pyodbc.connect(
         f"DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}"
     )
 
+
 @Announcement_Endpoints.route('/Create_Announcement', methods=['POST'])
 def Create_Announcement():
-    """
-    Endpoint to create an announcement.
-
-    Input:
-        - JSON object containing:
-            {
-                "courseID": "10111",        # Example course ID
-                "announcement": "Exam on Friday"  # Example announcement text
-            }
-
-    Output:
-        - Success: 
-            {
-                "message": "Announcement Successfully added"
-            }, status code 200
-        - Error:
-            {
-                "error": "error_message"  # Details of the error
-            }, status code 500
-    """
     data = request.get_json()
+
+    if not data or 'courseID' not in data or 'announcement' not in data:
+        return {'error': 'Missing required fields'}, 400
+    
     Course_id = data['courseID']
     Announcement = data['announcement']
     try:
@@ -46,7 +30,7 @@ def Create_Announcement():
         cursor.execute(query, (Announcement, Course_id))
         conn.commit()
         return {'message': 'Announcement Successfully added'}, 200
-    
+            
     except Exception as e:
         print("Error:", e)
         return {'error': str(e)}, 500
@@ -58,44 +42,13 @@ def Create_Announcement():
 
 @Announcement_Endpoints.route('/get_Announcements_Teachers', methods=['GET'])
 def get_Announcements_Teachers():
-    """
-    Endpoint to retrieve announcements for a teacher.
-
-    Input:
-        - Session variable:
-            {
-                "Teacher_id": "12345"  # Example teacher ID stored in the session
-            }
-
-    Output:
-        - Success:
-            {
-                "announcements": [
-                    {
-                        "Announcement": "Assignment due next Monday",
-                        "CourseID": "1011",
-                        "AnnouncementID": 122
-                    },
-                    {
-                        "Announcement": "Midterm review session on Thursday",
-                        "CourseID": "1021",
-                        "AnnouncementID": 123
-                    }
-                ],
-                "message": "Announcements Successfully returned"
-            }, status code 200
-        - Error:
-            {
-                "error": "error_message"  # Details of the error
-            }, status code 500
-    """
     Teacher_id = request.args.get('Teacher_id')
-    try:     
+    try:
         conn = get_connection()
         cursor = conn.cursor()
         query = '''
         SELECT Announcement, A.CourseID, AnnouncementID, C.Name, A.Timestamp
-        FROM Announcement A 
+        FROM Announcement A
         JOIN Courses C ON A.CourseID = C.CourseID
         WHERE C.TeacherID = ?;
         '''
@@ -114,32 +67,9 @@ def get_Announcements_Teachers():
     
 
 @Announcement_Endpoints.route('/get_Announcements_Students', methods=['GET'])
-def get_Announcements_Students(): 
-    """
-    Endpoint to retrieve announcements for a student.
-
-    Input:
-        - Session variable:
-            {
-                "student_id": "67890"  # Example student ID stored in the session
-            }
-
-    Output:
-        - Success:
-            {
-                "announcements": [
-                    "Final exam scheduled for December 10th",
-                    "Project submission deadline extended to November 20th"
-                ],
-                "message": "Announcements Successfully returned"
-            }, status code 200
-        - Error:
-            {
-                "error": "error_message"  # Details of the error
-            }, status code 500
-    """
+def get_Announcements_Students():
     Student_id = request.args.get('student_id')
-    try:     
+    try:
         conn = get_connection()
         cursor = conn.cursor()
         query = '''
@@ -167,28 +97,11 @@ def get_Announcements_Students():
 
 @Announcement_Endpoints.route('/Update_Announcement', methods=['PUT'])
 def Update_Announcement():
-    """
-    Endpoint to update an announcement.
-
-    Input:
-        - JSON object containing:
-            {
-                "courseID": "1101",                # Example course ID
-                "announcement": "Updated exam date: next Friday",  # Updated announcement text
-                "announcementID": 12345                # ID of the announcement to update
-            }
-
-    Output:
-        - Success:
-            {
-                "message": "Announcement Successfully updated"
-            }, status code 200
-        - Error:
-            {
-                "error": "error_message"  # Details of the error
-            }, status code 500
-    """
     data = request.get_json()
+
+    if not data or 'courseID' not in data or 'announcement' not in data or 'announcementID' not in data:
+        return {'error': 'Missing required fields'}, 400
+    
     Course_id = data['courseID']
     Announcement = data['announcement']
     AnnouncementID = data['announcementID']
