@@ -13,7 +13,7 @@
     "eject": "react-scripts eject",
     "prepare": "husky install",
     "lint": "npm run lint:frontend && npm run lint:backend",
-    "lint:frontend": "cd frontend && eslint 'src/**/*.{js,jsx}'",
+    "lint:frontend": "cd frontend && npx eslint src/**/*.{js,jsx}",
     "lint:backend": "flake8 backend"
   },
   "dependencies": {
