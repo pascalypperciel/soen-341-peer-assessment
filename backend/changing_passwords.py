@@ -11,8 +11,7 @@ def change_student_password():
     try:
         # Get the new password from the request
         student_id = request.json.get('student_id')
-        new_student_password = request.json.get('new_student_password')
-
+        new_student_password = request.json.get('new_password')
 
         if not new_student_password:
             return jsonify({"error": "Need to enter a new password!"}), 401
@@ -43,17 +42,15 @@ def change_student_password():
     finally:
         if cursor:
             cursor.close()
-        if conn:
-            conn.close()
             
 
 # This route intakes the teacherID to update their password in the DB with a hash for security
-@change_passwords_routes.route('/changeTeacherPassword/', methods=['PUT'])
+@change_passwords_routes.route('/changeTeacherPassword', methods=['PUT'])
 def change_teacher_password():
     try:
         # Get the new password from front end to be hashed and out in db
-        username = request.args.get('username')
-        new_teacher_password = request.json.get('new_teacher_password')
+        username = request.json.get('username')
+        new_teacher_password = request.json.get('new_password')
         
         #if no password passed end the interaction to not make any unwanted change
         if not new_teacher_password:
@@ -85,6 +82,4 @@ def change_teacher_password():
     finally:
         if cursor:
             cursor.close()
-        if conn:
-            conn.close()
             

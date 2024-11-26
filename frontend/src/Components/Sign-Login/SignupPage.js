@@ -211,8 +211,8 @@ const SignupPage = () => {
       : `http://localhost:5000/changeStudentPassword`;
 
     const data = {
-      [isTeacher ? "username" : "studentID"]: signupData.idOrUsername,
-      password: signupData.newpassword,
+      [isTeacher ? "username" : "student_id"]: signupData.idOrUsername,
+      new_password: signupData.newpassword,
     };
 
     try {
