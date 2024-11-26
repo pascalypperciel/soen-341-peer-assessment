@@ -86,8 +86,8 @@ def get_student_ratees(group_id):
         students = cursor.fetchall()
 
 
-        if not students:
-          return jsonify({"error": "No students available for rating in this group"}), 404
+        # if not students:
+        #   return jsonify({"error": "No students available for rating in this group"}), 404
         # Return the results as a JSON response using jsonify, return all eligible students to be rated
         
         return jsonify({'students': [{'StudentID': student.StudentID, 'Name': student.Name} for student in students]})
