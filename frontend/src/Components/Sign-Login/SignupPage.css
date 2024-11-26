@@ -82,6 +82,7 @@
   box-sizing: border-box;
   line-height: normal;
   margin-bottom: 20px;
+  
 }
 
 .info .button-signup {
@@ -99,6 +100,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  
 }
 
 .info .button-signup:hover {
@@ -182,4 +184,12 @@
   .peer-title {
     display: none;
   }
+}
+
+.p-2 {
+  cursor: pointer;
+  width: fit-content;
+  float: inline-end;
+  position: relative;
+  
 }

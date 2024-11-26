@@ -30,17 +30,3 @@ def display_ratings():
 
     finally:
         cursor.close()
-
-@feedback_routes.route('/get_user_info', methods=['GET'])
-def get_user_info():
-    try:
-        if 'user_id' in session and session.get('role') == 'student':
-            return jsonify({
-                'user_id': session['user_id'],
-                'role': session['role']
-            }), 200
-        else:
-            return jsonify({'error': 'Unauthorized access'}), 401
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-

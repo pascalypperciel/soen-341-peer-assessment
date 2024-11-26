@@ -219,7 +219,7 @@ const SignupPage = () => {
             />
             <div className="p-2" onClick={() => setVisible(!visible)}>
             {visible ? <EyeOutlined/> : <EyeInvisibleOutlined/>}
-          </div>
+            </div>
           </div>
 
           <Button type="submit" variant="contained" className="button-signup">
