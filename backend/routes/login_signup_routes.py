@@ -156,6 +156,7 @@ def logout():
     session.pop('teacher_id', None)
     return {'message': 'Logged out!'}, 200
 
+
 # This route intakes the studentID to update their password in the DB
 @login_signup_routes.route('/changeStudentPassword', methods=['PUT'])
 def change_student_password():
