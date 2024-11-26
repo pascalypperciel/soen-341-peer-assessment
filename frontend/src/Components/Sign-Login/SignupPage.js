@@ -5,9 +5,11 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { EyeInvisibleOutlined, EyeOutlined} from "@ant-design/icons"
 
 const SignupPage = () => {
   const [isTeacher, setIsTeacher] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [signupData, setSignupData] = useState({
     fullName: "",
     idOrUsername: "",
@@ -201,20 +203,23 @@ const SignupPage = () => {
             />
           </div>
 
-          <div>
+          <div >
             <TextField
               className="textfield"
               error={!!validationErrors.password}
               id="filled-password"
               label="Password"
               variant="filled"
-              type="password"
+              type = {visible? "text" : "password"}
               name="password"
               value={signupData.password}
               onChange={handleChange}
               helperText={validationErrors.password}
               required
             />
+            <div className="p-2" onClick={() => setVisible(!visible)}>
+            {visible ? <EyeOutlined/> : <EyeInvisibleOutlined/>}
+          </div>
           </div>
 
           <Button type="submit" variant="contained" className="button-signup">
