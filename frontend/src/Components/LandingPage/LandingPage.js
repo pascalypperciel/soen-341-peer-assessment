@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import Background from './Background/Background';
-import Hero from './Hero/Hero';
+import Background from './Background';
+import Hero from './Hero';
 import Main from '../HeaderLanding/Main';
 
 const LandingPage = ()  => {
