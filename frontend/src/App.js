@@ -9,6 +9,7 @@ import LandingPage from "./Components/LandingPage/LandingPage";
 import SignupPage from "./Components/SignupLogin/SignupLogin";
 import Contact from "./Components/Contact/Contact";
 import Teams from "./Components/Teams/Teams";
+import FeedbackPage from "./Components/Feedback/FeedbackPage";
 import RatingPage from "./Components/Rating/RatingPage";
 import AnnouncementsPage from "./Components/Announcement/AnnouncementsPage";
 import ShortSummary from "./Components/DashboardInstructor/ShortSummary";
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="contact" element={<Contact />}/>
         <Route path="/teams" element={<Teams />} />
+        <Route path="/feedback" element={<FeedbackPage />} />
         <Route path="/ratingpage" element={<RatingPage />} />
         <Route path="/shortsummary" element={<ShortSummary />} />
         <Route path="/longsummary" element={<LongSummary />} />

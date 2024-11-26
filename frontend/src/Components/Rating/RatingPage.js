@@ -536,10 +536,9 @@ const RatingPage = () => {
         </div>
 
         <div className="comments">
-          <h2> General Comments </h2>
+          <h2> Anonymous Comments </h2>
           <p>
-            Use this section to provide any overall impressions or suggestions
-            for improvement.
+            Use this section to comment something only the professor will see.
           </p>
           <TextField
             className="textfield"
