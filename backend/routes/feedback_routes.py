@@ -10,12 +10,12 @@ def display_ratings():
     student_id = request.args.get('student_id')
 
     # finding all ratings associated to student id of student
+
     query = """
     SELECT CooperationRating, ConceptualContributionRating, PracticalContributionRating, WorkEthicRating
     FROM Ratings
     WHERE RateeID = %s
     """
-
     try:
         cursor = conn.cursor()
         cursor.execute(query, (student_id,))
