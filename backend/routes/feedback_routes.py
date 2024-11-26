@@ -39,4 +39,3 @@ def display_ratings():
 
     finally:
         cursor.close()
-    
