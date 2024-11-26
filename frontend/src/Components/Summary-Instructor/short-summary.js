@@ -12,7 +12,6 @@ const ShortSummary = () => {
   const location = useLocation();
   const { groupName } = location.state || {};
 
-  //
   useEffect(() => {
     const teacherId = localStorage.getItem("teacher_id");
 
@@ -28,6 +27,7 @@ const ShortSummary = () => {
       });
   }, []);
 
+  //To be able to select the rating of all the rater
   const rateeAverages = ratings
     .filter((rating) => rating.GroupName === groupName)
     .reduce((acc, rating) => {
