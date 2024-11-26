@@ -62,8 +62,8 @@ def get_Announcements_Teachers():
         announcements_list = [{'Announcement': row[0], 'CourseID': row[1], 'AnnouncementID': row[2], 'CourseName': row[3], 'Timestamp': row[4]} for row in announcements]
 
         # return 404 if list is null 
-        if not announcements_list:
-            return {'error': 'No announcements found for the given Teacher ID'}, 404
+        if isinstance(announcements_list, list) and len(announcements_list) == 0:
+            return {'error': 'No announcements found for the given teacher ID'}, 404
         
         return {'announcements': announcements_list, 'message': 'Announcements Successfully returned'}, 200
 
@@ -99,11 +99,11 @@ def get_Announcements_Students():
 
         # Make format of response readable and interperatable by front end dev 
         announcements_list = [{'Announcement': row[0], 'CourseID': row[1], 'CourseName': row[2], 'Timestamp': row[3]} for row in announcements]
-        
+
         # return 404 if list is null 
-        if not announcements_list:
-            return {'error': 'No announcements found for the given Teacher ID'}, 404
-        
+        if isinstance(announcements_list, list) and len(announcements_list) == 0:
+            return {'error': 'No announcements found for the given student ID'}, 404
+
         return {'announcements': announcements_list, 'message': 'Announcements Successfully returned'}, 200
     
     except Exception as e:
