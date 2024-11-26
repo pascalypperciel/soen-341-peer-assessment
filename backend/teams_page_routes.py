@@ -199,10 +199,10 @@ def display_teams_teacher():
             cursor.execute(students_query, (group_id,))
             # fetch all rows from query result
             students_result = cursor.fetchall()
-
+             
             # make a list of the students within the group
             students_in_group = [{"studentId": student[0], "name": student[1]} for student in students_result]
-
+            
             groups_in_course.append({
                 "groupId": group_id,
                 "groupName": group_name,
@@ -210,7 +210,7 @@ def display_teams_teacher():
                 "courseName": course_name,
                 "students": students_in_group
             })
-
+        
         # return nested list of the groups within a course
         return jsonify(groups_in_course), 200
          

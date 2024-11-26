@@ -16,12 +16,14 @@ def studentSignup():
     password = data['password']
                     
     try:
+
         # connect to db
         cursor = conn.cursor()
         hashed_password = generate_password_hash(password)
 
         # query to add student to Student table using cursor
-        StudentSignup_query = """
+
+        StudentSignup_query="""
         INSERT INTO Students (StudentID, Name, Password) VALUES (?,?,?)
         """
         StudentSignup_values = (studentID, name, hashed_password)
@@ -55,7 +57,7 @@ def teacherSignup():
         hashed_password = generate_password_hash(password)
 
         # query to add teacher to Teacher table using cursor
-        TeacherSignup_query = """
+        TeacherSignup_query="""
         INSERT INTO Teachers (Name, Password, Username) VALUES (?, ?, ?)
         """
         TeacherSignup_values = (name, hashed_password, username)
@@ -79,12 +81,13 @@ def studentLogin():
     StudentID = request.args.get('studentID')
     password = request.args.get('password')
 
-    try:
+
+    try: 
         # connect to db
         cursor = conn.cursor()
 
         # query to verify if student with entered StudentID and Password exists
-        StudentLogin_query = """
+        StudentLogin_query="""
         SELECT Password FROM Students WHERE StudentID = ?
         """
 
@@ -98,6 +101,7 @@ def studentLogin():
 
                 # store the stud ID in a session once logged in
                 session['student_id'] = StudentID
+
 
                 return {'message': 'Login successful', 'student_id': StudentID}, 200
             else:

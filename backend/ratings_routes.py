@@ -45,7 +45,9 @@ def get_Student_Groups():
             }
             for group in groups_result
         ]
-
+        # if the query returns nothing, send an error saying no groups found for the student
+        if not groups_list:
+            return jsonify({"error": "No groups found for this student!"}), 404
         # Return the list of groups as a JSON object, can be manipulated as needed by front end
         return jsonify(groups_list), 200
 
@@ -58,7 +60,6 @@ def get_Student_Groups():
 
 # this route gets the unrated students based the group the end user
 # chose from the front end. assumed the group_id is passed into url
-#
 # searches for that group and verifies all students inside without a
 # rating by the user
 @ratings_routes.route('/getStudentRatees/<int:group_id>', methods=['GET'])
@@ -84,15 +85,18 @@ def get_student_ratees(group_id):
         cursor.execute(query, (student_id, group_id, student_id))
         students = cursor.fetchall()
 
-        # Return the results as a JSON response using jsonify, return all eligible students to be rated
-        return jsonify({'students': [{'StudentID': student.StudentID, 'Name': student.Name} for student in students]})
 
+        # if not students:
+        #   return jsonify({"error": "No students available for rating in this group"}), 404
+        # Return the results as a JSON response using jsonify, return all eligible students to be rated
+        
+        return jsonify({'students': [{'StudentID': student.StudentID, 'Name': student.Name} for student in students]})
+      
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
     finally:
         cursor.close()
-
 
 # get the JSON obj from front end with all metrics to be inserted, unwrap
 # and insert into db
@@ -147,3 +151,4 @@ def insert_Stud_Ratings():
         cursor.close()
         
     return jsonify({"message": "Rating successfully inserted."}), 201
+
