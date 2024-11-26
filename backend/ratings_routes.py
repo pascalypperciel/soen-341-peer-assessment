@@ -46,8 +46,8 @@ def get_Student_Groups():
             for group in groups_result
         ]
         # if the query returns nothing, send an error saying no groups found for the student
-		    if not groups_list:
-			      return jsonify({"error": "No groups found for this student!"}), 404
+        if not groups_list:
+            return jsonify({"error": "No groups found for this student!"}), 404
         # Return the list of groups as a JSON object, can be manipulated as needed by front end
         return jsonify(groups_list), 200
 
