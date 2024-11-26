@@ -61,7 +61,7 @@ def get_Announcements_Teachers():
 
         # Return an error if announcements is empty 
         if not announcements:
-            return {'announcements': [], 'message': 'No announcements available for the given student.'}, 200
+            return {'message': 'No announcements available for the given teacher.'}, 404
     
         announcements_list = [{'Announcement': row[0], 'CourseID': row[1], 'AnnouncementID': row[2], 'CourseName': row[3], 'Timestamp': row[4]} for row in announcements]
         return {'announcements': announcements_list, 'message': 'Announcements Successfully returned'}, 200
@@ -98,7 +98,7 @@ def get_Announcements_Students():
 
         # return an error if announcements is empty 
         if not announcements:
-            return {'announcements': [], 'message': 'No announcements available for the given student.'}, 200
+            return { 'message': 'No announcements available for the given student.'}, 404
     
         # Make format of response readable and interperatable by front end dev 
         announcements_list = [{'Announcement': row[0], 'CourseID': row[1], 'CourseName': row[2], 'Timestamp': row[3]} for row in announcements]
