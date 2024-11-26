@@ -1,16 +1,43 @@
 import React, { useState, useEffect } from "react";
 
-const DisplayRatings = ({ studentId }) => {
-  const [ratings, setRatings] = useState(null); // Store ratings data
+const DisplayRatings = () => {
+  const [studentId, setStudentId] = useState(null); // Logged-in student's ID
+  const [ratings, setRatings] = useState(null); // Ratings data
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
 
+  // Fetch logged-in user info to get student ID
   useEffect(() => {
-    // Fetch ratings from the backend
+    const fetchUserInfo = async () => {
+      try {
+        const response = await fetch("/get_user_info", { credentials: "include" });
+
+        if (!response.ok) {
+          throw new Error("Unauthorized or session expired");
+        }
+
+        const data = await response.json();
+        setStudentId(data.user_id); // Set student ID from session
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
+
+  // Fetch ratings based on student ID
+  useEffect(() => {
+    if (!studentId) return;
+
     const fetchRatings = async () => {
       try {
-        setLoading(true); // Start loading
-        const response = await fetch(`/display_ratings?student_id=${studentId}`);
+        setLoading(true);
+        const response = await fetch(`/display_ratings?student_id=${studentId}`, {
+          credentials: "include",
+        });
 
         if (!response.ok) {
           const errorData = await response.json();
@@ -18,37 +45,36 @@ const DisplayRatings = ({ studentId }) => {
         }
 
         const data = await response.json();
-        setRatings(data); // Set fetched ratings
+        setRatings(data); // Set ratings data
       } catch (err) {
-        setError(err.message); // Capture error
+        setError(err.message);
       } finally {
-        setLoading(false); // Stop loading
+        setLoading(false);
       }
     };
 
-    if (studentId) {
-      fetchRatings();
-    } else {
-      setError("Student ID is required");
-      setLoading(false);
-    }
+    fetchRatings();
   }, [studentId]);
 
+  // Loading state
   if (loading) {
     return <div>Loading...</div>;
   }
 
+  // Error state
   if (error) {
     return <div className="error">Error: {error}</div>;
   }
 
+  // No ratings found
   if (!ratings || ratings.length === 0) {
-    return <div>No ratings found for the student.</div>;
+    return <div>No ratings found for your student ID.</div>;
   }
 
+  // Display ratings
   return (
     <div className="ratings-container">
-      <h2>Ratings for Student {studentId}</h2>
+      <h2>Feedback for Student ID: {studentId}</h2>
       <table>
         <thead>
           <tr>
@@ -74,4 +100,3 @@ const DisplayRatings = ({ studentId }) => {
 };
 
 export default DisplayRatings;
-
