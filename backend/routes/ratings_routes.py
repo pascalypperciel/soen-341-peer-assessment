@@ -85,7 +85,6 @@ def get_student_ratees(group_id):
         cursor.execute(query, (student_id, group_id, student_id))
         students = cursor.fetchall()
 
-
         # if not students:
         #   return jsonify({"error": "No students available for rating in this group"}), 404
         # Return the results as a JSON response using jsonify, return all eligible students to be rated
@@ -97,6 +96,7 @@ def get_student_ratees(group_id):
     
     finally:
         cursor.close()
+
 
 # get the JSON obj from front end with all metrics to be inserted, unwrap
 # and insert into db
@@ -151,4 +151,3 @@ def insert_Stud_Ratings():
         cursor.close()
         
     return jsonify({"message": "Rating successfully inserted."}), 201
-

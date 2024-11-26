@@ -79,7 +79,7 @@ def get_announcements_students():
     try:
         conn = get_connection()
         cursor = conn.cursor()
-        # Query to obtaind all announcements for students in a given course 
+        # Query to obtaind all announcements for students in a given course
         query = '''
         SELECT A.Announcement, C.CourseID, C.Name, A.Timestamp
         FROM Students S
@@ -92,7 +92,7 @@ def get_announcements_students():
         cursor.execute(query, (student_id,))
         announcements = cursor.fetchall()
 
-        # Make format of response readable and interperatable by front end dev 
+        # Make format of response readable and interperatable by front end dev
         announcements_list = [{'Announcement': row[0], 'CourseID': row[1], 'CourseName': row[2], 'Timestamp': row[3]} for row in announcements]
 
         return {'announcements': announcements_list, 'message': 'Announcements Successfully returned'}, 200
