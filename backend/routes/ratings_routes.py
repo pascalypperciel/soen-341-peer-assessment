@@ -9,7 +9,7 @@ ratings_routes = Blueprint('ratings_routes', __name__)
 # in the format they desire
 
 @ratings_routes.route('/getStudentGroups', methods=['GET'])
-def get_Student_Groups():
+def get_student_groups():
     # Get the student ID from the session
     student_id = request.args.get('student_id')
 

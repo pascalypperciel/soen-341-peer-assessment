@@ -2,7 +2,7 @@ from flask import Blueprint, request
 import pyodbc
 from backend.db import driver, server, database, username, password
 
-Announcement_Endpoints = Blueprint('Announcement_Endpoints', __name__)
+announcement_endpoints = Blueprint('Announcement_Endpoints', __name__)
 
 
 def get_connection():
@@ -11,15 +11,15 @@ def get_connection():
     )
 
 
-@Announcement_Endpoints.route('/Create_Announcement', methods=['POST'])
-def Create_Announcement():
+@announcement_endpoints.route('/Create_Announcement', methods=['POST'])
+def create_announcement():
     data = request.get_json()
 
     if not data or 'courseID' not in data or 'announcement' not in data:
         return {'error': 'Missing required fields'}, 400
     
-    Course_id = data['courseID']
-    Announcement = data['announcement']
+    course_id = data['courseID']
+    announcement = data['announcement']
     try:
         conn = get_connection()
         cursor = conn.cursor()
@@ -27,7 +27,7 @@ def Create_Announcement():
         INSERT INTO Announcement (Announcement, CourseID)
         VALUES (?, ?)
         '''
-        cursor.execute(query, (Announcement, Course_id))
+        cursor.execute(query, (announcement, course_id))
         conn.commit()
         return {'message': 'Announcement Successfully added'}, 200
             
@@ -40,9 +40,9 @@ def Create_Announcement():
         conn.close()
 
 
-@Announcement_Endpoints.route('/get_Announcements_Teachers', methods=['GET'])
-def get_Announcements_Teachers():
-    Teacher_id = request.args.get('Teacher_id')
+@announcement_endpoints.route('/get_Announcements_Teachers', methods=['GET'])
+def get_announcements_teachers():
+    teacher_id = request.args.get('Teacher_id')
     try:
         conn = get_connection()
         cursor = conn.cursor()
@@ -52,7 +52,7 @@ def get_Announcements_Teachers():
         JOIN Courses C ON A.CourseID = C.CourseID
         WHERE C.TeacherID = ?;
         '''
-        cursor.execute(query, (Teacher_id,))
+        cursor.execute(query, (teacher_id,))
         announcements = cursor.fetchall()
         announcements_list = [{'Announcement': row[0], 'CourseID': row[1], 'AnnouncementID': row[2], 'CourseName': row[3], 'Timestamp': row[4]} for row in announcements]
         return {'announcements': announcements_list, 'message': 'Announcements Successfully returned'}, 200
@@ -66,9 +66,9 @@ def get_Announcements_Teachers():
         conn.close()
     
 
-@Announcement_Endpoints.route('/get_Announcements_Students', methods=['GET'])
-def get_Announcements_Students():
-    Student_id = request.args.get('student_id')
+@announcement_endpoints.route('/get_Announcements_Students', methods=['GET'])
+def get_announcements_students():
+    student_id = request.args.get('student_id')
     try:
         conn = get_connection()
         cursor = conn.cursor()
@@ -81,7 +81,7 @@ def get_Announcements_Students():
         JOIN Announcement A ON C.CourseID = A.CourseID
         WHERE S.StudentID = ?;
         '''
-        cursor.execute(query, (Student_id,))
+        cursor.execute(query, (student_id,))
         announcements = cursor.fetchall()
         announcements_list = [{'Announcement': row[0], 'CourseID': row[1], 'CourseName': row[2], 'Timestamp': row[3]} for row in announcements]
         return {'announcements': announcements_list, 'message': 'Announcements Successfully returned'}, 200
@@ -95,16 +95,16 @@ def get_Announcements_Students():
         conn.close()
 
 
-@Announcement_Endpoints.route('/Update_Announcement', methods=['PUT'])
-def Update_Announcement():
+@announcement_endpoints.route('/Update_Announcement', methods=['PUT'])
+def update_announcement():
     data = request.get_json()
 
     if not data or 'courseID' not in data or 'announcement' not in data or 'announcementID' not in data:
         return {'error': 'Missing required fields'}, 400
     
-    Course_id = data['courseID']
-    Announcement = data['announcement']
-    AnnouncementID = data['announcementID']
+    course_id = data['courseID']
+    announcement = data['announcement']
+    announcement_id = data['announcementID']
     try:
         conn = get_connection()
         cursor = conn.cursor()
@@ -113,7 +113,7 @@ def Update_Announcement():
         SET Announcement = ?, CourseID = ?
         WHERE AnnouncementID = ?;
         '''
-        cursor.execute(query, (Announcement, Course_id, AnnouncementID))
+        cursor.execute(query, (announcement, course_id, announcement_id))
         conn.commit()
         return {'message': 'Announcement Successfully updated'}, 200
     

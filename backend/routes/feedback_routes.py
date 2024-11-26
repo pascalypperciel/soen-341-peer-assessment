@@ -7,7 +7,7 @@ feedback_routes = Blueprint('feedback_routes', __name__)
 @feedback_routes.route('/display_ratings', methods=['GET'])
 def display_ratings():
     # Assuming sessionid is always student id for student login
-    stud_id = request.args.get('student_id')
+    student_id = request.args.get('student_id')
 
     # finding all ratings associated to student id of student
     query = """
@@ -18,7 +18,7 @@ def display_ratings():
 
     try:
         cursor = conn.cursor()
-        cursor.execute(query, (stud_id,))
+        cursor.execute(query, (student_id,))
         ratings = cursor.fetchall()
         return jsonify(ratings)
 
