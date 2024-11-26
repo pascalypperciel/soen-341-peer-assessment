@@ -1,8 +1,8 @@
 import './Background.css'
-import concovideo from '../../Assets/landingPage/concovideo.mp4'
-import concoimage from '../../Assets/landingPage/concoimage.jpg'
-import concoimage2 from '../../Assets/landingPage/concoimage2.jpg'
-import concoimage3 from '../../Assets/landingPage/concoimage3.jpg'
+import concovideo from '../Assets/landingPage/concovideo.mp4'
+import concoimage from '../Assets/landingPage/concoimage.jpg'
+import concoimage2 from '../Assets/landingPage/concoimage2.jpg'
+import concoimage3 from '../Assets/landingPage/concoimage3.jpg'
 
 const Background = ({playStatus, heroCount}) => {
     
