@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import RatingPage from "./ratingpage";
+import RatingPage from "../Components/Rating/RatingPage";
 import { BrowserRouter as Router } from "react-router-dom";
 import axios from "axios";
 import "@testing-library/jest-dom";

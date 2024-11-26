@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import logo from "../Assets/entire-logo.png";
-import "./header.css";
+import "./Header.css";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import AddTeamModal from "../TeamPage/AddTeamModal";
+import AddTeamModal from "../Teams/AddTeamModal";
 
 const Header = () => {
   const [isTeacher, setIsTeacher] = useState(false);

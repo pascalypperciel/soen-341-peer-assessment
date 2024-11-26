@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Header from "../header/header";
+import Header from "../Header/Header";
 import { useLocation } from "react-router-dom";
-import "./short-summary.css";
-import Footer from "../footer/footer";
+import "./ShortSummary.css";
+import Footer from "../Footer/Footer";
 
 const ShortSummary = () => {
   //Variables

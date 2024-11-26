@@ -16,11 +16,11 @@ import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAltOutlined";
 import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfied";
 import { useNavigate } from "react-router-dom";
-import Header from "../header/header";
-import Footer from "../footer/footer";
-import "./ratingPage.css";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
+import "./RatingPage.css";
 import axios from "axios";
-import ModalConfirmation from "./modalConfirmation";
+import ModalConfirmation from "./ModalConfirmation";
 import Typography from "@mui/material/Typography";
 
 // Styling the icon for the rating

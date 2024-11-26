@@ -1,8 +1,8 @@
 import { render, screen, fireEvent, within } from '@testing-library/react';
 import { BrowserRouter as Router, MemoryRouter } from 'react-router-dom';
-import Dashboard from './dashboard-instructor';
-import LongSummary from './long-summary';
-import ShortSummary from './short-summary';
+import Dashboard from '../Components/DashboardInstructor/DashboardInstructor';
+import LongSummary from '../Components/DashboardInstructor/LongSummary';
+import ShortSummary from '../Components/DashboardInstructor/ShortSummary';
 import '@testing-library/jest-dom';
 import axios from 'axios';
 

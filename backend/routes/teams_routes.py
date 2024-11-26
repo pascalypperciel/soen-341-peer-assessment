@@ -6,10 +6,10 @@ import pyodbc
 from io import StringIO
 import csv
 
-teams_page_routes = Blueprint('teams_page_routes', __name__)
+teams_routes = Blueprint('teams_routes', __name__)
 
 
-@teams_page_routes.route('/makeTeamsManually', methods=['POST'])
+@teams_routes.route('/makeTeamsManually', methods=['POST'])
 def make_team_manually():
     data = request.get_json()
 
@@ -78,7 +78,7 @@ def make_team_manually():
     return {'message': 'Inserts successful'}, 200
 
 
-@teams_page_routes.route('/makeTeamCSV', methods=['POST'])
+@teams_routes.route('/makeTeamCSV', methods=['POST'])
 def make_team_CSV():
     file = request.files['file']
     teacher_id = request.form.get('teacher_id')
@@ -158,7 +158,7 @@ def make_team_CSV():
     return jsonify({"message": "Teams successfully uploaded!"}), 200
 
 
-@teams_page_routes.route('/displayTeamsTeacher', methods=['GET'])
+@teams_routes.route('/displayTeamsTeacher', methods=['GET'])
 def display_teams_teacher():
     teacher_id = request.args.get('teacher_id')
 
@@ -222,7 +222,7 @@ def display_teams_teacher():
     
 
 # csv format is assumed to be studentID in each row, when there is an empty row, signaling of end of that specific team
-@teams_page_routes.route('/displayTeamsStudent', methods=['GET'])
+@teams_routes.route('/displayTeamsStudent', methods=['GET'])
 def display_teams_student():
     student_id = request.args.get('student_id')
 
@@ -284,7 +284,7 @@ def display_teams_student():
         cursor.close()
 
 
-@teams_page_routes.route('/deleteTeam', methods=['POST'])
+@teams_routes.route('/deleteTeam', methods=['POST'])
 def delete_team():
     data = request.get_json()
     team_id = data['team_id']
@@ -313,7 +313,7 @@ def delete_team():
     return {'message': 'Delete successful'}, 200
 
 
-@teams_page_routes.route('/editTeam', methods=['PUT'])
+@teams_routes.route('/editTeam', methods=['PUT'])
 def edit_team():
     data = request.get_json()
 
@@ -401,7 +401,7 @@ def edit_team():
     return {'message': 'Edit successful'}, 200
 
 
-@teams_page_routes.route('/getAllStudents', methods=['GET'])
+@teams_routes.route('/getAllStudents', methods=['GET'])
 def get_all_students():
     try:
         cursor = conn.cursor()
@@ -433,7 +433,7 @@ def get_all_students():
         cursor.close()
 
 
-@teams_page_routes.route('/getGroupedStudents', methods=['GET'])
+@teams_routes.route('/getGroupedStudents', methods=['GET'])
 def get_grouped_students():
     course_id = request.args.get('course_id')
 
@@ -463,7 +463,7 @@ def get_grouped_students():
         cursor.close()
 
 
-@teams_page_routes.route('/getAllCourses', methods=['GET'])
+@teams_routes.route('/getAllCourses', methods=['GET'])
 def get_all_courses():
     teacher_id = request.args.get('teacher_id')
 

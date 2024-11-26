@@ -1,14 +1,14 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import AnnouncementsPage from "./AnnouncementsPage";
-import CreateAnnouncementModal from "./CreateAnnouncementModal";
-import EditAnnouncementModal from "./EditAnnouncementModal";
+import AnnouncementsPage from "../Components/Announcement/AnnouncementsPage";
+import CreateAnnouncementModal from "../Components/Announcement/CreateAnnouncementModal";
+import EditAnnouncementModal from "../Components/Announcement/EditAnnouncementModal";
 import { BrowserRouter as Router } from "react-router-dom";
 import axios from "axios";
 import "@testing-library/jest-dom";
 
 jest.mock("axios");
-jest.mock("./CreateAnnouncementModal", () => jest.fn(() => null));
-jest.mock("./EditAnnouncementModal", () => jest.fn(() => null));
+jest.mock("../Components/Announcement/CreateAnnouncementModal", () => jest.fn(() => null));
+jest.mock("../Components/Announcement/EditAnnouncementModal", () => jest.fn(() => null));
 
 describe("AnnouncementsPage Component", () => {
   beforeEach(() => {

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Box, Button, Typography, List, ListItem, ListItemText, Paper, Divider } from '@mui/material';
 import CreateAnnouncementModal from './CreateAnnouncementModal';
 import EditAnnouncementModal from './EditAnnouncementModal';
-import Header from "../header/header";
+import Header from "../Header/Header";
 
 const AnnouncementsPage = () => {
   const [announcements, setAnnouncements] = useState([]);

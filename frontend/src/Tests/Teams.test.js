@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import Teams from './Teams';
+import Teams from '../Components/Teams/Teams';
 import { BrowserRouter as Router } from 'react-router-dom';
 import axios from 'axios';
 import '@testing-library/jest-dom';

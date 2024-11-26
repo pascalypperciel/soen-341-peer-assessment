@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import Background from './Background/Background';
 import Hero from './Hero/Hero';
-import Main from '../header2/Main';
+import Main from '../HeaderLanding/Main';
 
-const Home = ()  => {
+const LandingPage = ()  => {
   let heroData = [
     {text1:"When one teaches", text2:"two learn"},
     {text1:"To teach is", text2:"to learn twice"},
@@ -33,4 +33,4 @@ const Home = ()  => {
   );
 }
 
-export default Home;
+export default LandingPage;

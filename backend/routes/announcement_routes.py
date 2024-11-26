@@ -2,7 +2,7 @@ from flask import Blueprint, request
 import pyodbc
 from backend.db import driver, server, database, username, password
 
-announcement_endpoints = Blueprint('Announcement_Endpoints', __name__)
+announcement_routes = Blueprint('announcement_routes', __name__)
 
 
 def get_connection():
@@ -11,7 +11,7 @@ def get_connection():
     )
 
 
-@announcement_endpoints.route('/Create_Announcement', methods=['POST'])
+@announcement_routes.route('/Create_Announcement', methods=['POST'])
 def create_announcement():
     data = request.get_json()
 
@@ -40,7 +40,7 @@ def create_announcement():
         conn.close()
 
 
-@announcement_endpoints.route('/get_Announcements_Teachers', methods=['GET'])
+@announcement_routes.route('/get_Announcements_Teachers', methods=['GET'])
 def get_announcements_teachers():
     teacher_id = request.args.get('Teacher_id')
     try:
@@ -66,7 +66,7 @@ def get_announcements_teachers():
         conn.close()
     
 
-@announcement_endpoints.route('/get_Announcements_Students', methods=['GET'])
+@announcement_routes.route('/get_Announcements_Students', methods=['GET'])
 def get_announcements_students():
     student_id = request.args.get('student_id')
     try:
@@ -95,7 +95,7 @@ def get_announcements_students():
         conn.close()
 
 
-@announcement_endpoints.route('/Update_Announcement', methods=['PUT'])
+@announcement_routes.route('/Update_Announcement', methods=['PUT'])
 def update_announcement():
     data = request.get_json()
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./SignupPage.css";
+import "./SignupLogin.css";
 import backgroundImage from "../Assets/conco-image.jpg";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,7 @@ import { TextField, InputAdornment, IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-const SignupPage = () => {
+const SignupLogin = () => {
   const [isTeacher, setIsTeacher] = useState(true);
   const [signupData, setSignupData] = useState({
     fullName: "",
@@ -504,4 +504,4 @@ const SignupPage = () => {
   );
 };
 
-export default SignupPage;
+export default SignupLogin;

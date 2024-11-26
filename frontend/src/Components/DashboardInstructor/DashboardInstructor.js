@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Header from "../header/header";
-import Footer from "../footer/footer";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./dashboard-instructor.css";
+import "./DashboardInstructor.css";
 
 const Dashboard = () => {
   //Variables

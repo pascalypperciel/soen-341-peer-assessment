@@ -7,7 +7,7 @@ import HeaderBurger from "./HeaderBurger";
 import { useMediaQuery } from "./hooks/hooks";
 import s from "./header.module.scss";
 
-const Header = ({ items, logo, navPosition }) => {
+const HeaderLanding = ({ items, logo, navPosition }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isSmallScreen = useMediaQuery("(max-width: 989px)");
 
@@ -83,14 +83,14 @@ const Header = ({ items, logo, navPosition }) => {
   );
 };
 
-Header.propTypes = {
+HeaderLanding.propTypes = {
   items: PropTypes.array.isRequired,
   logo: PropTypes.element.isRequired,
   navPosition: PropTypes.oneOf(["center", "right", "overlay"])
 };
 
-Header.defaultProps = {
+HeaderLanding.defaultProps = {
   navPosition: "center"
 };
 
-export default Header;
+export default HeaderLanding;

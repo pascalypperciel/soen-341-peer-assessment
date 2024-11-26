@@ -88,4 +88,4 @@ jobs:
     - name: Run frontend tests
       run: |
         cd frontend
-        npm run test -- --ci --coverage frontend/src/App.test.js
+        npm run test -- --ci --coverage frontend/src/Tests/App.test.js

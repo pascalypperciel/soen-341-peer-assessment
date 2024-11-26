@@ -3,7 +3,7 @@ import axios from "axios";
 import TeamsList from "./TeamsList";
 import AddTeamModal from "./AddTeamModal";
 import "../../App.css";
-import Header from "../header/header";
+import Header from "../Header/Header";
 
 function Teams() {
   const [teamsData, setTeamsData] = useState([]);

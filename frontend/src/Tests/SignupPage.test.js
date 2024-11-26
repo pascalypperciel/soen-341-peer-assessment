@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import SignupPage from './SignupPage';
+import SignupPage from '../Components/SignupLogin/SignupLogin';
 import { BrowserRouter as Router } from 'react-router-dom';
 import axios from 'axios';
 import '@testing-library/jest-dom';

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Header from "../header/header";
-import Footer from "../footer/footer";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-import "./long-summary.css";
+import "./LongSummary.css";
 
 const LongSummary = () => {
   //Variables
