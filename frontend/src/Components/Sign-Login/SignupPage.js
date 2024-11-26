@@ -226,16 +226,6 @@ const SignupPage = () => {
 
       if (response.status === 200) {
         console.log("Password change successful");
-        const userData = response.data;
-
-        if (isTeacher) {
-          localStorage.removeItem("student_id");
-          localStorage.setItem("teacher_id", userData.teacher_id);
-        } else {
-          localStorage.removeItem("teacher_id");
-          localStorage.setItem("student_id", userData.student_id);
-        }
-
         alert(
           "Password updated successfully! Please login with your new password."
         );
@@ -253,15 +243,10 @@ const SignupPage = () => {
         return;
       }
     } catch (error) {
-      if (error.response) {
-        const { status, data } = error.response;
-
-        if (status === 404) {
-          setValidationErrors({
-            idOrUsername: data.message || "User not found.",
-          });
-        }
-      }
+      setValidationErrors({
+        general: "Either your ",
+      });
+      console.error("Error:", error);
     }
   };
 
