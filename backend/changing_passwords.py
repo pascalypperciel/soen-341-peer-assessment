@@ -44,7 +44,6 @@ def change_student_password():
             cursor.close()
             
 
-
 # This route intakes the teacherID to update their password in the DB with a hash for security
 @change_passwords_routes.route('/changeTeacherPassword', methods=['PUT'])
 def change_teacher_password():
