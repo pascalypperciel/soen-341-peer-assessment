@@ -7,10 +7,12 @@ course_id = 2
 announcement_text = "Exam on Friday"
 announcement_id = 123
 
+
 @pytest.fixture
 def client():
     with app.test_client() as client:
         yield client
+
 
 def test_create_announcement(client):
     data = {
@@ -23,6 +25,7 @@ def test_create_announcement(client):
     response_data = response.get_json()
     assert response_data['message'] == "Announcement Successfully added"
 
+
 def test_create_announcement_missing_data(client):
     data = {
         "courseID": course_id
@@ -33,6 +36,7 @@ def test_create_announcement_missing_data(client):
     response_data = response.get_json()
     assert "error" in response_data
     assert response_data['error'] == "Missing required fields"
+
 
 def test_get_announcements_teachers(client):
     response = client.get('/get_Announcements_Teachers', query_string={'Teacher_id': teacher_id})
@@ -49,6 +53,7 @@ def test_get_announcements_teachers(client):
         assert 'CourseName' in announcement
         assert 'Timestamp' in announcement
 
+
 def test_get_announcements_teachers_nonexistent_teacher(client):
     nonexistent_teacher_id = 99999
     response = client.get('/get_Announcements_Teachers', query_string={'Teacher_id': nonexistent_teacher_id})
@@ -58,6 +63,7 @@ def test_get_announcements_teachers_nonexistent_teacher(client):
     assert 'announcements' in data
     assert isinstance(data['announcements'], list)
     assert data['announcements'] == []
+
 
 def test_get_announcements_students(client):
     response = client.get('/get_Announcements_Students', query_string={'student_id': student_id})
@@ -73,6 +79,7 @@ def test_get_announcements_students(client):
         assert 'CourseName' in announcement
         assert 'Timestamp' in announcement
 
+
 def test_get_announcements_students_nonexistent_student(client):
     nonexistent_student_id = 99999
     response = client.get('/get_Announcements_Students', query_string={'student_id': nonexistent_student_id})
@@ -82,6 +89,7 @@ def test_get_announcements_students_nonexistent_student(client):
     assert 'announcements' in data
     assert isinstance(data['announcements'], list)
     assert data['announcements'] == []
+
 
 def test_update_announcement(client):
     data = {
@@ -95,6 +103,7 @@ def test_update_announcement(client):
     response_data = response.get_json()
     assert response_data['message'] == "Announcement Successfully updated"
 
+
 def test_update_announcement_missing_data(client):
     data = {
         "courseID": course_id,
@@ -106,4 +115,3 @@ def test_update_announcement_missing_data(client):
     response_data = response.get_json()
     assert "error" in response_data
     assert response_data['error'] == "Missing required fields"
-

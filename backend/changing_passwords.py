@@ -1,9 +1,9 @@
-from flask import Blueprint,request,jsonify,redirect,url_for,session
+from flask import Blueprint, request, jsonify
 from backend.db import conn
-from dotenv import load_dotenv
 from werkzeug.security import generate_password_hash
 
 change_passwords_routes = Blueprint('change_passwords_routes', __name__)
+
 
 # This route intakes the studentID to update their password in the DB
 @change_passwords_routes.route('/changeStudentPassword', methods=['PUT'])
@@ -16,13 +16,13 @@ def change_student_password():
         if not new_student_password:
             return jsonify({"error": "Need to enter a new password!"}), 401
 
-        # Hash the new password for added security 
+        # Hash the new password for added security
         hashed_password = generate_password_hash(new_student_password)
 
         # Connect to the database to access and change old password
         cursor = conn.cursor()
 
-        # Check if the student exists inside db to be changed 
+        # Check if the student exists inside db to be changed
         cursor.execute("SELECT * FROM Students WHERE StudentID = ?", (student_id,))
         student = cursor.fetchone()
 
@@ -44,15 +44,16 @@ def change_student_password():
             cursor.close()
             conn.close()
 
+
 # This route intakes the teacherID to update their password in the DB with a hash for security
-@change_passwords_routes.route('/changeTeacherPassword/', methods=['PUT'])
+@change_passwords_routes.route('/changeTeacherPassword', methods=['PUT'])
 def change_teacher_password():
     try:
         # Get the new password from front end to be hashed and out in db
         teacher_id = request.json.get('teacher_id')
         new_teacher_password = request.json.get('new_teacher_password')
         
-        #if no password passed end the interaction to not make any unwanted change
+        # if no password passed end the interaction to not make any unwanted change
         if not new_teacher_password:
             return jsonify({"error": "Need to enter a new password!"}), 401
 

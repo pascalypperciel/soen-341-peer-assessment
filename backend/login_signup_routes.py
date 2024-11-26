@@ -1,6 +1,5 @@
 from flask import Blueprint, request, session
 from backend.db import conn
-from dotenv import load_dotenv
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -19,13 +18,13 @@ def studentSignup():
     try:
         # connect to db
         cursor = conn.cursor()
-        hashed_password =generate_password_hash(password)
+        hashed_password = generate_password_hash(password)
 
         # query to add student to Student table using cursor
         StudentSignup_query = """
         INSERT INTO Students (StudentID, Name, Password) VALUES (?,?,?)
         """
-        StudentSignup_values=(studentID,name,hashed_password)
+        StudentSignup_values = (studentID, name, hashed_password)
 
         cursor.execute(StudentSignup_query, StudentSignup_values)
         conn.commit()
@@ -59,7 +58,7 @@ def teacherSignup():
         TeacherSignup_query = """
         INSERT INTO Teachers (Name, Password, Username) VALUES (?, ?, ?)
         """
-        TeacherSignup_values=(name, hashed_password, username)
+        TeacherSignup_values = (name, hashed_password, username)
 
         cursor.execute(TeacherSignup_query, TeacherSignup_values)
         conn.commit()
@@ -93,8 +92,8 @@ def studentLogin():
         result = cursor.fetchone()
 
         if result:
-            storedPassword=result[0]
-            #use hash checker to verify
+            storedPassword = result[0]
+            # use hash checker to verify
             if check_password_hash(storedPassword, password):
 
                 # store the stud ID in a session once logged in
@@ -134,8 +133,8 @@ def teacherLogin():
         if result:
             storedPassword = result[0]
             teacher_id = result[1]
-            session['teacher_id']= teacher_id
-            #use hash checker to verify
+            session['teacher_id'] = teacher_id
+            # use hash checker to verify
             if check_password_hash(storedPassword, password):
                 return {'message': 'Login successful', 'teacher_id': teacher_id}, 200
             else:

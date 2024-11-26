@@ -1,13 +1,15 @@
 import pytest
 from backend.app import app
 
-teacher_id = 17  #teacher id that we know exist
-nonexistent_teacher_id = -1  #teacher id that we know don't exist
+teacher_id = 17  # teacher id that we know exist
+nonexistent_teacher_id = -1  # teacher id that we know don't exist
+
 
 @pytest.fixture
 def client():
     with app.test_client() as client:
         yield client
+
 
 def test_get_student_ratings(client):
     with client.session_transaction() as session:
@@ -39,6 +41,7 @@ def test_get_student_ratings(client):
     else:
         assert response.get_json() == []
 
+
 def test_get_student_ratings_with_nonexistent_teacher(client):
     with client.session_transaction() as session:
         session['teacher_id'] = nonexistent_teacher_id
@@ -47,5 +50,5 @@ def test_get_student_ratings_with_nonexistent_teacher(client):
     assert response.status_code == 200
 
     data = response.get_json()
-    assert isinstance(data, list) 
+    assert isinstance(data, list)
     assert data == []

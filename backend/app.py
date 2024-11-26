@@ -10,7 +10,6 @@ from backend.Announcement_Endpoints import Announcement_Endpoints
 from backend.Instructor_Dashboard_routes import instructor_dashboard_routes
 from backend.changing_passwords import change_passwords_routes
 
-
 app = Flask(__name__)
 app.secret_key = 'SuperStrongKey'
 app.register_blueprint(login_signup_routes)
@@ -20,8 +19,6 @@ app.register_blueprint(ratings_routes)
 app.register_blueprint(Announcement_Endpoints)
 app.register_blueprint(instructor_dashboard_routes)
 app.register_blueprint(change_passwords_routes)
-
-
 
 CORS(app)
 
