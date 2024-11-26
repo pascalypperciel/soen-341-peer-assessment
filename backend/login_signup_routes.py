@@ -14,7 +14,7 @@ def studentSignup():
     name = data['name']
     # no password hashing yet
     password = data['password']
-
+                    
     try:
         # connect to db
         cursor = conn.cursor()

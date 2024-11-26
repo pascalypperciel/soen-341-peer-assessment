@@ -6,11 +6,13 @@ import { useNavigate } from "react-router-dom";
 import "./dashboard-instructor.css";
 
 const Dashboard = () => {
+  //Variables
   const [groups, setGroups] = useState([]);
   const [error, setError] = useState(null);
   const teacherId = localStorage.getItem("teacher_id");
   const navigate = useNavigate();
 
+  //Call to get the different teams for the specific teacher
   useEffect(() => {
     axios
       .get(`http://localhost:5000/getStudentRatings?teacher_id=${teacherId}`)
@@ -30,6 +32,7 @@ const Dashboard = () => {
       });
   }, [teacherId]);
 
+  //Send the teacher to the correct type of summary
   const handleButtonClick = (groupName, viewType) => {
     const path = viewType === "Summary" ? "/shortsummary" : "/longsummary";
     navigate(path, { state: { groupName } });
@@ -41,6 +44,7 @@ const Dashboard = () => {
       <Header />
       <div className="container-dashboard">
         <h1> Teams with Ratings </h1>
+        {/* Handle the display if the different teams and the error if it can't load*/}
         {error && <p>{error}</p>}
         {groups.length > 0 ? (
           <div className="dashboard">

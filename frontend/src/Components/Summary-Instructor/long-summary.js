@@ -6,11 +6,12 @@ import { useLocation } from "react-router-dom";
 import "./long-summary.css";
 
 const LongSummary = () => {
+  //Variables
   const [ratings, setRatings] = useState([]);
   const [error, setError] = useState(null);
   const location = useLocation();
   const { groupName } = location.state || {};
-
+  //Call to fetch the ratings of the student ofr the specific teacher
   useEffect(() => {
     const teacherId = localStorage.getItem("teacher_id");
 
@@ -25,7 +26,7 @@ const LongSummary = () => {
         console.error("Error fetching ratings:", err);
       });
   }, []);
-
+  //calculate the average of ratings
   const calculateAverage = (rating) => {
     const total =
       rating.CooperationRating +
@@ -35,9 +36,12 @@ const LongSummary = () => {
     return (total / 4).toFixed(1);
   };
 
+  //Match the current team with the team of the teacher
   const filteredRatings = ratings.filter(
     (rating) => rating.GroupName === groupName
   );
+
+  //select the rater student of the ratee student
   const rateeGroups = filteredRatings.reduce((acc, rating) => {
     if (!acc[rating.RateeID]) {
       acc[rating.RateeID] = {
@@ -89,6 +93,7 @@ const LongSummary = () => {
                 </tbody>
               </table>
               <p className="comments">
+                {/*The comments of all the students*/}
                 <h2>Comments Section:</h2>
                 {ratee.ratings.map((raterRating, index) => (
                   <div

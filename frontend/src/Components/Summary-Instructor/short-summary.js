@@ -6,6 +6,7 @@ import "./short-summary.css";
 import Footer from "../footer/footer";
 
 const ShortSummary = () => {
+  //Variables
   const [ratings, setRatings] = useState([]);
   const [error, setError] = useState(null);
   const location = useLocation();
@@ -26,6 +27,7 @@ const ShortSummary = () => {
       });
   }, []);
 
+  //To be able to select the rating of all the rater
   const rateeAverages = ratings
     .filter((rating) => rating.GroupName === groupName)
     .reduce((acc, rating) => {

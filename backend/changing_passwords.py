@@ -11,7 +11,7 @@ def change_student_password():
     try:
         # Get the new password from the request
         student_id = request.json.get('student_id')
-        new_student_password = request.json.get('new_student_password')
+        new_student_password = request.json.get('new_password')
 
         if not new_student_password:
             return jsonify({"error": "Need to enter a new password!"}), 401
@@ -40,9 +40,9 @@ def change_student_password():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     finally:
-        if conn:
+        if cursor:
             cursor.close()
-            conn.close()
+            
 
 
 # This route intakes the teacherID to update their password in the DB with a hash for security
@@ -50,8 +50,8 @@ def change_student_password():
 def change_teacher_password():
     try:
         # Get the new password from front end to be hashed and out in db
-        teacher_id = request.json.get('teacher_id')
-        new_teacher_password = request.json.get('new_teacher_password')
+        username = request.json.get('username')
+        new_teacher_password = request.json.get('new_password')
         
         # if no password passed end the interaction to not make any unwanted change
         if not new_teacher_password:
@@ -64,7 +64,7 @@ def change_teacher_password():
         cursor = conn.cursor()
 
         # Check if the teacher exists to update their password
-        cursor.execute("SELECT * FROM Teachers WHERE TeacherID = ?", (teacher_id,))
+        cursor.execute("SELECT * FROM Teachers WHERE Username = ?", (username,))
         teacher = cursor.fetchone()
 
         if not teacher:
@@ -72,8 +72,8 @@ def change_teacher_password():
 
         # Update the teacher password with the hash for added security
         cursor.execute(
-            "UPDATE Teachers SET Password = ? WHERE TeacherID = ?",
-            (hashed_password, teacher_id)
+            "UPDATE Teachers SET Password = ? WHERE Username = ?",
+            (hashed_password, username)
         )
         conn.commit()
 
@@ -81,6 +81,6 @@ def change_teacher_password():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     finally:
-        if conn:
+        if cursor:
             cursor.close()
-            conn.close()
+            
