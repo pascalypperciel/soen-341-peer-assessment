@@ -12,14 +12,25 @@ def display_ratings():
     # finding all ratings associated to student id of student
 
     query = """
-    SELECT CooperationRating, ConceptualContributionRating, PracticalContributionRating, WorkEthicRating
-    FROM Ratings
-    WHERE RateeID = %s
+    SELECT r.CooperationComment, r.ConceptualContributionComment, r.PracticalContributionComment, r.WorkEthicComment, g.Name
+    FROM Ratings r
+    LEFT JOIN Groups g ON g.GroupID = r.GroupID
+    WHERE RateeID = ?
     """
     try:
         cursor = conn.cursor()
         cursor.execute(query, (student_id,))
-        ratings = cursor.fetchall()
+        rows = cursor.fetchall()
+        ratings = [
+            {
+                "CooperationComment": row.CooperationComment,
+                "ConceptualContributionComment": row.ConceptualContributionComment,
+                "PracticalContributionComment": row.PracticalContributionComment,
+                "WorkEthicComment": row.WorkEthicComment,
+                "GroupName": row.Name,
+            }
+            for row in rows
+        ]
         return jsonify(ratings)
 
     except Exception as e:
@@ -28,3 +39,4 @@ def display_ratings():
 
     finally:
         cursor.close()
+    
