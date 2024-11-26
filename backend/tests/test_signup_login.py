@@ -7,7 +7,6 @@ student_id = '99999999'
 teacher_username = 'teacher_user'
 password = 'password123'
 teacher_id = '12345'
-new_password = 'newpassword123'
 
 
 @pytest.fixture
@@ -79,7 +78,7 @@ def test_change_student_password(client):
 
     response = client.put('/changeStudentPassword', json={
         'student_id': student_id,
-        'new_password': new_password
+        'new_password': password
     })
     assert response.status_code == 200
     assert response.json['message'] == 'Password updated successfully'
@@ -90,7 +89,7 @@ def test_change_student_password(client):
     cursor.close()
 
     assert result is not None
-    assert check_password_hash(result[0], new_password)
+    assert check_password_hash(result[0], password)
 
 
 def test_change_teacher_password(client):
@@ -104,7 +103,7 @@ def test_change_teacher_password(client):
 
     response = client.put('/changeTeacherPassword', json={
         'username': teacher_username,
-        'new_password': new_password
+        'new_password': password
     })
     assert response.status_code == 200
     assert response.json['message'] == 'Password updated successfully'
@@ -115,4 +114,4 @@ def test_change_teacher_password(client):
     cursor.close()
 
     assert result is not None
-    assert check_password_hash(result[0], new_password)
+    assert check_password_hash(result[0], password)
