@@ -200,7 +200,6 @@ const SignupPage = () => {
   const handleNewPassword = async (e) => {
     e.preventDefault();
 
-    // Validate the password
     const validationErrors = validPassword();
     if (Object.keys(validationErrors).length > 0) {
       setValidationErrors(validationErrors);
@@ -208,13 +207,21 @@ const SignupPage = () => {
     }
 
     const url = isTeacher
-      ? `http://localhost:5000/change_teacher_password?username=${signupData.idOrUsername}`
-      : `http://localhost:5000/change_student_password?studentID=${signupData.idOrUsername}`;
+      ? `http://localhost:5000/changeTeacherPassword`
+      : `http://localhost:5000/changeStudentPassword`;
+
+    const data = {
+      [isTeacher ? "username" : "studentID"]: signupData.idOrUsername,
+      password: signupData.newpassword,
+    };
 
     try {
-      const response = await axios.put(url, {
-        [isTeacher ? "new_teacher_password" : "new_student_password"]:
-          signupData.newpassword,
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       });
 
       if (response.status === 200) {
@@ -236,9 +243,7 @@ const SignupPage = () => {
         return;
       }
       if (response.status === 404) {
-        const errorMessage =
-          response.data?.message ||
-          "User not found. Please check your details and try again.";
+        const errorMessage = response.data?.message || "User not found.";
         setValidationErrors({
           general: errorMessage,
           ...(errorMessage.includes("not found") && {
@@ -247,11 +252,6 @@ const SignupPage = () => {
         });
         return;
       }
-
-      console.error("Unexpected response:", response.data);
-      setValidationErrors({
-        general: "An unexpected error occurred. Please try again later.",
-      });
     } catch (error) {
       if (error.response) {
         const { status, data } = error.response;
@@ -260,19 +260,7 @@ const SignupPage = () => {
           setValidationErrors({
             idOrUsername: data.message || "User not found.",
           });
-        } else {
-          setValidationErrors({
-            general:
-              data.message ||
-              "An error occurred while updating the password. Please try again later.",
-          });
         }
-      } else {
-        console.error("Network or server error:", error);
-        setValidationErrors({
-          general:
-            "A network error occurred. Please check your connection and try again.",
-        });
       }
     }
   };
