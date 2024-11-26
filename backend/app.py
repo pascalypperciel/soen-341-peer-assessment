@@ -3,11 +3,12 @@ from flask_cors import CORS
 from backend.db import conn
 # blueprints
 from backend.login_signup_routes import login_signup_routes
-from backend.teams_page_routes import teams_page_routes 
+from backend.teams_page_routes import teams_page_routes
 from backend.feedback_routes import feedback_routes
 from backend.ratings_routes import ratings_routes
 from backend.Announcement_Endpoints import Announcement_Endpoints
 from backend.Instructor_Dashboard_routes import instructor_dashboard_routes
+from backend.changing_passwords import change_passwords_routes
 
 
 app = Flask(__name__)
@@ -18,14 +19,18 @@ app.register_blueprint(feedback_routes)
 app.register_blueprint(ratings_routes)
 app.register_blueprint(Announcement_Endpoints)
 app.register_blueprint(instructor_dashboard_routes)
+app.register_blueprint(change_passwords_routes)
+
+
 
 CORS(app)
+
 
 # The following route is a test and will be deleted soon
 @app.route('/get-data', methods=['GET'])
 def get_data():
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Students") 
+    cursor.execute("SELECT * FROM Students")
     rows = cursor.fetchall()
 
     data = []
@@ -33,6 +38,7 @@ def get_data():
         data.append(dict(zip([column[0] for column in cursor.description], row)))
 
     return jsonify(data)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

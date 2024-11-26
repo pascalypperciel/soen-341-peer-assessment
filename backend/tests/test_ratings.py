@@ -1,6 +1,5 @@
 import pytest
 from backend.app import app
-from backend.db import conn
 
 # Variables to tweak used in tests
 student_id = '12345678'
@@ -8,10 +7,12 @@ group_id = 1
 rater_id = '12345678'
 ratee_id = '1'
 
+
 @pytest.fixture
 def client():
     with app.test_client() as client:
         yield client
+
 
 def test_get_student_groups(client):
     with client.session_transaction() as session:
@@ -29,6 +30,7 @@ def test_get_student_groups(client):
         assert 'CourseID' in group
         assert 'CourseName' in group
 
+
 def test_get_student_ratees(client):
     with client.session_transaction() as session:
         session['student_id'] = student_id
@@ -43,6 +45,7 @@ def test_get_student_ratees(client):
         student = data['students'][0]
         assert 'StudentID' in student
         assert 'Name' in student
+
 
 def test_insert_stud_ratings(client):
     rating_data = {

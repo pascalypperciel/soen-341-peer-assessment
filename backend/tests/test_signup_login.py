@@ -6,10 +6,12 @@ student_id = '99999999'
 teacher_username = 'teacher_user'
 password = 'password123'
 
+
 @pytest.fixture
 def client():
     with app.test_client() as client:
         yield client
+
 
 def test_student_signup(client):
     cursor = conn.cursor()
@@ -24,6 +26,7 @@ def test_student_signup(client):
     })
     assert response.status_code == 200
 
+
 def test_teacher_signup(client):
     response = client.post('/teacherSignup', json={
         'name': 'Test Teacher',
@@ -32,6 +35,7 @@ def test_teacher_signup(client):
     })
     assert response.status_code == 200
     assert response.json['message'] == 'Signup successful'
+
 
 def test_student_login(client):
     response = client.get('/studentLogin', query_string={
@@ -46,6 +50,7 @@ def test_student_login(client):
 
     assert response.status_code == 200
     assert response.json['message'] == 'Login successful'
+
 
 def test_teacher_login(client):
     response = client.get('/teacherLogin', query_string={

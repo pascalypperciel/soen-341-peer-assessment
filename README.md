@@ -23,21 +23,27 @@ SQL server hosted on Microsoft Azure Cloud Computing Services
 * #### Massimo Caruso   -  Frontend
   - Background: Second year Software Engineering student.
   - Access: Contributor (Read/Write)
+  - Username: Extinctable
 * #### Parsa Darbani    -  Frontend
   - Background: Second year Software Engineering student.
   - Access: Contributor (Read/Write)
+  - Username: Speciaa
 * #### Jessica Codreanu -  Frontend
   - Background: Second year Software Engineering student.
   - Access: Contributor (Read/Write)
+  - Username: Jessicuta
 * #### Anthony Guarraci -  Backend
   - Background: Second year Software Engineering student.
   - Access: Contributor (Read/Write)
+  - Username: antoguarr
 * #### Justin Lombardi  -  Backend
   - Background: Second year Software Engineering student.
   - Access: Contributor (Read/Write)
+  - Username: JustinLombardi
 * #### Pascal Ypperciel -  Backend & Database  
   - Background: Third year Computer Engineering student.
   - Access: Admin (Read/Write + Repository Management)
+  - Username: pascalypperciel
 
 
 #### Contributor
@@ -47,6 +53,15 @@ Same as Contributor but can also manage repository settings, manage collaborator
 
 ## Repository's Rules
 Currently, we have a rule where PR requires at least one approuval from a reviewer to be accepeted and merged.
+
+
+## Linting Rules
+We used the [Flake8](https://flake8.pycqa.org/en/latest/) linter for Python and [ESLint](https://eslint.org/) for JavaScript code.     
+Here are the rules that these linters follow:
+  * https://www.flake8rules.com/
+  * https://eslint.org/docs/latest/rules/
+
+Please note that we slightly modified the Flake8 configuration as seen [here](.flake8)
   
 
   
