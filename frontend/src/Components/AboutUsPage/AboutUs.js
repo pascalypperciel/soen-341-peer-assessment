@@ -1,5 +1,6 @@
 import React from "react";
 import "./AboutUs.css"; 
+import Main from "../HeaderLanding/Main";
 
 const AboutUs = () => {
   const teamMembers = [
@@ -36,15 +37,17 @@ const AboutUs = () => {
   ];
 
   return (
+    
     <div className="about-us">
+      <div className="header">
+        <Main />
+      </div>
       <section className="company-description">
         <h1>About Us</h1>
         <p>
           Our company is dedicated to delivering innovative solutions that solve real-world problems.
           We are passionate about technology and driven by a commitment to excellence and customer satisfaction.
           The system that we created will give genuine feedback to the students and the instructor in charge of the course.
-
-
         </p>
       </section>
 
