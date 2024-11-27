@@ -5,15 +5,16 @@ import {
   Navigate,
 } from "react-router-dom";
 
-import Home from "./Components/landingPage/Home";
-import SignupPage from "./Components/Sign-Login/SignupPage";
+import LandingPage from "./Components/LandingPage/LandingPage";
+import SignupPage from "./Components/SignupLogin/SignupLogin";
 import Contact from "./Components/Contact/Contact";
-import Teams from "./Components/TeamPage/Teams";
-import RatingPage from "./Components/ratingPage/ratingpage";
-import AnnouncementsPage from "./Components/announcementPage/AnnouncementsPage";
-import ShortSummary from "./Components/Summary-Instructor/short-summary";
-import LongSummary from "./Components/Summary-Instructor/long-summary";
-import DashboardInstructor from "./Components/Summary-Instructor/dashboard-instructor";
+import Teams from "./Components/Teams/Teams";
+import FeedbackPage from "./Components/Feedback/FeedbackPage";
+import RatingPage from "./Components/Rating/RatingPage";
+import AnnouncementsPage from "./Components/Announcement/AnnouncementsPage";
+import ShortSummary from "./Components/DashboardInstructor/ShortSummary";
+import LongSummary from "./Components/DashboardInstructor/LongSummary";
+import DashboardInstructor from "./Components/DashboardInstructor/DashboardInstructor";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
@@ -21,10 +22,11 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Navigate to="/home" />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/home" element={<LandingPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="contact" element={<Contact />}/>
         <Route path="/teams" element={<Teams />} />
+        <Route path="/feedback" element={<FeedbackPage />} />
         <Route path="/ratingpage" element={<RatingPage />} />
         <Route path="/shortsummary" element={<ShortSummary />} />
         <Route path="/longsummary" element={<LongSummary />} />

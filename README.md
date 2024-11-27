@@ -53,6 +53,15 @@ Same as Contributor but can also manage repository settings, manage collaborator
 
 ## Repository's Rules
 Currently, we have a rule where PR requires at least one approuval from a reviewer to be accepeted and merged.
+
+
+## Linting Rules
+We used the [Flake8](https://flake8.pycqa.org/en/latest/) linter for Python and [ESLint](https://eslint.org/) for JavaScript code.     
+Here are the rules that these linters follow:
+  * https://www.flake8rules.com/
+  * https://eslint.org/docs/latest/rules/
+
+Please note that we slightly modified the Flake8 configuration as seen [here](.flake8)
   
 
   
