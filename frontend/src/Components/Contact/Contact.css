@@ -1,9 +1,13 @@
 .contact {
   display: flex;
-  justify-content: center;
+  
   align-items: center;
   min-height: 100vh;
   background: #912338;
+}
+.header {
+  margin-bottom: 1000px;
+
 }
 
 .form {
@@ -15,6 +19,7 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 1);
   color: #333;
   margin: 25px;
+  margin-left: 400px;
 }
 
 .form h2 {

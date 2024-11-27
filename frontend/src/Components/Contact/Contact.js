@@ -1,5 +1,6 @@
 import React from "react"
 import './Contact.css'
+import Main from "../HeaderLanding/Main"
 import Swal from 'sweetalert2'
 
 const Contact = () => {
@@ -33,7 +34,11 @@ const Contact = () => {
 
     return (
         <section className="contact">
+            <div className="header">
+                    <Main />
+            </div>
             <form className = "form" onSubmit={onSubmit}>
+                
                 <h2>Contact Form</h2>
                 <div className="input-box">
                     <label>Full name</label>

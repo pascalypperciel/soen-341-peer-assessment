@@ -12,7 +12,7 @@ const navigation = [
   {
     id: "2fa83d93-e460-4298-a07d-70d0b3642397",
     name: "About us",
-    slug: "About us"
+    slug: "aboutus"
   },
   {
     id: "2836aafa-6733-4b25-a908-ffca75b3e84f",
