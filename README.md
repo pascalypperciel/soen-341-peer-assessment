@@ -56,6 +56,8 @@ Currently, we have a rule where PR requires at least one approuval from a review
 
 
 ## Linting Rules
+We have **Pre-Commit Hooks** setup in our project for our linters.   
+
 We used the [Flake8](https://flake8.pycqa.org/en/latest/) linter for Python and [ESLint](https://eslint.org/) for JavaScript code.     
 Here are the rules that these linters follow:
   * https://www.flake8rules.com/
